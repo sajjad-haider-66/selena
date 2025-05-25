@@ -34,7 +34,8 @@ use ApiResponse;
      */
     public function index()
     {
-        return view('readiness.index');
+        $readiness_forms = ReadinessForm::latest()->get();
+        return view('readiness.index', compact('readiness_forms'));
     }
 
     /**
@@ -100,7 +101,7 @@ use ApiResponse;
      */
     public function show()
     {
-        return view('readiness.show');
+      
     }
 
     /**
@@ -140,5 +141,11 @@ use ApiResponse;
             }
         }
         return $count ? ($totalScore / $count) * 100 : 0;
+    }
+
+    public function Notification()
+    {
+        $all_notifications = Notification::where('user_id', auth()->user()->id)->get();
+        return view('readiness.notification', compact('all_notifications'));
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Audit;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\ReadinessForm;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AuditStoreRequest;
 use App\Http\Requests\AuditUpdateRequest;
@@ -32,8 +34,8 @@ class AuditController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['getParentCategoryHasOne'])->orderBy('updated_at', 'desc')->get();
-        return view('products.index', compact('products'));
+        $audits = Audit::latest()->get();
+        return view('audits.index', compact('audits'));
     }
 
     /**
@@ -41,44 +43,78 @@ class AuditController extends Controller
      */
     public function create()
     {
-        $parent_category = Category::where('status', Category::STATUS_ACTIVE)->get();
-        //   $subCategories = SubCategory::where('status', Category::STATUS_ACTIVE)->get();
-        return view('products.create', compact('parent_category', /*'subCategories'*/));
+        return view('audits.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AuditStoreRequest $request)
+    public function store(Request $request)
     {
-        try {
-            $fileName = null;
-            if ($request->hasFile('image')) {
-                $filehandle = $this->_singleFileUploads($request, 'image', 'public/products');
-                $fileName = $filehandle['data']['name'];
-            }
-            $created = Product::create(['name' => $request->name, 'description' => $request->description, 'image' => $fileName, 'parent_category_id' => $request->select_parent_cat, 'price' => $request->price, 'qty' => $request->qty, 'user_id' => auth()->user()->id]);
+        // dd($request->all());
+        $data = $request->validate([
+            'date' => 'required|date',
+            'intervenant' => 'required|string',
+            'themes_comments' => 'nullable|string',
+            'mission_comments' => 'nullable|string',
+            'trainings_comments' => 'nullable|string',
+            'authorizations_comments' => 'nullable|string',
+            'env_risks_comments' => 'nullable|string',
+            'sse_comments' => 'nullable|string',
+            'actions' => 'nullable|array',
+        ]);
 
-            if ($created) { // inserted success
-                \Log::info(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Success insert data : " . json_encode([request()->all()]));
-                return redirect()->route('products.index')
-                    ->withSuccess('Created successfully...!');
-            }
-            throw new \Exception('fails not created..!', 403);
-        } catch (\Illuminate\Database\QueryException $e) { // Handle query exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error Query inserting data : " . $e->getMessage() . '');
-            // You can also return a response to the user
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        } catch (\Exception $e) { // Handle any runtime exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error inserting data : " . $e->getMessage() . '');
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
+        // Generate actions for immediate risks
+        $actions = $data['actions'] ?? [];
+        if ($data['risks_score'] === 'SO' || $data['sse_score'] <= 2) {
+            $actions[] = [
+                'description' => 'Address immediate risks identified',
+                'responsible' => 'RQSE Team',
+                'deadline' => now()->addDays(3)->toDateString(),
+                'type' => 'I',
+            ];
         }
+
+        $audit = Audit::create([
+            'date' => $data['date'],
+            'site' => $data['site'],
+            'auditor' => $data['auditor'],
+            'intervenant' => $data['intervenant'],
+            'themes_comments' => $data['themes_comments'],
+            'mission_score' => $data['mission_score'],
+            'mission_comments' => $data['mission_comments'],
+            'risks_score' => $data['risks_score'],
+            'risks_comments' => $data['risks_comments'],
+            'trainings_score' => $data['trainings_score'],
+            'trainings_comments' => $data['trainings_comments'],
+            'authorizations_score' => $data['authorizations_score'],
+            'authorizations_comments' => $data['authorizations_comments'],
+            'env_risks_score' => $data['env_risks_score'],
+            'env_risks_comments' => $data['env_risks_comments'],
+            'access_score' => $data['access_score'],
+            'access_comments' => $data['access_comments'],
+            'safety_score' => $data['safety_score'],
+            'safety_comments' => $data['safety_comments'],
+            'mase_score' => $data['mase_score'],
+            'mase_comments' => $data['mase_comments'],
+            'prevention_score' => $data['prevention_score'],
+            'prevention_comments' => $data['prevention_comments'],
+            'client_expectations_score' => $data['client_expectations_score'],
+            'client_expectations_comments' => $data['client_expectations_comments'],
+            'feedback_score' => $data['feedback_score'],
+            'feedback_comments' => $data['feedback_comments'],
+            'last_causerie_score' => $data['last_causerie_score'],
+            'last_causerie_comments' => $data['last_causerie_comments'],
+            'sse_score' => $data['sse_score'],
+            'sse_comments' => $data['sse_comments'],
+            'actions' => json_encode($actions),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Audit submitted successfully.',
+            'redirect' => route('dashboard'),
+        ]);
     }
 
     /**
@@ -105,35 +141,7 @@ class AuditController extends Controller
      */
     public function update(AuditUpdateRequest $request, Product $product)
     {
-        try {
-            $fileName = $product->image;
-            if ($request->hasFile('image')) {
-                if (Storage::exists('/public/products/' . $product->image)) {
-                    Storage::delete('/public/products/' . $product->image);
-                }
-                $filehandle = $this->_singleFileUploads($request, 'image', 'public/products');
-                $fileName = $filehandle['data']['name'];
-            }
-            $product->update(['name' => $request->name, 'description' => $request->description, 'image' => $fileName, 'parent_category_id' => $request->select_parent_cat, 'price' => $request->price, 'qty' => $request->qty, 'user_id' => auth()->user()->id]);
 
-            \Log::info(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Success updating data : " . json_encode([request()->all(), $product]));
-
-            return redirect()->route('products.index')
-                ->withSuccess('Updated Successfully...!');
-        } catch (\Illuminate\Database\QueryException $e) { // Handle query exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error Query updating data : " . $e->getMessage() . '');
-            // You can also return a response to the user
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        } catch (\Exception $e) { // Handle any runtime exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error updating data : " . $e->getMessage() . '');
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        }
     }
 
     /**
@@ -141,25 +149,7 @@ class AuditController extends Controller
      */
     public function destroy(Product $product)
     {
-        try {            
-            $product->delete();
-            \Log::info(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Success deleting data : " . json_encode([request()->all(), $product]));
-            return redirect()->route('products.index')
-                ->withSuccess('Deleted Successfully.');
-        } catch (\Illuminate\Database\QueryException $e) { // Handle query exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error Query deleting data : " . $e->getMessage() . '');
-            // You can also return a response to the user
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        } catch (\Exception $e) { // Handle any runtime exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error deleting data : " . $e->getMessage() . '');
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        }
+
     }
 
     /**

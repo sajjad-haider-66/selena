@@ -48,6 +48,11 @@
                         Actions
                     </x-nav-link>
                 </div>
+                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('fetch.notification')">
+                       <i class="fa fa-bell" style="font-size:18px"></i>
+                    </x-nav-link>
+                </div>
                 <!-- KEY : MULTIPERMISSION ends -->
             </div>
 

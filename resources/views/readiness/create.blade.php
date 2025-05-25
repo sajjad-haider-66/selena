@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="title">
-        Incident Report Form
+        Daily Work Readiness
     </x-slot>
 
     <x-slot name="header">
@@ -10,319 +10,575 @@
     </x-slot>
 
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
+        .checklist-section {
+            background-color: #f8f9fa;
             padding: 20px;
-            margin: 0;
-        }
-
-        .form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .header h1 {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
+            border-radius: 8px;
             margin-bottom: 20px;
-            font-size: 24px;
         }
 
-        .row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
+        .checklist-item {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
         }
 
-        .label {
-            flex: 1 1 30%;
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-item label {
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        .form-check {
+            margin-left: 20px;
+        }
+
+        .form-check-input {
+            margin-top: 3px;
+        }
+
+        .form-check-label {
+            color: #495057;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .progress-label {
+            font-size: 1.1rem;
             font-weight: bold;
-            color: #333;
+            margin-bottom: 10px;
+            color: #212529;
         }
 
-        .input-field,
-        .textarea {
-            flex: 1 1 65%;
-            padding: 8px;
-            border: 1px solid #ddd;
+        .progress {
+            height: 25px;
             border-radius: 5px;
-            font-size: 14px;
+            background-color: #e9ecef;
         }
 
-        .textarea {
-            height: 100px;
-            resize: vertical;
+        .progress-bar {
+            font-weight: bold;
+            font-size: 1rem;
+            transition: width 0.3s ease-in-out;
         }
 
-        .checkbox-group {
-            flex: 1 1 65%;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+        .alert-green .progress-bar {
+            background-color: #28a745;
         }
 
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .alert-blocked .progress-bar {
+            background-color: #dc3545;
         }
 
-        .image-section img {
-            max-width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        .submit-btn {
+        .btn-submit {
             background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
             border: none;
+            padding: 10px 20px;
+            font-size: 1.1rem;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
 
-        .submit-btn:hover {
+        .btn-submit:hover {
             background-color: #0056b3;
         }
 
-        .alert {
-            background: #ffe5e5;
-            border-left: 5px solid red;
+        #success-message,
+        #error-message {
+            display: none;
             margin-bottom: 20px;
-            padding: 10px 15px;
-            color: #d8000c;
-            border-radius: 5px;
+        }
+
+        .error-border {
+            border: 1px solid #dc3545 !important;
         }
     </style>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
-
-                <a href="{{ route('subcategory.index') }}" class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold uppercase bg-green-600 text-white rounded-md hover:bg-green-500">
-                    {{ __('Back') }}
-                </a>
-
-                @if ($errors->any())
-                    <div class="alert">
-                        <strong>Oops! Something went wrong:</strong>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                    <div class="header">
-                        <h1>Formulaire de Rapport d'Incident</h1>
-                    </div>
-
-                    <form method="POST" action="#">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Confined Spaces Checklist</h4>
+                    <span class="badge bg-light text-dark">Total Energies</span>
+                </div>
+                <div class="card-body">
+                    <a href="{{ route('daily_readiness.index') }}"
+                        class="btn btn-secondary inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold uppercase bg-green-600 text-white rounded-md hover:bg-green-500">
+                        {{ __('Back') }}
+                    </a>
+                    <div id="success-message" class="alert alert-success"></div>
+                    <div id="error-message" class="alert alert-danger"></div>
+                    <form id="readinessForm">
                         @csrf
-
                         <div class="row">
-                            <div class="label">Date :</div>
-                            <input type="date" name="date" class="input-field">
+                            <div class="col-md-6 mb-3">
+                                <label for="date" class="form-label">Date</label>
+                                <input type="date" name="date" id="date" class="form-control">
+                                <div class="invalid-feedback">Please select a date.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="site_name" class="form-label">Lieu (Site)</label>
+                                <input type="text" name="site_name" id="site_name" class="form-control">
+                                <div class="invalid-feedback">Please select a site.</div>
+                            </div>
                         </div>
-
                         <div class="row">
-                            <div class="label">Lieu (Site/Chantier) :</div>
-                            <input type="text" name="location" class="input-field" value="Station Total Relais des Tilleuls à Chatou">
-                        </div>
-
-                        <div class="row">
-                            <div class="label">Type d'Événement :</div>
-                            <div class="checkbox-group">
-                                <div class="checkbox-item"><input type="checkbox" name="event_type[]" value="situation_dangereuse" checked> Situation Dangereuse</div>
-                                <div class="checkbox-item"><input type="checkbox" name="event_type[]" value="presque_accident"> Presque Accident</div>
-                                <div class="checkbox-item"><input type="checkbox" name="event_type[]" value="incident"> Incident</div>
-                                <div class="checkbox-item"><input type="checkbox" name="event_type[]" value="accident"> Accident</div>
-                                <div class="checkbox-item"><input type="checkbox" name="event_type[]" value="maladie"> Maladie Professionnelle</div>
+                            <div class="col-md-6 mb-3">
+                                <label for="company_name" class="form-label">Entreprise observée (Company)</label>
+                                <input type="text" name="company_name" id="company_name" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="permit_number" class="form-label">Numéro de permis</label>
+                                <input type="text" name="permit_number" id="permit_number" class="form-control">
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="label">Émetteur :</div>
-                            <input type="text" name="emetteur" class="input-field">
-                        </div>
-
-                        <div class="row">
-                            <div class="label">Domaine :</div>
-                            <div class="checkbox-group">
-                                <div class="checkbox-item"><input type="checkbox" name="domaine[]" value="securite" checked> Sécurité</div>
-                                <div class="checkbox-item"><input type="checkbox" name="domaine[]" value="sante"> Santé</div>
-                                <div class="checkbox-item"><input type="checkbox" name="domaine[]" value="environnement"> Environnement</div>
-                                <div class="checkbox-item"><input type="checkbox" name="domaine[]" value="rse"> RSE</div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="label">Circonstances Détaillées :</div>
-                            <textarea name="details" class="textarea">Lors de notre intervention au sein de Total Relais des Tilleuls à Chatou pour une opération de nettoyage haute pression, nous avons projeté de l'eau sur le coffret électrique provoquant un court-circuit. Éclairage coupé dans la station de lavage.</textarea>
-                        </div>
-
-                        <div class="image-section">
-                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="Incident Image">
-                        </div>
-
-                        <div class="row">
-                            <div class="label">Risques Encourus :</div>
-                            <textarea name="risks" class="textarea">Le risque encourus aurait pu provoquer un départ de feu du coffret ainsi qu'un dommage financier au niveau de l'éclairage.</textarea>
-                        </div>
-                        <div class="header mt-8">
-                            <h1>Analyse simplifiée (Recueil des faits sur les manquements liés aux risques identifiés ci-dessous)</h1>
-                        </div>
-
-                            <div class="row">
-                                <div class="label w-full font-semibold">Sécurité des accès :</div>
-                                <div class="checkbox-group">
-                                    @foreach(['Chute de plain pied ou escalier', 'Chute dans trémie sans protection ou mal protégée', 'Chute de hauteur', 'Chute d’objet', 'Franchissement d’un balisage ou d’un garde-corps', 'Cheminement non sécurisé (manque de visibilité, obstacle, sol instable …)'] as $item)
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" name="access_security[]" value="{{ $item }}"> {{ $item }}
+                        <div class="checklist-section">
+                            <h5 class="mb-3">Points à vérifier</h5>
+                            <div id="checklist">
+                                <!-- Question 1 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">1. La vérification «Feu Vert Sécurité» a-t-elle été
+                                        réalisée ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[0][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
                                         </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="label w-full font-semibold">Matériel de sécurité :</div>
-                                <div class="checkbox-group">
-                                    @foreach(['Matériel de sécurité non vérifié', 'Matériel de sécurité inadapté', 'Matériel de sécurité indisponible', 'Non-respect d’une consigne de sécurité', 'Non port des EPI', 'Non utilisation d’EPC'] as $item)
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" name="safety_equipment[]" value="{{ $item }}"> {{ $item }}
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[0][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
                                         </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="label w-full font-semibold">Information sur les risques :</div>
-                                <div class="checkbox-group">
-                                    @foreach(['Absence de PdP ou de PPSPS', 'Non communication du PdP ou du PPSPS au collaborateur', 'Information sur les risques potentiels incomplète ou absente', 'Absence d’accueil sécurité sur le site'] as $item)
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" name="risk_information[]" value="{{ $item }}"> {{ $item }}
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[0][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
                                         </div>
-                                    @endforeach
+                                    </div>
+                                    <input type="hidden" name="checklist_data[0][question]"
+                                        value="La vérification *Feu Vert Sécurité* a-t-elle été réalisée ?">
+                                    <input type="hidden" name="checklist_data[0][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
                                 </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="label w-full font-semibold">Ambiances et situations de travail :</div>
-                                <div class="checkbox-group">
-                                    @foreach(['Produits toxiques, nocifs', 'Produits corrosifs, irritants', 'Risque électrique', 'Risque d’incendie, d’explosion', 'Risques liés à la coactivité (interventions superposées)', 'Modification des risques en cours de mission', 'Conditions d’hygiène dans les locaux'] as $item)
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" name="work_conditions[]" value="{{ $item }}"> {{ $item }}
+                                <!-- Question 2 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">2. Appliquer la check-list «Travaux sur systèmes
+                                        dé-énergisés » pour chaque énergie et répondre:
+                                        tous les points applicables sont-ils conformes ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[1][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
                                         </div>
-                                    @endforeach
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="label w-full font-semibold">Formation sécurité / Habilitations :</div>
-                                <div class="checkbox-group">
-                                    @foreach(['Formation sécurité insuffisante ou absente', 'Intervention d’un collaborateur non habilité', 'Habilitation périmée, à réexaminée'] as $item)
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" name="training_issues[]" value="{{ $item }}"> {{ $item }}
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[1][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
                                         </div>
-                                    @endforeach
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[1][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[1][question]"
+                                        value="Appliquer la check-list «Travaux sur systèmes
+                                        dé-énergisés » pour chaque énergie et répondre:
+                                        tous les points applicables sont-ils conformes ?">
+                                    <input type="hidden" name="checklist_data[1][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
+                                </div>
+                                <!-- Question 3 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">3. Une vérification d’atmosphère a-t-elle
+                                        été réalisée avant l’entrée dans l’ espace confiné ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[2][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
+                                        </div>
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[2][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[2][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[2][question]"
+                                        value="Une vérification d’atmosphère a-t-elle
+                                    été réalisée avant l’entrée dans l’ espace confiné ?">
+                                    <input type="hidden" name="checklist_data[2][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
+                                </div>
+                                <!-- Question 4 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">4. L’atmosphère est-elle surveillée (ou régulièrement
+                                        testée) pendant toute la présence en espace confiné ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[3][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
+                                        </div>
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[3][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[3][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[3][question]"
+                                        value="L’atmosphère est-elle surveillée (ou régulièrement
+                                        testée) pendant toute la présence en espace confiné ?">
+                                    <input type="hidden" name="checklist_data[3][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
+                                </div>
+                                <!-- Question 5 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">5. La surveillance à l’entrée est-elle déterminée
+                                        et assurée en tout temps ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[4][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
+                                        </div>
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[4][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[4][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[4][question]"
+                                        value="La surveillance à l’entrée est-elle déterminée
+                                        et assurée en tout temps ?">
+                                    <input type="hidden" name="checklist_data[4][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
+                                </div>
+                                <!-- Question 6 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">6. LLe nombre de personnes présentes
+                                        dans l’espace confiné est-il suivi à tout moment
+                                        du travail dans l’espace confiné ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[5][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
+                                        </div>
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[5][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[5][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[5][question]"
+                                        value="LLe nombre de personnes présentes
+                                    dans l’espace confiné est-il suivi à tout moment
+                                    du travail dans l’espace confiné ?">
+                                    <input type="hidden" name="checklist_data[5][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
+                                </div>
+                                <!-- Question 7 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">7. La communication entre le personnel de surveillance
+                                        de l’entrée et les entrants est-elle en place
+                                        et régulièrement testée ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[6][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
+                                        </div>
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[6][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[6][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[6][question]"
+                                        value="La communication entre le personnel de surveillance
+                                    de l’entrée et les entrants est-elle en place
+                                    et régulièrement testée ?">
+                                    <input type="hidden" name="checklist_data[6][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
+                                </div>
+                                <!-- Question 8 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">8. L’espace confiné est-il ventilé ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[7][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
+                                        </div>
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[7][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[7][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[7][question]"
+                                        value="Les permis de travail sont-ils validés ?">
+                                    <input type="hidden" name="checklist_data[7][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
+                                </div>
+                                <!-- Question 9 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">9. Si requise par le permis de travail, une protection
+                                        respiratoire adaptée est-elle utilisée ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[8][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
+                                        </div>
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[8][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[8][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[8][question]"
+                                        value="Si requise par le permis de travail, une protection
+                                    respiratoire adaptée est-elle utilisée ?">
+                                    <input type="hidden" name="checklist_data[8][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
+                                </div>
+                                <!-- Question 10 -->
+                                <div class="checklist-item">
+                                    <label class="form-label">10. Le plan de sauvetage est-il connu et prêt à être
+                                        activé ?</label>
+                                    <div class="d-flex">
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[9][answer]" value="Yes"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Oui</label>
+                                        </div>
+                                        <div class="form-check me-3">
+                                            <input type="radio" name="checklist_data[9][answer]" value="No"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">Non</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" name="checklist_data[9][answer]" value="N/A"
+                                                class="form-check-input checklist-input">
+                                            <label class="form-check-label">N/A</label>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="checklist_data[9][question]"
+                                        value="Le plan de sauvetage est-il connu et prêt à être activé ?">
+                                    <input type="hidden" name="checklist_data[9][score]" value="1">
+                                    <div class="invalid-feedback">Please select an option.</div>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="label">Autres :</div>
-                                <textarea name="other_notes" class="textarea"></textarea>
-                            </div>
- 
-                        <div class="header mt-8">
-                            <h1>Cotation du risque</h1>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-4 border p-4">
-                            <div>
-                                <strong>F : Fréquence d’exposition à ce danger</strong>
-                                <ul>
-                                    <li>1 : Faible (expo. &lt; 1 fois par an)</li>
-                                    <li>2 : Moyenne (expo. &lt; 1 fois par mois)</li>
-                                    <li>3 : Grande (expo. &gt; 1 fois par mois)</li>
-                                    <li>4 : Grande (expo. &gt; 1 fois par semaine)</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <strong>G : Gravité des dommages qui auraient pu survenir</strong>
-                                <ul>
-                                    <li>1 : Gêne ou dommage léger (Soin infirmier)</li>
-                                    <li>2 : Blessure légère (ASA)</li>
-                                    <li>3 : Blessure grave (AAA)</li>
-                                    <li>4 : Blessure grave (ATMORTEL)</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <strong>C : Cotation du risque</strong>
-                                <ul>
-                                    <li>C = 1 à 6 ➔ <span class="text-green-600">Action à entreprendre sous 1 semaine</span></li>
-                                    <li>C = 6 à 10 ➔ <span class="text-blue-600">Action à entreprendre sous 48 h</span></li>
-                                    <li>C &gt; 10 ➔ <span class="text-red-600 font-bold">Action urgente à entreprendre immédiatement</span></li>
-                                </ul>
+                        <div class="progress-container">
+                            <div class="progress-label" id="readiness-label">Readiness Rate: 0%</div>
+                            <div class="progress" id="readiness-progress">
+                                <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0"
+                                    aria-valuemin="0" aria-valuemax="100">0%</div>
                             </div>
                         </div>
 
-                        <div class="mt-4">
-                            <label class="font-semibold">Propositions pour éviter que cette situation dangereuse ne se reproduise :</label>
-                            <textarea name="prevention_proposal" class="textarea w-full">Rénover les coffrets électriques par des coffrets étanche et protéger tous les coffrets avant toute intervention</textarea>
-                        </div>
-
-                        <div class="mt-6">
-                            <h2 class="font-semibold">Nature des mesures qui permettraient d’éviter un accident</h2>
-                            <div class="checkbox-group grid grid-cols-2 gap-2">
-                                <div>
-                                    <label>
-                                        <input type="checkbox" name="measures[]" value="Information / formation" checked>
-                                        Information / formation
-                                    </label>
-                                    <p class="text-sm text-gray-600 ml-6">Information sur les dangers, procédures, plan de prévention, signalisation</p>
-                                </div>
-                                <div>
-                                    <label>
-                                        <input type="checkbox" name="measures[]" value="Organisation" checked>
-                                        Organisation
-                                    </label>
-                                    <p class="text-sm text-gray-600 ml-6">Préparation de la mission (bien protéger les coffrets électriques et autres éléments...)</p>
-                                </div>
-                                <div>
-                                    <label>
-                                        <input type="checkbox" name="measures[]" value="Equipement de sécurité">
-                                        Equipement de sécurité
-                                    </label>
-                                  
-                                </div>
-                             
-                            </div>
-                        </div>
-
-                        <br>
                         <div class="row">
-                            <button type="submit" class="submit-btn">Soumettre</button>
+                            <div class="col-md-6 mb-3">
+                                <label for="commentaires" class="form-label">Commentaires</label>
+                                <input type="text" name="commentaires" id="commentaires" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nom" class="form-label">Nom</label>
+                                <input type="text" name="nom" id="nom" class="form-control">
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="entreprise" class="form-label">Entreprise</label>
+                                <input type="text" name="entreprise" id="entreprise" class="form-control">
+                            </div>
+                            {{-- <div class="col-md-6 mb-3">
+                                <label for="signature" class="form-label">Signature</label>
+                                <input type="text" name="signature" id="signature" class="form-control @error('signature') is-invalid @enderror" value="{{ old('signature') }}">
+                                @error('signature')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div> --}}
+                        </div>
+
+                        <button type="submit" class="btn btn-submit w-100">Submit Checklist</button>
                     </form>
-
                 </div>
             </div>
+        </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            // Readiness Rate Calculation
+            const checklistInputs = $('.checklist-input');
+            const readinessLabel = $('#readiness-label');
+            const progressBar = $('#readiness-progress .progress-bar');
+
+            function calculateReadinessRate() {
+                let totalScore = 0;
+                let count = 0;
+                checklistInputs.each(function() {
+                    if (this.checked && this.value === 'Yes') {
+                        totalScore += parseInt($(this).closest('.checklist-item').find(
+                            'input[name$="[score]"]').val());
+                    }
+                    if (this.checked) {
+                        count++;
+                    }
+                });
+                const rate = count ? (totalScore / count) * 100 : 0;
+                readinessLabel.text(`Readiness Rate: ${rate.toFixed(1)}%`);
+                progressBar.css('width', `${rate}%`);
+                progressBar.text(`${rate.toFixed(1)}%`);
+                progressBar.parent().removeClass('alert-green alert-blocked');
+                progressBar.parent().addClass(rate >= 75 ? 'alert-green' : 'alert-blocked');
+            }
+
+            checklistInputs.on('change', calculateReadinessRate);
+
+            // AJAX Form Submission
+            $('body').on('submit', '#readinessForm', function(e) {
+                e.preventDefault(); // Prevent default form submission
+
+                const formData = $(this).serialize(); // Serialize form data
+                const submitButton = $(this).find('button[type="submit"]');
+                submitButton.prop('disabled',
+                true); // Disable submit button to prevent multiple submissions
+
+                // Reset previous error states
+                $('#success-message').hide();
+                $('#error-message').hide();
+                $('.form-control').removeClass('error-border');
+                $('.checklist-item').removeClass('error-border');
+                $('.invalid-feedback').hide();
+
+                // Client-side validation
+                let hasError = false;
+                const dateInput = $('#date');
+                const siteInput = $('#site_name');
+                const checklistItems = $('.checklist-item');
+
+                if (!dateInput.val()) {
+                    dateInput.addClass('error-border');
+                    dateInput.next('.invalid-feedback').show();
+                    hasError = true;
+                }
+                if (!siteInput.val()) {
+                    siteInput.addClass('error-border');
+                    siteInput.next('.invalid-feedback').show();
+                    hasError = true;
+                }
+                checklistItems.each(function() {
+                    const radioGroup = $(this).find('input[type="radio"]');
+                    if (!radioGroup.is(':checked')) {
+                        $(this).addClass('error-border');
+                        $(this).find('.invalid-feedback').show();
+                        hasError = true;
+                    }
+                });
+
+                if (hasError) {
+                    $('#error-message').text('Please fill out all required fields.').show();
+                    submitButton.prop('disabled', false);
+                    return; // Stop submission if validation fails
+                }
+
+                $.ajax({
+                    url: '{{ route('daily_readiness.store') }}', // Route to store the form
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.responseCode == 200) {
+                            $('#success-message').text(response.message).show();
+                            // Redirect after 2 seconds
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
+                            submitButton.prop('disabled', false);
+                        }
+                    },
+                    error: function(xhr) {
+                        const errors = xhr.responseJSON.errors;
+                        let errorMessage = 'Please fix the following errors:<br>';
+                        $.each(errors, function(key, value) {
+                            errorMessage += `- ${value[0]}<br>`;
+                            if (key === 'date') {
+                                $('#date').addClass('error-border');
+                                $('#date').next('.invalid-feedback').text(value[0])
+                                    .show();
+                            }
+                            if (key === 'site_name') {
+                                $('#site_name').addClass('error-border');
+                                $('#site_name').next('.invalid-feedback').text(value[0])
+                                    .show();
+                            }
+                            if (key.startsWith('checklist_data')) {
+                                const index = key.match(/\d+/)[0];
+                                $(`.checklist-item:eq(${index})`).addClass(
+                                    'error-border');
+                                $(`.checklist-item:eq(${index}) .invalid-feedback`)
+                                    .text(value[0]).show();
+                            }
+                        });
+                        $('#error-message').html(errorMessage).show();
+                        submitButton.prop('disabled', false);
+                    },
+                    complete: function() {
+                        // Scroll to top of form to show messages
+                        $('html, body').animate({
+                            scrollTop: $('#readinessForm').offset().top
+                        }, 500);
+                        submitButton.prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script>
 </x-app-layout>

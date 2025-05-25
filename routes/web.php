@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DailyReadinessController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('daily_readiness', App\Http\Controllers\DailyReadinessController::class);
     Route::resource('audit', App\Http\Controllers\AuditController::class);
     Route::resource('action', App\Http\Controllers\ActionController::class);
+    Route::get('fetch/notification', [DailyReadinessController::class, 'Notification'])->name('fetch.notification');
 });
 // KEY : MULTIPERMISSION ends
 
