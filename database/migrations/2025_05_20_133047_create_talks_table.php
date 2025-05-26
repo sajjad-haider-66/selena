@@ -12,20 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('talks', function (Blueprint $table) {
-            $table->id('talk_id');
+            $table->id('id');
             $table->date('date');
-            $table->unsignedBigInteger('site_id');
+            $table->string('lieu');
             $table->string('theme');
-            $table->unsignedBigInteger('animator_id');
-            $table->json('categories')->nullable();
-            $table->text('description')->nullable();
-            $table->text('feedback')->nullable();
-            $table->json('materials')->nullable();
-            $table->string('qr_code')->nullable();
+            $table->string('animateur');
+            $table->string('signature')->nullable();
+            $table->boolean('security')->default(false);
+            $table->boolean('health')->default(false);
+            $table->boolean('environment')->default(false);
+            $table->boolean('rse')->default(false);
+            $table->text('points')->nullable();
+            $table->text('commentaires')->nullable();
+            $table->json('participants')->nullable(); // Array of participants with name and signature
+            $table->json('actions')->nullable(); // Array of actions with type
+            $table->json('materials')->nullable(); // Uploaded materials or recordings
+            $table->json('feedback')->nullable(); // Feedback or concerns from users
+            $table->json('stats')->nullable(); // Participation stats
+            $table->text('notes')->nullable(); // Additional notes for archiving
             $table->timestamps();
-            
-            // $table->foreign('site_id')->references('site_id')->on('sites')->onDelete('cascade');
-            // $table->foreign('animator_id')->references('user_id')->on('users')->onDelete('cascade');
         });
     }
 

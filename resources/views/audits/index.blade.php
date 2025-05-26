@@ -95,11 +95,11 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Themes Comments</th>
-                                <th>Mission Comments</th>
-                                <th>Risks Comments</th>
-                                <th>Trainings Comments</th>
-                                <th>Authorizations Comments</th>
+                                <th>Date</th>
+                                <th>Lieu</th>
+                                <th>Auditeur</th>
+                                <th>Intervenant</th>
+                                <th>Culture_sse</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -107,11 +107,11 @@
                             @foreach ($audits as $form)
                             <tr>
                                 <td>{{ $form->id }}</td>
-                                <td>{{ $form->themes_comments }}</td>
-                                <td>{{ $form->mission_comments }}</td>
-                                <td>{{ $form->risks_comments }}</td>
-                                <td>{{ $form->trainings_comments }}</td>
-                                <td>{{ $form->authorizations_comments }}</td>
+                                <td>{{ $form->date }}</td>
+                                <td>{{ $form->lieu }}</td>
+                                <td>{{ $form->auditeur }}</td>
+                                <td>{{ $form->intervenant }}</td>
+                                <td>{{ $form->culture_sse }}</td>
                                 <td>
                                     <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
                                     <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>

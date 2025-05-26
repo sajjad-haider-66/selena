@@ -76,15 +76,13 @@
         }
     </style>
 
-
     <div class="row justify-content-center mt-4">
         <div class="col-md-10">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                   
+                    <h4>Formulaire d'Audit</h4>
                 </div>
                 <div class="card-body">
-                
                     <div id="success-message" class="alert alert-success"></div>
                     <div id="error-message" class="alert alert-danger"></div>
                     <form id="auditForm">
@@ -94,22 +92,22 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label>Date</label>
-                                <input type="date" name="date" class="form-control">
+                                <input type="date" name="date" class="form-control" required>
                             </div>
                             <div class="col-md-6">
                                 <label>Lieu (site / chantier)</label>
-                                <input type="text" name="lieu" class="form-control">
+                                <input type="text" name="lieu" class="form-control" required>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label>Auditeur</label>
-                                <input type="text" name="auditeur" class="form-control">
+                                <input type="text" name="auditeur" class="form-control" required>
                             </div>
                             <div class="col-md-6">
                                 <label>Nom de l'intervenant</label>
-                                <input type="text" name="intervenant" class="form-control">
+                                <input type="text" name="intervenant" class="form-control" required>
                             </div>
                         </div>
 
@@ -157,13 +155,13 @@
                                             ],
                                         ];
 
-                                        $radios = ['TS', 'S', 'IS', 'SO'];
+                                        $radios = ['TS', 'S', 'I', 'S2'];
                                         $index = 0;
                                     @endphp
 
                                     @foreach ($questions as $section => $qs)
                                         <tr class="table-primary fw-bold text-start">
-                                            <td colspan="7">{{ $section }}</td>
+                                            <td colspan="6">{{ $section }}</td>
                                         </tr>
 
                                         @foreach ($qs as $q)
@@ -171,9 +169,7 @@
                                                 <td class="text-start">{{ $q }}</td>
                                                 @foreach ($radios as $r)
                                                     <td>
-                                                        <input type="radio"
-                                                            name="responses[{{ $index }}][note]"
-                                                            value="{{ $r }}" class="form-check-input">
+                                                        <input type="radio" name="responses[{{ $index }}][note]" value="{{ $r }}" class="form-check-input" required>
                                                     </td>
                                                 @endforeach
                                                 <td>
@@ -186,17 +182,19 @@
                                 </tbody>
                             </table>
                         </div>
+
                         <h5>Culture SSE terrain</h5>
                         <div class="mb-3">
                             @foreach(['++', '+', '=/-', '-', '--'] as $val)
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="culture_sse" value="{{ $val }}" id="culture_{{ $loop->index }}">
-                                    <label class="form-check-label" for="culture_{{ $loop->index }}">{{ $val }}</label>
+                                    <input class="form-check-input" type="radio" name="culture_sse" value="{{ $val }}" id="culture_{{ $val }}" required>
+                                    <label class="form-check-label" for="culture_{{ $val }}">{{ $val }}</label>
                                 </div>
                             @endforeach
                         </div>
+
                         <h5 class="mt-4">Actions à mettre en place</h5>
-                        <div class="table-responsive mb-3">
+                        <div id="actions-container" class="table-responsive mb-3">
                             <table class="table table-bordered align-middle">
                                 <thead class="table-secondary text-center">
                                     <tr class="table-primary">
@@ -207,12 +205,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><textarea name="action[action]" class="form-control"></textarea></td>
-                                        <td><input type="text" name="action[responsable]" class="form-control"></td>
-                                        <td><input type="date" name="action[delai]" class="form-control"></td>
+                                    <tr class="action-row">
+                                        <td><textarea name="actions[0][description]" class="form-control"></textarea></td>
+                                        <td><input type="text" name="actions[0][responsable]" class="form-control"></td>
+                                        <td><input type="date" name="actions[0][delai]" class="form-control"></td>
                                         <td>
-                                            <select name="action[type]" class="form-select">
+                                            <select name="actions[0][type]" class="form-select">
                                                 <option value="I">Imméd. (I)</option>
                                                 <option value="C">Corrective (C)</option>
                                                 <option value="P">Préventive (P)</option>
@@ -222,8 +220,10 @@
                                 </tbody>
                             </table>
                         </div>
+                        <button type="button" id="add-action" class="btn btn-secondary mb-3">Add Action</button>
+
                         <!-- Submit -->
-                        <div class="text">
+                        <div class="text-center">
                             <button type="submit" class="btn btn-primary">Enregistrer</button>
                         </div>
                     </form>
@@ -232,113 +232,71 @@
         </div>
     </div>
 
-
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Score Selection
-            let scores = {};
-            $('.score-option').on('click', function() {
-                const field = $(this).data('field');
-                const score = $(this).data('score');
-                $(this).parent().find('.score-option').removeClass('score-selected');
-                $(this).addClass('score-selected');
-                scores[field] = score;
-                if (field === 'sse_score') {
-                    $('#sse_score').val(score);
-                } else {
-                    $(`input[name="${field}"]`).val(score);
-                }
-            });
+        $(document).ready(function () {
+            let actionCount = 0;
 
             // Add Action Dynamically
-            let actionCount = 0;
-            $('#add-action').on('click', function() {
-                const newAction = `
-                    <div class="action-row">
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="action_description_${actionCount}" class="form-label">Action</label>
-                                <textarea name="actions[${actionCount}][description]" id="action_description_${actionCount}" class="form-control" required></textarea>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="action_responsible_${actionCount}" class="form-label">Responsable</label>
-                                <input type="text" name="actions[${actionCount}][responsible]" id="action_responsible_${actionCount}" class="form-control" required>
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <label for="action_deadline_${actionCount}" class="form-label">Délai</label>
-                                <input type="date" name="actions[${actionCount}][deadline]" id="action_deadline_${actionCount}" class="form-control" required>
-                            </div>
-                            <div class="col-md-2 mb-3">
-                                <label class="form-label">Type</label>
-                                <select name="actions[${actionCount}][type]" class="form-control" required>
-                                    <option value="I">I (Immédiate)</option>
-                                    <option value="C">C (Corrective)</option>
-                                    <option value="P">P (Préventive)</option>
-                                </select>
-                            </div>
-                            <button type="button" class="btn btn-danger remove-action">Remove</button>
-                        </div>
-                    </div>
-                `;
-                $('#actions-container').append(newAction);
+            $('#add-action').on('click', function () {
                 actionCount++;
+                const newAction = `
+                    <tr class="action-row">
+                        <td><textarea name="actions[${actionCount}][description]" class="form-control" required></textarea></td>
+                        <td><input type="text" name="actions[${actionCount}][responsable]" class="form-control" required></td>
+                        <td><input type="date" name="actions[${actionCount}][delai]" class="form-control" required></td>
+                        <td>
+                            <select name="actions[${actionCount}][type]" class="form-select" required>
+                                <option value="I">Imméd. (I)</option>
+                                <option value="C">Corrective (C)</option>
+                                <option value="P">Préventive (P)</option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>
+                    </tr>
+                `;
+                $('#actions-container table tbody').append(newAction);
             });
 
             // Remove Action
-            $(document).on('click', '.remove-action', function() {
-                $(this).closest('.action-row').remove();
+            $(document).on('click', '.remove-action', function () {
+                $(this).closest('tr').remove();
             });
 
-            // Automatic Action for Immediate Risks
-            function generateImmediateAction() {
-                if (scores['risks_score'] === 'SO' || scores['sse_score'] <= 2) {
-                    if ($('#actions-container .action-row').length === 0) {
-                        $('#add-action').trigger('click');
-                        const lastAction = $('#actions-container .action-row:last');
-                        lastAction.find('textarea').val('Address immediate risks identified');
-                        lastAction.find('[name$="[responsible]"]').val('RQSE Team');
-                        lastAction.find('[name$="[deadline]"]').val(new Date(Date.now() + 3 * 86400000)
-                        .toISOString().split('T')[0]);
-                        lastAction.find('select').val('I');
-                    }
-                }
-            }
-
             // AJAX Form Submission
-            $('#auditForm').on('submit', function(e) {
+            $('#auditForm').on('submit', function (e) {
                 e.preventDefault();
 
                 // Reset messages
                 $('#success-message').hide();
                 $('#error-message').hide();
                 $('.form-control').removeClass('is-invalid');
-                $('.invalid-feedback').hide();
+                $('.form-check-input').removeClass('is-invalid');
 
                 // Client-side validation
                 let hasError = false;
-                $('input[required], textarea[required], select[required]').each(function() {
+                $('input[required], textarea[required], select[required]').each(function () {
                     if (!$(this).val()) {
                         $(this).addClass('is-invalid');
                         hasError = true;
                     }
                 });
-                if (!scores['sse_score']) {
-                    $('#error-message').text('Please select a SSE culture score.').show();
+                if (!$('input[name="culture_sse"]:checked').length) {
+                    $('#error-message').text('Please select a Culture SSE score.').show();
                     hasError = true;
                 }
                 if (hasError) return;
-
-                generateImmediateAction();
 
                 const formData = $(this).serialize();
                 const submitButton = $(this).find('button[type="submit"]');
                 submitButton.prop('disabled', true);
 
                 $.ajax({
-                    url: '{{ route('audit.store') }}',
+                    url: '{{ route("audit.store") }}',
                     type: 'POST',
                     data: formData,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             $('#success-message').text(response.message).show();
                             setTimeout(() => {
@@ -346,10 +304,10 @@
                             }, 2000);
                         }
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         const errors = xhr.responseJSON.errors;
                         let errorMessage = 'Please fix the following errors:<br>';
-                        $.each(errors, function(key, value) {
+                        $.each(errors, function (key, value) {
                             errorMessage += `- ${value[0]}<br>`;
                             $(`[name="${key}"]`).addClass('is-invalid');
                         });
@@ -360,6 +318,4 @@
             });
         });
     </script>
-
-
 </x-app-layout>

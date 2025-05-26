@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\TalkAnimation;
 use App\Http\Requests\TalkAnimationUpdateRequest;
 
@@ -42,9 +43,94 @@ class TalkAnimationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store()
+ public function store(Request $request)
     {
+        $data = $request->validate([
+            'date' => 'required|date',
+            'lieu' => 'required|string',
+            'theme' => 'required|string',
+            'animateur' => 'required|string',
+            'signature' => 'nullable|string',
+            'security' => 'nullable|boolean',
+            'health' => 'nullable|boolean',
+            'environment' => 'nullable|boolean',
+            'rse' => 'nullable|boolean',
+            'points' => 'nullable|string',
+            'commentaires' => 'nullable|string',
+            'participant_name' => 'nullable|array',
+            'participant_signature' => 'nullable|array',
+            'action' => 'nullable|array',
+            'responsable' => 'nullable|array',
+            'delai' => 'nullable|array',
+            'immediate' => 'nullable|array',
+            'corrective' => 'nullable|array',
+            'preventive' => 'nullable|array',
+        ]);
 
+        // Process participants
+        $participants = [];
+        if ($request->has('participant_name')) {
+            foreach ($request->input('participant_name') as $index => $name) {
+                if (!empty($name)) {
+                    $participants[] = [
+                        'name' => $name,
+                        'signature' => $request->input('participant_signature')[$index] ?? '',
+                    ];
+                }
+            }
+        }
+
+        // Process actions
+        $actions = [];
+        if ($request->has('action')) {
+            foreach ($request->input('action') as $index => $actionDescription) {
+                if (!empty($actionDescription)) {
+                    $type = [];
+                    if (in_array($index, $request->input('immediate', []))) $type[] = 'I';
+                    if (in_array($index, $request->input('corrective', []))) $type[] = 'C';
+                    if (in_array($index, $request->input('preventive', []))) $type[] = 'P';
+                    $actions[] = [
+                        'description' => $actionDescription,
+                        'responsable' => $request->input('responsable')[$index] ?? '',
+                        'delai' => $request->input('delai')[$index] ?? '',
+                        'type' => implode(',', $type),
+                    ];
+                }
+            }
+        }
+
+        // Basic stats for now (can be extended later)
+        $stats = [
+            'total_participants' => count($participants),
+            'event_date' => $data['date'],
+        ];
+
+        $talk = TalkAnimation::create([
+            'date' => $data['date'],
+            'lieu' => $data['lieu'],
+            'theme' => $data['theme'],
+            'animateur' => $data['animateur'],
+            'signature' => $data['signature'],
+            'security' => $request->has('security'),
+            'health' => $request->has('health'),
+            'environment' => $request->has('environment'),
+            'rse' => $request->has('rse'),
+            'points' => $data['points'],
+            'commentaires' => $data['commentaires'],
+            'participants' => json_encode($participants),
+            'actions' => json_encode($actions),
+            'stats' => json_encode($stats),
+        ]);
+
+        // Notify users (basic structure - implementation depends on your notification setup)
+        // $users = User::all();
+        // Notification::send($users, new TalkInvitation($talk));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Talk event created successfully.',
+            'redirect' => route('talk.index'),
+        ]);
     }
 
     /**

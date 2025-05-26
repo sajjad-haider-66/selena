@@ -51,69 +51,55 @@ class AuditController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $data = $request->validate([
             'date' => 'required|date',
+            'lieu' => 'required|string',
+            'auditeur' => 'required|string',
             'intervenant' => 'required|string',
-            'themes_comments' => 'nullable|string',
-            'mission_comments' => 'nullable|string',
-            'trainings_comments' => 'nullable|string',
-            'authorizations_comments' => 'nullable|string',
-            'env_risks_comments' => 'nullable|string',
-            'sse_comments' => 'nullable|string',
+            'responses' => 'nullable|array',
+            'culture_sse' => 'required|in:++,+,-=/--',
             'actions' => 'nullable|array',
         ]);
 
-        // Generate actions for immediate risks
+        // Process responses array to include only selected notes and comments
+        $responses = [];
+        if ($request->has('responses')) {
+            foreach ($request->input('responses') as $index => $response) {
+                if (isset($response['note']) && !empty($response['note'])) {
+                    $responses[] = [
+                        'question' => $request->input("responses.{$index}.question") ?? "Question {$index}",
+                        'note' => $response['note'],
+                        'comment' => $response['comment'] ?? '',
+                    ];
+                }
+            }
+        }
+
+        // Process actions array
         $actions = $data['actions'] ?? [];
-        if ($data['risks_score'] === 'SO' || $data['sse_score'] <= 2) {
+        if ($data['culture_sse'] === '--' || in_array('SO', array_column($responses, 'note'))) {
             $actions[] = [
                 'description' => 'Address immediate risks identified',
-                'responsible' => 'RQSE Team',
-                'deadline' => now()->addDays(3)->toDateString(),
+                'responsable' => 'RQSE Team',
+                'delai' => now()->addDays(3)->toDateString(),
                 'type' => 'I',
             ];
         }
 
         $audit = Audit::create([
             'date' => $data['date'],
-            'site' => $data['site'],
-            'auditor' => $data['auditor'],
+            'lieu' => $data['lieu'],
+            'auditeur' => $data['auditeur'],
             'intervenant' => $data['intervenant'],
-            'themes_comments' => $data['themes_comments'],
-            'mission_score' => $data['mission_score'],
-            'mission_comments' => $data['mission_comments'],
-            'risks_score' => $data['risks_score'],
-            'risks_comments' => $data['risks_comments'],
-            'trainings_score' => $data['trainings_score'],
-            'trainings_comments' => $data['trainings_comments'],
-            'authorizations_score' => $data['authorizations_score'],
-            'authorizations_comments' => $data['authorizations_comments'],
-            'env_risks_score' => $data['env_risks_score'],
-            'env_risks_comments' => $data['env_risks_comments'],
-            'access_score' => $data['access_score'],
-            'access_comments' => $data['access_comments'],
-            'safety_score' => $data['safety_score'],
-            'safety_comments' => $data['safety_comments'],
-            'mase_score' => $data['mase_score'],
-            'mase_comments' => $data['mase_comments'],
-            'prevention_score' => $data['prevention_score'],
-            'prevention_comments' => $data['prevention_comments'],
-            'client_expectations_score' => $data['client_expectations_score'],
-            'client_expectations_comments' => $data['client_expectations_comments'],
-            'feedback_score' => $data['feedback_score'],
-            'feedback_comments' => $data['feedback_comments'],
-            'last_causerie_score' => $data['last_causerie_score'],
-            'last_causerie_comments' => $data['last_causerie_comments'],
-            'sse_score' => $data['sse_score'],
-            'sse_comments' => $data['sse_comments'],
+            'responses' => json_encode($responses),
+            'culture_sse' => $data['culture_sse'],
             'actions' => json_encode($actions),
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Audit submitted successfully.',
-            'redirect' => route('dashboard'),
+            'redirect' => route('audit.index'),
         ]);
     }
 
