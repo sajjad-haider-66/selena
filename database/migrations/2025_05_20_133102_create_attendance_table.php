@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\TalkAnimation;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -12,15 +14,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attendance', function (Blueprint $table) {
-            $table->id('attendance_id');
-            $table->unsignedBigInteger('talk_id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('signature')->nullable();
-            $table->timestamp('marked_at')->nullable();
+            $table->id();
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(TalkAnimation::class)->nullable();
+            $table->date('date')->default(now()->toDateString());
+            $table->time('check_in')->nullable();
+            $table->time('check_out')->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
-            
-            // $table->foreign('talk_id')->references('talk_id')->on('talks')->onDelete('cascade');
-            // $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->unique(['user_id', 'date']);
         });
     }
 

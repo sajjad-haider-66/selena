@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -13,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('talks', function (Blueprint $table) {
             $table->id('id');
+            $table->foreignIdFor(User::class, 'created_by');
             $table->date('date');
             $table->string('lieu');
             $table->string('theme');
@@ -28,7 +30,7 @@ return new class extends Migration
             $table->json('actions')->nullable(); // Array of actions with type
             $table->json('materials')->nullable(); // Uploaded materials or recordings
             $table->json('feedback')->nullable(); // Feedback or concerns from users
-            $table->json('stats')->nullable(); // Participation stats
+             $table->string('status')->default('scheduled'); // scheduled, completed, archived
             $table->text('notes')->nullable(); // Additional notes for archiving
             $table->timestamps();
         });

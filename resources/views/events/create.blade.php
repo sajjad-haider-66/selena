@@ -9,9 +9,11 @@
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-label {
             font-weight: bold;
         }
+
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
@@ -20,16 +22,20 @@
             background-color: #f8f9fa;
             border-radius: 5px;
         }
+
         .checkbox-item {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        .action-table th, .action-table td {
+
+        .action-table th,
+        .action-table td {
             border: 1px solid #dee2e6;
             padding: 8px;
             text-align: center;
         }
+
         .category-title {
             background-color: #007bff;
             color: white;
@@ -38,6 +44,7 @@
             cursor: pointer;
             margin-bottom: 5px;
         }
+
         .category-content {
             display: block;
             padding: 10px;
@@ -45,6 +52,7 @@
             border-radius: 4px;
             margin-bottom: 10px;
         }
+
         /* .category-content.active {
             display: block;
         } */
@@ -59,32 +67,39 @@
 
                     <form id="eventForm" enctype="multipart/form-data">
                         @csrf
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" name="date" class="form-control" required>
+                                </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Date</label>
-                            <input type="date" name="date" class="form-control" required>
+                                <div class="form-group">
+                                    <label class="form-label">Lieu (site / chantier)</label>
+                                    <input type="text" name="lieu" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Type d'événement</label>
+                                    <select name="type" class="form-control" required>
+                                        <option value="">Sélectionner</option>
+                                        <option value="Dangerous situation">Situation Dangereuse</option>
+                                        <option value="Near miss">Presque Accident</option>
+                                        <option value="Work accident">Accident du Travail (AT)</option>
+                                        <option value="Occupational illness">Maladie Professionnelle (MP)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Émetteur</label>
+                                    <input type="text" name="emetteur" class="form-control">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Lieu (site / chantier)</label>
-                            <input type="text" name="lieu" class="form-control" required>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Type d'événement</label>
-                            <select name="type" class="form-control" required>
-                                <option value="">Sélectionner</option>
-                                <option value="Dangerous situation">Situation Dangereuse</option>
-                                <option value="Near miss">Presque Accident</option>
-                                <option value="Work accident">Accident du Travail (AT)</option>
-                                <option value="Occupational illness">Maladie Professionnelle (MP)</option>
-                            </select>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Émetteur</label>
-                            <input type="text" name="emetteur" class="form-control">
-                        </div>
 
                         <div class="form-group">
                             <label class="form-label">Catégories</label>
@@ -122,106 +137,170 @@
                             <label class="form-label">Analyse simplifiée (Sélectionnez les manquements)</label>
 
                             <!-- Sécurité des accès -->
-                            <div class="category-title" onclick="toggleCategory('securite_acces')">Sécurité des accès</div>
+                            <div class="category-title" onclick="toggleCategory('securite_acces')">Sécurité des accès
+                            </div>
                             <div id="securite_acces" class="category-content">
                                 <div class="checkbox-group">
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]" value="Chute de plain-pied ou escalier"> Chute de plain-pied ou escalier</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]" value="Chute dans trémie sans protection ou mal protégée"> Chute dans trémie sans protection</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]" value="Chute de hauteur"> Chute de hauteur</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]" value="Chute d’objet"> Chute d’objet</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]" value="Franchissement d’un balisage ou d’un garde-corps"> Franchissement d’un balisage ou garde-corps</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]" value="Cheminement non sécurisé"> Cheminement non sécurisé (manque de visibilité, obstacle, etc.)</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]"
+                                            value="Chute de plain-pied ou escalier"> Chute de plain-pied ou escalier
+                                    </div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]"
+                                            value="Chute dans trémie sans protection ou mal protégée"> Chute dans trémie
+                                        sans protection</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]"
+                                            value="Chute de hauteur"> Chute de hauteur</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]"
+                                            value="Chute d’objet"> Chute d’objet</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]"
+                                            value="Franchissement d’un balisage ou d’un garde-corps"> Franchissement
+                                        d’un balisage ou garde-corps</div>
+                                    <div class="checkbox-item"><input type="checkbox"
+                                            name="analyse[securite_acces][]" value="Cheminement non sécurisé">
+                                        Cheminement non sécurisé (manque de visibilité, obstacle, etc.)</div>
                                     <div class="checkbox-item">
-                                        <input type="text" name="analyse[securite_acces][other]" placeholder="Autre manquement (optionnel)">
+                                        <input type="text" name="analyse[securite_acces][other]"
+                                            placeholder="Autre manquement (optionnel)">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Matériel de sécurité -->
-                            <div class="category-title" onclick="toggleCategory('materiel_securite')">Matériel de sécurité</div>
+                            <div class="category-title" onclick="toggleCategory('materiel_securite')">Matériel de
+                                sécurité</div>
                             <div id="materiel_securite" class="category-content">
                                 <div class="checkbox-group">
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[materiel_securite][]" value="Matériel de sécurité non vérifié"> Matériel de sécurité non vérifié</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[materiel_securite][]" value="Matériel de sécurité inadapté"> Matériel de sécurité inadapté</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[materiel_securite][]" value="Matériel de sécurité indisponible"> Matériel de sécurité indisponible</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[materiel_securite][]" value="Non respect d’une consigne de sécurité"> Non respect d’une consigne de sécurité</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[materiel_securite][]" value="Non port des EPI"> Non port des EPI</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[materiel_securite][]" value="Non utilisation d’EPC"> Non utilisation d’EPC</div>
+                                    <div class="checkbox-item"><input type="checkbox"
+                                            name="analyse[materiel_securite][]"
+                                            value="Matériel de sécurité non vérifié"> Matériel de sécurité non vérifié
+                                    </div>
+                                    <div class="checkbox-item"><input type="checkbox"
+                                            name="analyse[materiel_securite][]" value="Matériel de sécurité inadapté">
+                                        Matériel de sécurité inadapté</div>
+                                    <div class="checkbox-item"><input type="checkbox"
+                                            name="analyse[materiel_securite][]"
+                                            value="Matériel de sécurité indisponible"> Matériel de sécurité
+                                        indisponible</div>
+                                    <div class="checkbox-item"><input type="checkbox"
+                                            name="analyse[materiel_securite][]"
+                                            value="Non respect d’une consigne de sécurité"> Non respect d’une consigne
+                                        de sécurité</div>
+                                    <div class="checkbox-item"><input type="checkbox"
+                                            name="analyse[materiel_securite][]" value="Non port des EPI"> Non port des
+                                        EPI</div>
+                                    <div class="checkbox-item"><input type="checkbox"
+                                            name="analyse[materiel_securite][]" value="Non utilisation d’EPC"> Non
+                                        utilisation d’EPC</div>
                                     <div class="checkbox-item">
-                                        <input type="text" name="analyse[materiel_securite][other]" placeholder="Autre manquement (optionnel)">
+                                        <input type="text" name="analyse[materiel_securite][other]"
+                                            placeholder="Autre manquement (optionnel)">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Information sur les risques -->
-                            <div class="category-title" onclick="toggleCategory('info_risques')">Information sur les risques</div>
+                            <div class="category-title" onclick="toggleCategory('info_risques')">Information sur les
+                                risques</div>
                             <div id="info_risques" class="category-content">
                                 <div class="checkbox-group">
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]" value="Absence de PdP ou de PPSPS"> Absence de PdP ou de PPSPS</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]" value="Non communication du PdP ou du PPSPS au collaborateur"> Non communication du PdP/PPSPS</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]" value="Information sur les risques potentiels incomplète ou absente"> Information sur les risques incomplète</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]" value="Absence d’accueil sécurité sur le site"> Absence d’accueil sécurité</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]"
+                                            value="Absence de PdP ou de PPSPS"> Absence de PdP ou de PPSPS</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]"
+                                            value="Non communication du PdP ou du PPSPS au collaborateur"> Non
+                                        communication du PdP/PPSPS</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]"
+                                            value="Information sur les risques potentiels incomplète ou absente">
+                                        Information sur les risques incomplète</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]"
+                                            value="Absence d’accueil sécurité sur le site"> Absence d’accueil sécurité
+                                    </div>
                                     <div class="checkbox-item">
-                                        <input type="text" name="analyse[info_risques][other]" placeholder="Autre manquement (optionnel)">
+                                        <input type="text" name="analyse[info_risques][other]"
+                                            placeholder="Autre manquement (optionnel)">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Ambiances et situations de travail -->
-                            <div class="category-title" onclick="toggleCategory('ambiances')">Ambiances et situations de travail</div>
+                            <div class="category-title" onclick="toggleCategory('ambiances')">Ambiances et situations
+                                de travail</div>
                             <div id="ambiances" class="category-content">
                                 <div class="checkbox-group">
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]" value="Produits toxiques, nocifs"> Produits toxiques, nocifs</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]" value="Produits corrosifs, irritants"> Produits corrosifs, irritants</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]" value="Risque électrique"> Risque électrique</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]" value="Risque d’incendie, d’explosion"> Risque d’incendie, d’explosion</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]" value="Risques liés à la coactivité"> Risques liés à la coactivité</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]" value="Modification des risques en cours de mission"> Modification des risques en cours</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]" value="Conditions d’hygiène dans les locaux"> Conditions d’hygiène insuffisantes</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]"
+                                            value="Produits toxiques, nocifs"> Produits toxiques, nocifs</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]"
+                                            value="Produits corrosifs, irritants"> Produits corrosifs, irritants</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]"
+                                            value="Risque électrique"> Risque électrique</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]"
+                                            value="Risque d’incendie, d’explosion"> Risque d’incendie, d’explosion
+                                    </div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]"
+                                            value="Risques liés à la coactivité"> Risques liés à la coactivité</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]"
+                                            value="Modification des risques en cours de mission"> Modification des
+                                        risques en cours</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]"
+                                            value="Conditions d’hygiène dans les locaux"> Conditions d’hygiène
+                                        insuffisantes</div>
                                     <div class="checkbox-item">
-                                        <input type="text" name="analyse[ambiances][other]" placeholder="Autre manquement (optionnel)">
+                                        <input type="text" name="analyse[ambiances][other]"
+                                            placeholder="Autre manquement (optionnel)">
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Formation sécurité / Habilitations -->
-                            <div class="category-title" onclick="toggleCategory('formation')">Formation sécurité / Habilitations</div>
+                            <div class="category-title" onclick="toggleCategory('formation')">Formation sécurité /
+                                Habilitations</div>
                             <div id="formation" class="category-content">
                                 <div class="checkbox-group">
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[formation][]" value="Formation sécurité insuffisante ou absente"> Formation sécurité insuffisante</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[formation][]" value="Intervention d’un collaborateur non habilité"> Collaborateur non habilité</div>
-                                    <div class="checkbox-item"><input type="checkbox" name="analyse[formation][]" value="Habilitation périmée, à réexaminée"> Habilitation périmée</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[formation][]"
+                                            value="Formation sécurité insuffisante ou absente"> Formation sécurité
+                                        insuffisante</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[formation][]"
+                                            value="Intervention d’un collaborateur non habilité"> Collaborateur non
+                                        habilité</div>
+                                    <div class="checkbox-item"><input type="checkbox" name="analyse[formation][]"
+                                            value="Habilitation périmée, à réexaminée"> Habilitation périmée</div>
                                     <div class="checkbox-item">
-                                        <input type="text" name="analyse[formation][other]" placeholder="Autre manquement (optionnel)">
+                                        <input type="text" name="analyse[formation][other]"
+                                            placeholder="Autre manquement (optionnel)">
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Fréquence d’exposition</label>
+                                    <select name="frequence" class="form-control" required>
+                                        <option value="1">Faible (< 1 fois/an)</option>
+                                        <option value="2">Moyenne (< 1 fois/mois)</option>
+                                        <option value="3">Grande (> 1 fois/mois)</option>
+                                        <option value="4">Grande (> 1 fois/semaine)</option>
+                                    </select>
+                                </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Fréquence d’exposition</label>
-                            <select name="frequence" class="form-control" required>
-                                <option value="1">Faible (< 1 fois/an)</option>
-                                <option value="2">Moyenne (< 1 fois/mois)</option>
-                                <option value="3">Grande (> 1 fois/mois)</option>
-                                <option value="4">Grande (> 1 fois/semaine)</option>
-                            </select>
+                                <div class="form-group">
+                                    <label class="form-label">Gravité des dommages</label>
+                                    <select name="gravite" class="form-control" required>
+                                        <option value="1">Gêne ou dommage léger</option>
+                                        <option value="2">Blessure légère</option>
+                                        <option value="3">Blessure grave</option>
+                                        <option value="4">Blessure mortelle</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Propositions pour éviter</label>
+                                    <textarea name="propositions[0]" class="form-control" rows="2"></textarea>
+                                </div>
+
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Gravité des dommages</label>
-                            <select name="gravite" class="form-control" required>
-                                <option value="1">Gêne ou dommage léger</option>
-                                <option value="2">Blessure légère</option>
-                                <option value="3">Blessure grave</option>
-                                <option value="4">Blessure mortelle</option>
-                            </select>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Propositions pour éviter</label>
-                            <textarea name="propositions[0]" class="form-control" rows="2"></textarea>
-                        </div>
 
                         <div class="form-group">
                             <label class="form-label">Mesures pour éviter accident</label>
@@ -258,9 +337,12 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><input type="text" name="actions[0][description]" class="form-control"></td>
-                                        <td><input type="text" name="actions[0][responsible]" class="form-control"></td>
-                                        <td><input type="date" name="actions[0][deadline]" class="form-control"></td>
+                                        <td><input type="text" name="actions[0][description]"
+                                                class="form-control"></td>
+                                        <td><input type="text" name="actions[0][responsible]"
+                                                class="form-control"></td>
+                                        <td><input type="date" name="actions[0][deadline]" class="form-control">
+                                        </td>
                                         <td>
                                             <select name="actions[0][type]" class="form-select">
                                                 <option value="I">Immédiate (I)</option>
@@ -279,7 +361,8 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary" style="background-color: #007bff">Enregistrer</button>
+                            <button type="submit" class="btn btn-primary"
+                                style="background-color: #007bff">Enregistrer</button>
                         </div>
                     </form>
                 </div>
@@ -290,8 +373,8 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#eventForm').on('submit', function (e) {
+        $(document).ready(function() {
+            $('#eventForm').on('submit', function(e) {
                 e.preventDefault();
 
                 var formData = new FormData(this);
@@ -299,12 +382,12 @@
                 submitButton.prop('disabled', true);
 
                 $.ajax({
-                    url: '{{ route("event.store") }}',
+                    url: '{{ route('event.store') }}',
                     type: 'POST',
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             $('#success-message').text(response.message).show();
                             setTimeout(() => {
@@ -312,10 +395,10 @@
                             }, 2000);
                         }
                     },
-                    error: function (xhr) {
+                    error: function(xhr) {
                         var errors = xhr.responseJSON.errors;
                         var errorMessage = 'Please fix the following errors:<br>';
-                        $.each(errors, function (key, value) {
+                        $.each(errors, function(key, value) {
                             errorMessage += `- ${value[0]}<br>`;
                         });
                         $('#error-message').html(errorMessage).show();

@@ -17,30 +17,30 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Date</th>
-                                <th>Site Name</th>
-                                <th>Company Name</th>
-                                <th>Permit #</th>
+                                <th>Lieu</th>
+                                <th>Theme</th>
+                                <th>Animateur</th>
+                                <th>Commentaires</th>
                                 <th>Status</th>
-                                <th>Rate (%)</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($talkanimations as $form)
+                            @foreach ($talkanimations as $talk)
                                 <tr>
-                                    <td>{{ $form->id }}</td>
-                                    <td>{{ $form->date }}</td>
-                                    <td>{{ $form->site_name }}</td>
-                                    <td>{{ $form->company_name }}</td>
-                                    <td>{{ $form->permit_number }}</td>
+                                    <td>{{ $talk->id }}</td>
+                                    <td>{{ $talk->date }}</td>
+                                    <td>{{ $talk->lieu }}</td>
+                                    <td>{{ $talk->theme }}</td>
+                                    <td>{{ $talk->animateur }}</td>
+                                    <td>{{ $talk->commentaires }}</td>
                                     <td>
-                                        <span class="badge {{ $form->status == 'Green' ? 'bg-success' : 'bg-danger' }}">
-                                            {{ $form->status }}
+                                        <span class="badge {{ $talk->status == 'Green' ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $talk->status }}
                                         </span>
                                     </td>
-                                    <td>{{ $form->readiness_rate }}%</td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-info" title="View"><i
+                                        <a href="{{ route('talk_animation.show', $talk->id) }}" class="btn btn-sm btn-info" title="View"><i
                                                 class="fa fa-eye"></i></a>
                                         <a href="#" class="btn btn-sm btn-warning" title="Edit"><i
                                                 class="fa fa-pencil"></i></a>

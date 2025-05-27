@@ -46,6 +46,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('action', ActionController::class);
     Route::resource('event', EventController::class);
     Route::get('fetch/notification', [DailyReadinessController::class, 'Notification'])->name('fetch.notification');
+    Route::post('/talk/{id}/materials', [TalkAnimationController::class, 'uploadMaterials'])->name('talk_animation.materials');
+    Route::post('/talk/{id}/attendance', [TalkAnimationController::class, 'markAttendance'])->name('talk_animation.attendance');
+    Route::post('/talk/{id}/attendance/qr', [TalkAnimationController::class, 'markAttendanceQR'])->name('talk_animation.attendance.qr');
+    Route::post('/talk/{id}/feedback', [TalkAnimationController::class, 'submitFeedback'])->name('talk_animation.feedback');
+    Route::post('/talk/{id}/archive', [TalkAnimationController::class, 'archive'])->name('talk_animation.archive');
 });
 // KEY : MULTIPERMISSION ends
 

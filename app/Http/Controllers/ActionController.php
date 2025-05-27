@@ -34,9 +34,8 @@ class ActionController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('updated_at', 'desc')->get();
-        $orders = Order::where('user_id', auth()->user()->id)->orderBy('updated_at', 'desc')->get();
-        return view('orders.index', compact('products', 'orders'));
+        $actions = Action::where('pilot_id', auth()->user()->id)->orderBy('updated_at', 'desc')->get();
+        return view('actions.index', compact('actions'));
     }
 
     /**
@@ -45,7 +44,7 @@ class ActionController extends Controller
     public function create()
     {
         $products = Product::where('status', Product::STATUS_ACTIVE)->get();
-        return view('orders.create', compact('products'));
+        return view('actions.create', compact('products'));
     }
 
     /**

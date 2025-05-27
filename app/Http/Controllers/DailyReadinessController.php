@@ -85,7 +85,7 @@ use ApiResponse;
                 $manager = User::whereHas('roles', fn($q) => $q->where('name', 'SuperManger'))->first();
                 if ($manager) {
                     Notification::create([
-                        'user_id' => $manager->id,
+                        'to_user_id' => $manager->id,
                         'message' => "Readiness form blocked for site Name {$form->site_name}. Rate: {$readinessRate}%",
                     ]);
                 }
@@ -145,7 +145,7 @@ use ApiResponse;
 
     public function Notification()
     {
-        $all_notifications = Notification::where('user_id', auth()->user()->id)->get();
+        $all_notifications = Notification::where('to_user_id', auth()->user()->id)->get();
         return view('readiness.notification', compact('all_notifications'));
     }
 }

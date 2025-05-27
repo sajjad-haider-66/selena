@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Models\TalkAnimation;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TalkAnimationUpdateRequest;
 
 class TalkAnimationController extends Controller
@@ -43,7 +45,7 @@ class TalkAnimationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
- public function store(Request $request)
+    public function store(Request $request)
     {
         $data = $request->validate([
             'date' => 'required|date',
@@ -51,10 +53,10 @@ class TalkAnimationController extends Controller
             'theme' => 'required|string',
             'animateur' => 'required|string',
             'signature' => 'nullable|string',
-            'security' => 'nullable|boolean',
-            'health' => 'nullable|boolean',
-            'environment' => 'nullable|boolean',
-            'rse' => 'nullable|boolean',
+            // 'security' => 'nullable|boolean',
+            // 'health' => 'nullable|boolean',
+            // 'environment' => 'nullable|boolean',
+            // 'rse' => 'nullable|boolean',
             'points' => 'nullable|string',
             'commentaires' => 'nullable|string',
             'participant_name' => 'nullable|array',
@@ -99,46 +101,149 @@ class TalkAnimationController extends Controller
             }
         }
 
-        // Basic stats for now (can be extended later)
-        $stats = [
-            'total_participants' => count($participants),
-            'event_date' => $data['date'],
-        ];
-
         $talk = TalkAnimation::create([
             'date' => $data['date'],
+            'created_by' => auth()->user()->id,
             'lieu' => $data['lieu'],
             'theme' => $data['theme'],
-            'animateur' => $data['animateur'],
-            'signature' => $data['signature'],
-            'security' => $request->has('security'),
-            'health' => $request->has('health'),
-            'environment' => $request->has('environment'),
-            'rse' => $request->has('rse'),
+            'animateur' => $data['animateur'] ?? 'dummy',
+            'signature' => $data['signature']?? 'dummy',
+            'security' => $request->has('security')?? 'dummy',
+            'health' => $request->has('health')?? 'dummy',
+            'environment' => $request->has('environment')?? 'dummy',
+            'rse' => $request->has('rse')?? 'dummy',
             'points' => $data['points'],
             'commentaires' => $data['commentaires'],
             'participants' => json_encode($participants),
             'actions' => json_encode($actions),
-            'stats' => json_encode($stats),
+            'status' => 'scheduled',
         ]);
 
-        // Notify users (basic structure - implementation depends on your notification setup)
-        // $users = User::all();
+        // Notify and Invite Users
+        // $users = User::where('role', '!=', 'RQSE Manager')->get();
         // Notification::send($users, new TalkInvitation($talk));
 
         return response()->json([
             'success' => true,
             'message' => 'Talk event created successfully.',
-            'redirect' => route('talk.index'),
+            'redirect' => route('talk_animation.index'),
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show($id)
     {
-        // return view('category.show', compact('category'));
+        $talk = TalkAnimation::findOrFail($id);
+        return view('talk_animations.show', compact('talk'));
+    }
+
+    public function uploadMaterials(Request $request, $id)
+    {
+        $talk = TalkAnimation::findOrFail($id);
+
+        $materials = $talk->materials ?? [];
+        foreach ($request->file('materials') as $file) {
+            $path = $file->store('talks', 'public');
+            $materials[] = $path;
+        }
+
+        $talk->update(['materials' => $materials]);
+        return redirect()->back()->with('success', 'Materials uploaded successfully.');
+    }
+
+    public function markAttendance(Request $request, $id)
+    {
+        $talk = TalkAnimation::findOrFail($id);
+        if ($talk->date != now()->toDateString()) {
+            return response()->json(['error' => 'Attendance can only be marked on the event day.'], 400);
+        }
+
+        $userId = Auth::id();
+        $attendance = Attendance::firstOrNew([
+            'user_id' => $userId,
+            'talk_animation_id' => $talk->id,
+            'date' => now()->toDateString(),
+        ]);
+
+        if (!$attendance->check_in) {
+            $attendance->check_in = now()->toTimeString();
+            $attendance->status = 'checked_in';
+            $attendance->save();
+
+            // $talk->increment('participants_count');
+        }
+
+        return response()->json(['success' => true, 'message' => 'Attendance marked successfully.']);
+    }
+
+    public function markAttendanceQR(Request $request, $id)
+    {
+        $talk = TalkAnimation::findOrFail($id);
+        if ($talk->date != now()->toDateString()) {
+            return response()->json(['error' => 'Attendance can only be marked on the event day.'], 400);
+        }
+
+        $userId = $request->input('user_id'); // From QR code scan
+        $attendance = Attendance::firstOrNew([
+            'user_id' => $userId,
+            'talk_id' => $talk->id,
+            'date' => now()->toDateString(),
+        ]);
+
+        if (!$attendance->check_in) {
+            $attendance->check_in = now()->toTimeString();
+            $attendance->status = 'checked_in';
+            $attendance->save();
+
+            $talk->increment('participants_count');
+        }
+
+        return response()->json(['success' => true, 'message' => 'Attendance marked via QR code.']);
+    }
+
+    public function submitFeedback(Request $request, $id)
+    {
+        $talk = TalkAnimation::findOrFail($id);
+        $request->validate([
+            'feedback' => 'required|string',
+            'concerns' => 'nullable|string',
+        ]);
+
+        $feedback = $talk->feedback ?? [];
+        $feedback[] = [
+            'user_id' => Auth::id(),
+            'feedback' => $request->input('feedback'),
+            'submitted_at' => now()->toDateTimeString(),
+        ];
+
+        $concerns = $talk->concerns ?? [];
+        if ($request->filled('concerns')) {
+            $concerns[] = [
+                'user_id' => Auth::id(),
+                'concern' => $request->input('concerns'),
+                'submitted_at' => now()->toDateTimeString(),
+            ];
+        }
+
+        $talk->update([
+            'feedback' => $feedback,
+            'concerns' => $concerns,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Feedback submitted successfully.']);
+    }
+
+    public function archive(Request $request, $id)
+    {
+        $talk = TalkAnimation::findOrFail($id);
+        $talk->update([
+            'status' => 'archived',
+            'notes' => $request->input('notes', 'Talk completed and archived.'),
+        ]);
+
+        return redirect()->back()->with('success', 'Talk archived successfully.');
     }
 
     /**

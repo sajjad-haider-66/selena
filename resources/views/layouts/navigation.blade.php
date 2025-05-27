@@ -16,18 +16,21 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
-            
-                 <!-- KEY : MULTIPERMISSION starts -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index') || request()->routeIs('users.create') || request()->routeIs('users.edit') || request()->routeIs('users.show')">
-                        Users
-                    </x-nav-link>
-                </div>
+                @if(auth()->user()->can('user-list'))
+                    <!-- KEY : MULTIPERMISSION starts -->
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index') || request()->routeIs('users.create') || request()->routeIs('users.edit') || request()->routeIs('users.show')">
+                            Users
+                        </x-nav-link>
+                    </div>
+                @endif
+                @if(auth()->user()->can('role-list'))
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index') || request()->routeIs('roles.create') || request()->routeIs('roles.edit') || request()->routeIs('roles.show')">
                         Roles
                     </x-nav-link>
                 </div>
+                @endif
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('talk_animation.index')" :active="request()->routeIs('talk_animation.index') || request()->routeIs('talk_animation.create') || request()->routeIs('talk_animation.edit') || request()->routeIs('talk_animation.show')">
                         Talk/Animation

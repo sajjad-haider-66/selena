@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Event;
+use App\Models\Action;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 use App\Notifications\EventReported;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class EventController extends Controller
 {
@@ -126,10 +129,30 @@ class EventController extends Controller
             'attachments' => json_encode($attachments),
         ]);
 
+        // Auto-generate Action
+        $priority = $cotation > 10 ? 'High' : ($cotation > 6 ? 'Medium' : 'Low');
+        $action = Action::create([
+            'origin' => 'Event-' . $event->id,
+            'origin_id' => $event->id,
+            'description' => 'Address ' . $data['risques'],
+            'issued_date' => now(),
+            'type' => $actions[0]['type'] ?? 'Preventive',
+            'responsible_id' => $this->assignResponsible($event->type, $cotation),
+            'deadline' => $actions[0]['deadline'] ?? now()->addDays(7),
+            'json_data' => json_encode(['event_id' => $event->id, 'progress' => 0]),
+        ]);
+
         // Notify Client or RQSE (basic structure)
         // $client = User::where('role', 'client')->first();
         // $rqse = User::where('role', 'rqse')->first();
         // Notification::send([$client, $rqse], new EventReported($event));
+
+        $notification = Notification::create([
+            'to_user_id' => Auth::id(),
+            'from_user_id' => Auth::id(),
+            'action' => 'user_event_notify',
+            'message' => 'Ypu are invite for this event',
+        ]);
 
         return response()->json([
             'success' => true,
@@ -138,12 +161,22 @@ class EventController extends Controller
         ]);
     }
 
+    private function assignResponsible($eventType, $cotation)
+    {
+        // Logic to assign responsible based on event type and cotation
+        if ($cotation > 10 || $eventType === 'Work accident') {
+            return User::where('role', 'SuperManager')->first()->id ?? 1; // Default to Super Manager
+        }
+        return User::where('role', 'RQSE Team')->first()->id ?? 1; // Default to RQSE
+    }
+
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $event = Event::findOrFail($id);
+        return view('event.show', compact('event'));
     }
 
     /**

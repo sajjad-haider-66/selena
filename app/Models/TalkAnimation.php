@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Attendance;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TalkAnimation extends Model
 {
@@ -13,7 +14,7 @@ class TalkAnimation extends Model
         'date', 'lieu', 'theme', 'animateur', 'signature',
         'security', 'health', 'environment', 'rse',
         'points', 'commentaires', 'participants', 'actions',
-        'materials', 'feedback', 'stats', 'notes'
+        'materials', 'feedback', 'status', 'notes', 'created_by'
     ];
 
     protected $casts = [
@@ -21,6 +22,15 @@ class TalkAnimation extends Model
         'actions' => 'array',
         'materials' => 'array',
         'feedback' => 'array',
-        'stats' => 'array',
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'talk_id');
+    }
 }

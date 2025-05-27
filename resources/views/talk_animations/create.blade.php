@@ -144,7 +144,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">
-                                    <textarea name="points" rows="4" style="width:100%; border:none; padding:8px;">Un produit corrosif est un produit qui va attaquer et détruire la matière organique donc les tissus corporels. La plupart sont des acides et des bases : les acides corrosifs les plus communs sont les acides chlorhydriques, sulfuriques, nitriques, chromiques, acétiques et fluorhydriques (avec une toxicité particulière)</textarea>
+                                    <textarea name="points" rows="4" style="width:100%; border:none; padding:8px;">Saisir les points couverts</textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -153,8 +153,8 @@
                             <tr>
                                 <td colspan="4">
                                     <div>
-                                        <textarea name="commentaires" rows="2" style="width:100%; border:none; padding:8px;">En voyant ce pictogramme, il faut bien penser à s'équiper des EPI adéquates</textarea>
-                                        <img src="{{ asset('images/corrosive_pictogram.png') }}" alt="Pictogramme Corrosif" class="corrosive-img">
+                                        <textarea name="commentaires" rows="2" style="width:100%; border:none; padding:8px;">Entrer des commentaires</textarea>
+                                        {{-- <img src="{{ asset('images/corrosive_pictogram.png') }}" alt="Pictogramme Corrosif" class="corrosive-img"> --}}
                                     </div>
                                 </td>
                             </tr>
@@ -232,7 +232,7 @@
                         <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="${actionCount}"></td>
                         <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="${actionCount}"></td>
                         <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="${actionCount}"></td>
-                        <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action">Remove</button></td>
+                        <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
                     </tr>
                 `;
                 $('#actions-table tbody').append(newAction);
