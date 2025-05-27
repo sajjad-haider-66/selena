@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('audits', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+           $table->date('date');
             $table->string('lieu');
             $table->string('auditeur');
             $table->string('intervenant');
             $table->json('responses')->nullable(); // Array of responses with notes and comments
             $table->string('culture_sse')->nullable(); // SSE culture score (++, +, =/-, -, --)
+            $table->integer('qser_score')->nullable(); // Added QSER score
             $table->json('actions')->nullable(); // Array of actions
             $table->timestamps();
         });

@@ -49,7 +49,7 @@ class AuditController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   public function store(Request $request)
     {
         $data = $request->validate([
             'date' => 'required|date',
@@ -61,7 +61,41 @@ class AuditController extends Controller
             'actions' => 'nullable|array',
         ]);
 
-        // Process responses array to include only selected notes and comments
+        // Calculate score based on responses
+        $totalScore = 0;
+        if ($request->has('responses')) {
+            foreach ($request->input('responses') as $response) {
+                $note = $response['note'] ?? '';
+                switch ($note) {
+                    case 'TS':
+                        $totalScore += 2;
+                        break;
+                    case 'S':
+                        $totalScore += 1;
+                        break;
+                    case 'IS':
+                        $totalScore -= 1;
+                        break;
+                    case 'SO':
+                        $totalScore += 0;
+                        break;
+                }
+            }
+        }
+
+        // Calculate QSER score based on range
+        $qserScore = $totalScore;
+        if ($qserScore >= 12) {
+            $cultureQser = '++';
+        } elseif ($qserScore >= 0) {
+            $cultureQser = '+';
+        } elseif ($qserScore >= -12) {
+            $cultureQser = '-';
+        } else {
+            $cultureQser = '--';
+        }
+
+        // Process responses array
         $responses = [];
         if ($request->has('responses')) {
             foreach ($request->input('responses') as $index => $response) {
@@ -77,7 +111,7 @@ class AuditController extends Controller
 
         // Process actions array
         $actions = $data['actions'] ?? [];
-        if ($data['culture_sse'] === '--' || in_array('SO', array_column($responses, 'note'))) {
+        if ($data['culture_sse'] === '--' || in_array('S2', array_column($responses, 'note'))) {
             $actions[] = [
                 'description' => 'Address immediate risks identified',
                 'responsable' => 'RQSE Team',
@@ -92,7 +126,8 @@ class AuditController extends Controller
             'auditeur' => $data['auditeur'],
             'intervenant' => $data['intervenant'],
             'responses' => json_encode($responses),
-            'culture_sse' => $data['culture_sse'],
+            'culture_sse' => $cultureQser, // Updated with calculated QSER
+            'qser_score' => $qserScore,   // Added QSER score
             'actions' => json_encode($actions),
         ]);
 

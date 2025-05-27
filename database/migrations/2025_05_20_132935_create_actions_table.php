@@ -12,28 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('actions', function (Blueprint $table) {
-            $table->id('action_id');
-            $table->enum('origin', [
-                'Audit MASE', 'Revue Direction', 'Vérifications Périodiques', 'Document Unique',
-                'Audits Terrains', 'Accident', 'Incident', 'Animations SSE', 'Demandes Client',
-                'Communication', 'Veille Règlementaire', 'Comité SSE'
-            ]);
+            $table->id();
+           $table->string('origin');
+            $table->integer('origin_id')->nullable();
             $table->text('description');
-            $table->enum('action_type', ['Immediate', 'Corrective', 'Preventive']);
-            $table->unsignedBigInteger('pilot_id');
+            $table->dateTime('issued_date')->nullable();
+            $table->enum('type', ['Immediate', 'Corrective', 'Preventive'])->default('Preventive');
+            $table->Integer('verifier_id')->nullable();
             $table->date('due_date');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->unsignedBigInteger('verifier_id')->nullable();
             $table->date('verified_date')->nullable();
-            $table->integer('progress')->default(0);
+            $table->integer('progress_rate')->default(0);
             $table->enum('efficiency', ['O', 'N'])->nullable();
-            $table->text('comment')->nullable();
+            $table->text('comments')->nullable();
             $table->enum('status', ['Not Started', 'In Progress', 'Completed'])->default('Not Started');
+            $table->string('pilot_id')->nullable();
+             $table->json('json_data')->nullable();
             $table->timestamps();
             
-            // $table->foreign('pilot_id')->references('user_id')->on('users')->onDelete('cascade');
-            // $table->foreign('verifier_id')->references('user_id')->on('users')->onDelete('set null');
         });
     }
 

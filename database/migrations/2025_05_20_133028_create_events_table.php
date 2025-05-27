@@ -12,24 +12,28 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id('event_id');
+           $table->id();
             $table->date('date');
-            $table->unsignedBigInteger('site_id');
-            $table->enum('event_type', ['Dangerous Situation', 'Near Miss', 'Incident', 'Accident', 'Occupational Illness']);
-            $table->unsignedBigInteger('emitter_id');
-            $table->json('categories')->nullable();
-            $table->text('description');
-            $table->text('risks')->nullable();
-            $table->json('media')->nullable();
-            $table->json('risk_analysis')->nullable();
-            $table->json('risk_cotation')->nullable();
-            $table->text('propositions')->nullable();
-            $table->json('measure_types')->nullable();
-            $table->enum('status', ['Reported', 'Validated'])->default('Reported');
+            $table->string('lieu');
+            $table->string('type')->nullable(); // Dangerous situation, Near miss, Work accident, Occupational illness
+            $table->string('emetteur')->nullable();
+            $table->boolean('securite')->default(false);
+            $table->boolean('sante')->default(false);
+            $table->boolean('environnement')->default(false);
+            $table->boolean('rse')->default(false);
+            $table->text('circonstances')->nullable();
+            $table->text('risques')->nullable();
+            $table->json('analyse')->nullable(); // Array of checked risk factors
+            $table->integer('cotation')->nullable();
+            $table->string('frequence')->nullable(); // 1, 2, 3, 4
+            $table->string('gravite')->nullable(); // 1, 2, 3, 4
+            $table->json('propositions')->nullable(); // Array of propositions
+            $table->json('mesures')->nullable(); // Array of measures
+            $table->json('actions')->nullable(); // Array of actions with responsible, deadline, type
+            $table->json('attachments')->nullable(); // Photos or videos
+            $table->boolean('validated')->default(false);
             $table->timestamps();
             
-            // $table->foreign('site_id')->references('site_id')->on('sites')->onDelete('cascade');
-            // $table->foreign('emitter_id')->references('user_id')->on('users')->onDelete('cascade');
         });
     }
 

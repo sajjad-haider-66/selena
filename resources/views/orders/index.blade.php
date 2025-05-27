@@ -342,4 +342,52 @@
             </div>
         </div>
     </div>
+        <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#submitForm').on('click', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData($('#actionForm')[0]);
+                var progress = $('#progress').val();
+                $('#progress-fill').css('width', progress + '%');
+
+                $.ajax({
+                    url: '{{ route('action.store') }}',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.success) {
+                            $('#success-message p').text(response.message);
+                            $('#success-message').show();
+                            setTimeout(() => {
+                                $('#success-message').hide();
+                            }, 3000);
+                        }
+                    },
+                    error: function(xhr) {
+                        var errors = xhr.responseJSON.errors;
+                        var errorMessage = '<p><strong>Opps Something went wrong</strong></p><ul>';
+                        $.each(errors, function(key, value) {
+                            errorMessage += '<li>' + value[0] + '</li>';
+                        });
+                        errorMessage += '</ul>';
+                        $('#error-message ul').html(errorMessage);
+                        $('#error-message').show();
+                        setTimeout(() => {
+                            $('#error-message').hide();
+                        }, 5000);
+                    }
+                });
+            });
+
+            $('#progress').on('change', function() {
+                var progress = $(this).val();
+                $('#progress-fill').css('width', progress + '%');
+            });
+        });
+    </script>
 </x-app-layout>

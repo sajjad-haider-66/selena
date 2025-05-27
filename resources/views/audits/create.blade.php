@@ -32,21 +32,6 @@
             color: white;
         }
 
-        .score-option {
-            cursor: pointer;
-            padding: 5px 10px;
-            border: 1px solid #dee2e6;
-            border-radius: 3px;
-            display: inline-block;
-            margin-right: 5px;
-        }
-
-        .score-selected {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
-
         .action-row {
             background-color: #f8f9fa;
             padding: 10px;
@@ -119,8 +104,8 @@
                                         <th style="width: 50%;">Thèmes abordés</th>
                                         <th>TS</th>
                                         <th>S</th>
-                                        <th>I</th>
-                                        <th>S2</th>
+                                        <th>IS</th>
+                                        <th>SO</th>
                                         <th>Commentaires</th>
                                     </tr>
                                 </thead>
@@ -155,7 +140,7 @@
                                             ],
                                         ];
 
-                                        $radios = ['TS', 'S', 'I', 'S2'];
+                                        $radios = ['TS', 'S', 'IS', 'SO'];
                                         $index = 0;
                                     @endphp
 
@@ -192,6 +177,7 @@
                                 </div>
                             @endforeach
                         </div>
+                        <p id="qser-display" class="mt-2"></p>
 
                         <h5 class="mt-4">Actions à mettre en place</h5>
                         <div id="actions-container" class="table-responsive mb-3">

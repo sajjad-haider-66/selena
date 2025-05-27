@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Action;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use App\Models\OrderProductPivot;
-use App\Http\Requests\OrderStoreRequest;
-use App\Http\Requests\ActionStoreRequest;
-use App\Http\Requests\OrderUpdateRequest;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ActionUpdateRequest;
 
 class ActionController extends Controller
@@ -49,42 +51,97 @@ class ActionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ActionStoreRequest $request)
+    public function store(Request $request)
     {
-        try {
-            $createdOrder = Order::firstOrCreate(['order_code' => $request->order_code, 'user_id' => auth()->user()->id]);
+        $request->validate([
+            'origin.*.mase' => 'nullable|boolean',
+            'origin.*.direction' => 'nullable|boolean',
+            'origin.*.verifications' => 'nullable|boolean',
+            'origin.*.document' => 'nullable|boolean',
+            'origin.*.audits' => 'nullable|boolean',
+            'origin.*.accident' => 'nullable|boolean',
+            'origin.*.incident' => 'nullable|boolean',
+            'origin.*.animations' => 'nullable|boolean',
+            'origin.*.demandes' => 'nullable|boolean',
+            'origin.*.communication' => 'nullable|boolean',
+            'origin.*.veille' => 'nullable|boolean',
+            'origin.*.comite' => 'nullable|boolean',
+            'new_action_number' => 'required_if:origin.new_action_number,null|string',
+            'new_description' => 'required_if:origin.new_description,null|string',
+            'new_date' => 'required_if:origin.new_date,null|date',
+            'actions.*.i' => 'nullable|boolean',
+            'actions.*.c' => 'nullable|boolean',
+            'actions.*.p' => 'nullable|boolean',
+            'new_action_date' => 'required_if:actions.new_action_date,null|date',
+            'new_action_description' => 'required_if:actions.new_action_description,null|string',
+            'new_action_pilot' => 'required_if:actions.new_action_pilot,null|string',
+            'new_action_deadline' => 'required_if:actions.new_action_deadline,null|date',
+            'new_action_progress' => 'required_if:actions.new_action_progress,null|integer|min:0|max:100',
+        ]);
 
-            // Create an array of data for bulk insertion
-            $data = [];
-            foreach ($request->products as $productId) {
-                $data[] = [
-                    'order_id' => $createdOrder->id,
-                    'product_id' => $productId,
-                ];
-            }
-            OrderProductPivot::insert($data);
-            if ($createdOrder) { // inserted success
-                $createdOrder->total_amount = Product::whereIn('id', $request->products)->sum('price');
-                $createdOrder->save();
-                \Log::info(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Success inserting data : ".json_encode([request()->all(),$data]));
-                return redirect()->route('orders.index')
-                    ->withSuccess('Created successfully...!');
-            }
-            throw new \Exception('fails not created..!', 403);
-        } catch (\Illuminate\Database\QueryException $e) { // Handle query exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error Query inserting data : " . $e->getMessage() . '');
-            // You can also return a response to the user
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        } catch (\Exception $e) { // Handle any runtime exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error inserting data : " . $e->getMessage() . '');
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
+        $jsonData = [
+            'origin' => $request->input('origin', []),
+            'actions' => $request->input('actions', []),
+        ];
+
+        // Handle new action row
+        if ($request->filled('new_action_number')) {
+            $jsonData['origin'][] = array_filter([
+                'mase' => $request->input('new_origin.mase'),
+                'direction' => $request->input('new_origin.direction'),
+                'verifications' => $request->input('new_origin.verifications'),
+                'document' => $request->input('new_origin.document'),
+                'audits' => $request->input('new_origin.audits'),
+                'accident' => $request->input('new_origin.accident'),
+                'incident' => $request->input('new_origin.incident'),
+                'animations' => $request->input('new_origin.animations'),
+                'demandes' => $request->input('new_origin.demandes'),
+                'communication' => $request->input('new_origin.communication'),
+                'veille' => $request->input('new_origin.veille'),
+                'comite' => $request->input('new_origin.comite'),
+                'description' => $request->input('new_description'),
+                'issued_date' => $request->input('new_date'),
+            ]);
         }
+
+        if ($request->filled('new_action_date')) {
+            $jsonData['actions'][] = array_filter([
+                'issued_date' => $request->input('new_action_date'),
+                'description' => $request->input('new_action_description'),
+                'i' => $request->input('new_action_i'),
+                'c' => $request->input('new_action_c'),
+                'p' => $request->input('new_action_p'),
+                'pilot' => $request->input('new_action_pilot'),
+                'deadline' => $request->input('new_action_deadline'),
+                'start_date' => $request->input('new_action_started'),
+                'end_date' => $request->input('new_action_completed'),
+                'verifier' => $request->input('new_action_verifier'),
+                'verified_date' => $request->input('new_action_verified'),
+                'progress_rate' => $request->input('new_action_progress'),
+                'efficiency' => $request->input('new_action_efficiency'),
+                'comment' => $request->input('new_action_comment'),
+            ]);
+        }
+
+        $action = Action::create([
+            'origin' => 'SSE Action', // Default origin
+            'origin_id' => 1, // Default origin_id (can be dynamic)
+            'description' => $jsonData['actions'][0]['description'] ?? 'No description',
+            'issued_date' => $jsonData['actions'][0]['issued_date'] ?? now(),
+            'type' => $this->getActionType($jsonData['actions'][0]),
+            'responsible_id' => Auth::id(),
+            'json_data' => json_encode($jsonData),
+        ]);
+
+        return redirect()->back()->with('success', 'Actions saved successfully.');
+    }
+
+    private function getActionType($actionData)
+    {
+        if ($actionData['i']) return 'Immediate';
+        if ($actionData['c']) return 'Corrective';
+        if ($actionData['p']) return 'Preventive';
+        return 'Preventive';
     }
 
     /**
@@ -125,38 +182,7 @@ class ActionController extends Controller
      */
     public function update(ActionUpdateRequest $request, Order $order)
     {
-        try {
-            // Delete old order and product record 
-            OrderProductPivot::where('order_id', $order->id)->delete();
-            // Create an array of data for bulk insertion
-            $data = [];
-            foreach ($request->products as $productId) {
-                $data[] = [
-                    'order_id' => $order->id,
-                    'product_id' => $productId,
-                ];
-            }
-            OrderProductPivot::insert($data);
-            // update order details
-            $order->updateOrFail(['order_code' => $request->order_code, 'total_amount' => Product::whereIn('id', $request->products)->sum('price'), 'user_id' => auth()->user()->id]);
 
-            \Log::info(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Success updating data : ".json_encode([request()->all(),$order]));
-            return redirect()->route('orders.index')
-                ->withSuccess('Updated Successfully...!');            
-        } catch (\Illuminate\Database\QueryException $e) { // Handle query exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error Query updating data : " . $e->getMessage() . '');
-            // You can also return a response to the user
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        } catch (\Exception $e) { // Handle any runtime exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error updating data : " . $e->getMessage() . '');
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        }
     }
 
     /**
@@ -164,26 +190,7 @@ class ActionController extends Controller
      */
     public function destroy(Order $order)
     {
-        try {
-            OrderProductPivot::where('order_id', $order->id)->delete(); // related order and product pivot data remove
-            $order->delete(); // main order table record remove
-            \Log::info(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Success deleting data : " . json_encode([request()->all(), $order]));
-            return redirect()->route('orders.index')
-                ->withSuccess('Deleted Successfully.');                
-        } catch (\Illuminate\Database\QueryException $e) { // Handle query exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error Query deleting data : " . $e->getMessage() . '');
-            // You can also return a response to the user
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        } catch (\Exception $e) { // Handle any runtime exception
-            \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error deleting data : " . $e->getMessage() . '');
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', "error occurs failed to proceed...! " . $e->getMessage());
-        }
+
     }
 
 }

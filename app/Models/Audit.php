@@ -9,9 +9,9 @@ class Audit extends Model
 {
     use HasFactory;
 
-     protected $table = 'audits';
+    protected $table = 'audits';
     protected $fillable = [
-        'date', 'lieu', 'auditeur', 'intervenant', 'responses', 'culture_sse', 'actions'
+        'date', 'lieu', 'auditeur', 'intervenant', 'responses', 'culture_sse', 'qser_score', 'actions'
     ];
 
     protected $casts = [

@@ -44,6 +44,11 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('event.index')" :active="request()->routeIs('event.index') || request()->routeIs('event.create') || request()->routeIs('event.edit') || request()->routeIs('event.show')">
+                        Event
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('action.index')" :active="request()->routeIs('action.index') || request()->routeIs('action.create') || request()->routeIs('action.edit') || request()->routeIs('action.show')">
                         Actions
                     </x-nav-link>

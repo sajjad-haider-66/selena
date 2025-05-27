@@ -49,6 +49,11 @@ class PermissionTableSeeder extends Seeder
             'action-edit',
             'action-delete',
             'action-show',
+            'event-list',
+            'event-create',
+            'event-edit',
+            'event-delete',
+            'event-show',
 
         ];
         foreach ($permissions as $permission) {

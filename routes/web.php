@@ -1,7 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuditController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\ActionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TalkAnimationController;
 use App\Http\Controllers\DailyReadinessController;
 
 /*
@@ -32,12 +38,13 @@ Route::middleware('auth')->group(function () {
 // KEY : MULTIPERMISSION starts
 Route::group(['middleware' => ['auth']], function() {
 // Route::group(function() {
-    Route::resource('roles', App\Http\Controllers\RoleController::class);
-    Route::resource('users', App\Http\Controllers\UserController::class);
-    Route::resource('talk_animation', App\Http\Controllers\TalkAnimationController::class);
-    Route::resource('daily_readiness', App\Http\Controllers\DailyReadinessController::class);
-    Route::resource('audit', App\Http\Controllers\AuditController::class);
-    Route::resource('action', App\Http\Controllers\ActionController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('talk_animation', TalkAnimationController::class);
+    Route::resource('daily_readiness', DailyReadinessController::class);
+    Route::resource('audit', AuditController::class);
+    Route::resource('action', ActionController::class);
+    Route::resource('event', EventController::class);
     Route::get('fetch/notification', [DailyReadinessController::class, 'Notification'])->name('fetch.notification');
 });
 // KEY : MULTIPERMISSION ends
