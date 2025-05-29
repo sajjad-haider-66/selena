@@ -14,10 +14,8 @@ return new class extends Migration
     {
         Schema::create('checklists', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ReadinessForm::class);
-            $table->string('question_number')->nullable();
+            $table->string('category')->nullable();
             $table->text('question');
-            $table->enum('answer', ['Yes', 'No', 'N/A'])->nullable();
             $table->integer('score')->nullable();
             $table->timestamps();
             

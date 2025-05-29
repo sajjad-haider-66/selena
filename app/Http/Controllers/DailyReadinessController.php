@@ -43,7 +43,9 @@ use ApiResponse;
      */
     public function create()
     {
-        return view('readiness.create');
+        // Fetch all checklist questions from the database
+        $checklists = Checklist::all();
+        return view('readiness.create', compact('checklists'));
     }
 
     /**
