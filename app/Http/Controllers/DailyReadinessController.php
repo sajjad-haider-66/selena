@@ -86,6 +86,7 @@ use ApiResponse;
                 if ($manager) {
                     Notification::create([
                         'to_user_id' => $manager->id,
+                        'action' => 'daily_work_readness',
                         'message' => "Readiness form blocked for site Name {$form->site_name}. Rate: {$readinessRate}%",
                     ]);
                 }

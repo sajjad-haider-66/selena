@@ -57,7 +57,7 @@ class AuditController extends Controller
             'auditeur' => 'required|string',
             'intervenant' => 'required|string',
             'responses' => 'nullable|array',
-            'culture_sse' => 'required|in:++,+,-=/--',
+            'culture_sse' => 'required|in:++,+,-=/,-,--',
             'actions' => 'nullable|array',
         ]);
 

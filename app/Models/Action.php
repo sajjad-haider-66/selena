@@ -12,9 +12,9 @@ class Action extends Model
     protected $table = 'actions';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'origin', 'origin_id', 'description', 'issued_date', 'type', 'responsible_id',
+        'origin', 'origin_id', 'description', 'issued_date', 'type', 'pilot_id',
         'start_date', 'end_date', 'verified_date', 'progress_rate', 'efficiency',
-        'comments', 'json_data' // To store origin and actions arrays
+        'comments', 'json_data', 'due_date' // To store origin and actions arrays
     ];
 
     protected $casts = [

@@ -539,7 +539,7 @@
                             $('#success-message').text(response.message).show();
                             // Redirect after 2 seconds
                             setTimeout(() => {
-                                window.location.reload();
+                                window.location.href= '{{ route('daily_readiness.index') }}';
                             }, 2000);
                             submitButton.prop('disabled', false);
                         }

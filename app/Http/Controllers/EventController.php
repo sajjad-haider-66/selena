@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Action;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Notifications\EventReported;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
 
 class EventController extends Controller
 {
@@ -52,7 +52,7 @@ class EventController extends Controller
         $data = $request->validate([
             'date' => 'required|date',
             'lieu' => 'required|string',
-            'type' => 'required|in:Dangerous situation,Near miss,Work accident,Occupational illness',
+            'type' => 'required',
             'emetteur' => 'nullable|string',
             // 'securite' => 'nullable|boolean',
             // 'sante' => 'nullable|boolean',
@@ -136,10 +136,14 @@ class EventController extends Controller
             'origin_id' => $event->id,
             'description' => 'Address ' . $data['risques'],
             'issued_date' => now(),
-            'type' => $actions[0]['type'] ?? 'Preventive',
-            'responsible_id' => $this->assignResponsible($event->type, $cotation),
+            // 'type' => $actions[0]['type'] ?? 'Preventive',
+            'pilot_id' => $this->assignResponsible($event->type, $cotation),
             'deadline' => $actions[0]['deadline'] ?? now()->addDays(7),
             'json_data' => json_encode(['event_id' => $event->id, 'progress' => 0]),
+            'due_date' => now()->addDays(7),
+            'progress_rate' => 0,
+            'efficiency' => 'N',
+            'comments' => 'Action generated from event reporting',
         ]);
 
         // Notify Client or RQSE (basic structure)
@@ -163,11 +167,11 @@ class EventController extends Controller
 
     private function assignResponsible($eventType, $cotation)
     {
-        // Logic to assign responsible based on event type and cotation
         if ($cotation > 10 || $eventType === 'Work accident') {
-            return User::where('role', 'SuperManager')->first()->id ?? 1; // Default to Super Manager
+            return User::role('SuperManager')->first()->id ?? 1;
         }
-        return User::where('role', 'RQSE Team')->first()->id ?? 1; // Default to RQSE
+
+        return User::role('RQSE Team')->first()->id ?? 1;
     }
 
     /**
