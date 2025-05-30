@@ -10,10 +10,11 @@ use App\Models\ReadinessForm;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AuditStoreRequest;
 use App\Http\Requests\AuditUpdateRequest;
+use App\Traits\ApiResponse;
 
 class AuditController extends Controller
 {
-
+    use ApiResponse;
     /**
      * Display a listing of the resource.
      *
@@ -168,9 +169,11 @@ class AuditController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-
+        $audit = Audit::FindOrFail($id);
+        $audit->delete();
+        return $this->success('Audit Delete Successfully', ['success' => true, 'data' => null]);
     }
 
     /**

@@ -104,18 +104,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($audits as $form)
+                            @foreach ($audits as $audit)
                             <tr>
-                                <td>{{ $form->id }}</td>
-                                <td>{{ $form->date }}</td>
-                                <td>{{ $form->lieu }}</td>
-                                <td>{{ $form->auditeur }}</td>
-                                <td>{{ $form->intervenant }}</td>
-                                <td>{{ $form->culture_sse }}</td>
+                                <td>{{ $audit->id }}</td>
+                                <td>{{ $audit->date }}</td>
+                                <td>{{ $audit->lieu }}</td>
+                                <td>{{ $audit->auditeur }}</td>
+                                <td>{{ $audit->intervenant }}</td>
+                                <td>{{ $audit->culture_sse }}</td>
                                 <td>
                                     <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
                                     <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                    <a href="#" class="btn btn-sm btn-danger delete-audits" data-id="{{ $audit->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach
@@ -134,6 +134,62 @@
             responsive: true,
             "lengthChange": false,
         });
+        $('body').on('click', '.delete-audits', function () {
+            deleteAudits($(this));
+        });
+        function deleteAudits(data) {
+            let active = "Delete";
+                let remove_id = data.data("id");
+
+            Swal.fire({
+                title: 'Are you sure you want to ' + active + ' this?',
+                text: "You can't undo this action.",
+                type: active === 'Active' ? 'success' : 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, ' + active + ' it!',
+                confirmButtonColor: "#4B49AC",
+                confirmButtonClass: "btn-danger",
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                onClose: () => {
+                    removeBodyPadding();
+                },
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                "content"
+                            ),
+                        },
+                        data: { '_method': 'DELETE' },
+                        url: "audit/destory/" + remove_id,
+                        type: 'Post',
+                        success: function (data) {
+                            console.log(data);
+                            if (data.responseCode === 200) {
+                                toastr.success('Audit deleted successfully');
+                                setTimeout(function () {// wait for 2 secs(2)
+                                    window.location.reload(); // then reload the page.(3)
+                                }, 1000);
+
+                            } else if (data.responseCode === 401) {
+                                toastr.error(data.response);
+                            }
+                            return data;
+                        },
+                        error: function (response) {
+                            let message = 'Something Went Wrong';
+
+                            if (response.responseJSON.message != undefined) {
+                                message = response.responseJSON.message
+                            }
+                            toastr.error(message);
+                        }
+                    });
+                }
+            });
+        }
     });
 </script>
 </x-app-layout>

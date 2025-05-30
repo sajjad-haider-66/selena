@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\TalkAnimation;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TalkAnimationUpdateRequest;
+use App\Traits\ApiResponse;
 
 class TalkAnimationController extends Controller
 {
+    use ApiResponse;
     /**
      * Display a listing of the resource.
      *
@@ -265,8 +267,10 @@ class TalkAnimationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy($id)
     {
-
+        $talk = TalkAnimation::FindOrFail($id);
+        $talk->delete();
+        return $this->success('Talk Animation Delete Successfully', ['success' => true, 'data' => null]);
     }
 }

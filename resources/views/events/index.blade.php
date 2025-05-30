@@ -104,18 +104,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($events as $form)
+                            @foreach ($events as $event)
                             <tr>
-                                <td>{{ $form->id }}</td>
-                                <td>{{ $form->date }}</td>
-                                <td>{{ $form->lieu }}</td>
-                                <td>{{ $form->type }}</td>
-                                <td>{{ $form->emetteur }}</td>
-                                <td>{{ $form->cotation }}</td>
+                                <td>{{ $event->id }}</td>
+                                <td>{{ $event->date }}</td>
+                                <td>{{ $event->lieu }}</td>
+                                <td>{{ $event->type }}</td>
+                                <td>{{ $event->emetteur }}</td>
+                                <td>{{ $event->cotation }}</td>
                                 <td>
                                     <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
                                     <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
+                                    <a href="#" class="btn btn-sm btn-danger delete-events" data-id="{{ $event->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach
@@ -127,13 +127,70 @@
         </div>
     </div>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css">
-<script src="https://cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
     <script>
     $(document).ready(function () {
         $('#event_table').DataTable({
             responsive: true,
             "lengthChange": false,
         });
+
+        $('body').on('click', '.delete-events', function () {
+            deleteEvents($(this));
+        });
+        function deleteEvents(data) {
+                let active = "Delete";
+                 let remove_id = data.data("id");
+
+                Swal.fire({
+                    title: 'Are you sure you want to ' + active + ' this?',
+                    text: "You can't undo this action.",
+                    type: active === 'Active' ? 'success' : 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, ' + active + ' it!',
+                    confirmButtonColor: "#4B49AC",
+                    confirmButtonClass: "btn-danger",
+                    cancelButtonText: "Cancel",
+                    allowOutsideClick: false,
+                    onClose: () => {
+                        removeBodyPadding();
+                    },
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            headers: {
+                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                    "content"
+                                ),
+                            },
+                            data: { '_method': 'DELETE' },
+                            url: "event/destory/" + remove_id,
+                            type: 'Post',
+                            success: function (data) {
+                                console.log(data);
+                                if (data.responseCode === 200) {
+                                    toastr.success('Event deleted successfully');
+                                    setTimeout(function () {// wait for 2 secs(2)
+                                        window.location.reload(); // then reload the page.(3)
+                                    }, 1000);
+
+                                } else if (data.responseCode === 401) {
+                                    toastr.error(data.response);
+                                }
+                                return data;
+                            },
+                            error: function (response) {
+                                let message = 'Something Went Wrong';
+
+                                if (response.responseJSON.message != undefined) {
+                                    message = response.responseJSON.message
+                                }
+                                toastr.error(message);
+                            }
+                        });
+                    }
+                });
+        }
     });
 </script>
 </x-app-layout>

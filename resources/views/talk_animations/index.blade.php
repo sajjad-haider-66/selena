@@ -44,7 +44,7 @@
                                                 class="fa fa-eye"></i></a>
                                         <a href="#" class="btn btn-sm btn-warning" title="Edit"><i
                                                 class="fa fa-pencil"></i></a>
-                                        <a href="#" class="btn btn-sm btn-danger" title="Delete"><i
+                                        <a href="#" class="btn btn-sm btn-danger delete-talks" data-id="{{ $talk->id }}" title="Delete"><i
                                                 class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
@@ -67,6 +67,63 @@
             "autoWidth": false,
             "responsive": true,
         });
+
+        $('body').on('click', '.delete-talks', function () {
+            deleteTalks($(this));
+        });
+        function deleteTalks(data) {
+            let active = "Delete";
+                let remove_id = data.data("id");
+
+            Swal.fire({
+                title: 'Are you sure you want to ' + active + ' this?',
+                text: "You can't undo this action.",
+                type: active === 'Active' ? 'success' : 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, ' + active + ' it!',
+                confirmButtonColor: "#4B49AC",
+                confirmButtonClass: "btn-danger",
+                cancelButtonText: "Cancel",
+                allowOutsideClick: false,
+                onClose: () => {
+                    removeBodyPadding();
+                },
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                "content"
+                            ),
+                        },
+                        data: { '_method': 'DELETE' },
+                        url: "talk/destory/" + remove_id,
+                        type: 'Post',
+                        success: function (data) {
+                            console.log(data);
+                            if (data.responseCode === 200) {
+                                toastr.success('talk animation deleted successfully');
+                                setTimeout(function () {// wait for 2 secs(2)
+                                    window.location.reload(); // then reload the page.(3)
+                                }, 1000);
+
+                            } else if (data.responseCode === 401) {
+                                toastr.error(data.response);
+                            }
+                            return data;
+                        },
+                        error: function (response) {
+                            let message = 'Something Went Wrong';
+
+                            if (response.responseJSON.message != undefined) {
+                                message = response.responseJSON.message
+                            }
+                            toastr.error(message);
+                        }
+                    });
+                }
+            });
+        }
     });
 </script>
 </x-app-layout>

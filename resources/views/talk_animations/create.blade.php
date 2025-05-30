@@ -256,6 +256,7 @@
                     type: 'POST',
                     data: formData,
                     success: function (response) {
+                        toastr.success(response.message);
                         if (response.success) {
                             window.location.href = response.redirect;
                         }
@@ -263,6 +264,7 @@
                     error: function (xhr) {
                         const errors = xhr.responseJSON.errors;
                         let errorMessage = 'Please fix the following errors:<br>';
+                        toastr.error(response.message);
                         $.each(errors, function (key, value) {
                             errorMessage += `- ${value[0]}<br>`;
                         });

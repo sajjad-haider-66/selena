@@ -8,11 +8,12 @@ use App\Models\Action;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Notifications\EventReported;
+use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
-
+    use ApiResponse;
     /**
      * Display a listing of the resource.
      *
@@ -202,8 +203,10 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $event = Event::FindOrFail($id);
+        $event->delete();
+        return $this->success('Event Delete Successfully', ['success' => true, 'data' => null]);
     }
 }

@@ -285,6 +285,7 @@
                     success: function (response) {
                         if (response.success) {
                             $('#success-message').text(response.message).show();
+                             toastr.success(response.message);
                             setTimeout(() => {
                                 window.location.href = response.redirect;
                             }, 2000);
@@ -293,6 +294,7 @@
                     error: function (xhr) {
                         const errors = xhr.responseJSON.errors;
                         let errorMessage = 'Please fix the following errors:<br>';
+                         toastr.error('Please fix the following errors:<br>');
                         $.each(errors, function (key, value) {
                             errorMessage += `- ${value[0]}<br>`;
                             $(`[name="${key}"]`).addClass('is-invalid');
