@@ -28,4 +28,18 @@ class ReadinessForm extends Model
     {
         return $this->hasMany(Checklist::class, 'form_id', 'form_id');
     }
+
+    public function checklistAnswers()
+    {
+        return $this->hasMany(ChecklistAnswer::class, 'readiness_form_id', 'id');
+    }
+    public function scopeToday($query)
+    {
+        return $query->whereDate('created_at', now()->toDateString());
+    }
+    public function scopeUserToday($query, $userId)
+    {
+        return $query->whereDate('created_at', now()->toDateString())
+                     ->where('user_id', $userId);
+    }
 }

@@ -38,7 +38,12 @@
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('daily_readiness.index')" :active="request()->routeIs('daily_readiness.index') || request()->routeIs('daily_readiness.create') || request()->routeIs('daily_readiness.edit') || request()->routeIs('daily_readiness.show')">
-                        Daily Work Readiness 
+                        Daily Readiness 
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('checklist.index')" :active="request()->routeIs('checklist.index') || request()->routeIs('checklist.create') || request()->routeIs('checklist.edit') || request()->routeIs('checklist.show')">
+                        CheckList 
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">

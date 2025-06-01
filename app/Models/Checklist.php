@@ -11,9 +11,8 @@ class Checklist extends Model
 
     protected $table = 'checklists';
     protected $fillable = [
-        'readiness_form_id',
+        'category',
         'question',
-        'answer',
         'score',
     ];
 }

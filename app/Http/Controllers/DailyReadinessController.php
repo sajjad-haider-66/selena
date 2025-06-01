@@ -7,13 +7,14 @@ use App\Models\Checklist;
 use App\Traits\ApiResponse;
 use App\Models\Notification;
 use App\Models\ReadinessForm;
+use App\Models\ChecklistAnswer;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\DailyReadinessStoreRequest;
 use App\Http\Requests\DailyReadinessUpdateRequest;
 
 class DailyReadinessController extends Controller
 {
-use ApiResponse;
+    use ApiResponse;
     /**
      * Display a listing of the resource.
      *
@@ -43,9 +44,19 @@ use ApiResponse;
      */
     public function create()
     {
-        // Fetch all checklist questions from the database
-        $checklists = Checklist::all();
-        return view('readiness.create', compact('checklists'));
+        // Fetch all checklist questions and group by category
+        $checklistsByCategory = Checklist::all()->groupBy('category');
+        $today = now()->toDateString();
+        $userId = Auth::id();
+
+        // Check if a submission exists for today
+        $hasSubmittedToday = ReadinessForm::userToday($userId)
+            ->whereDate('created_at', $today)
+            ->get();
+            // dd($hasSubmittedToday);
+        // Return the view with the checklist data and today's date
+
+        return view('readiness.create', compact('checklistsByCategory', 'today', 'hasSubmittedToday'));
     }
 
     /**
@@ -53,6 +64,7 @@ use ApiResponse;
      */
     public function store(DailyReadinessStoreRequest $request)
     {
+        // dd($request->all());
             // Calculate readiness rate
             $readinessRate = $this->calculateReadinessRate($request->checklist_data);
             $status = $readinessRate >= 75 ? 'Green' : 'Blocked';
@@ -74,9 +86,9 @@ use ApiResponse;
 
             // Save checklist items
             foreach ($request->checklist_data as $item) {
-                Checklist::create([
+                ChecklistAnswer::create([
                     'readiness_form_id' => $form->id,
-                    'question' => $item['question'],
+                    'question' => $item['checklist_id'],
                     'answer' => $item['answer'],
                     'score' => $item['score'] ?? 1,
                 ]);
@@ -126,9 +138,11 @@ use ApiResponse;
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy($id)
     {
-      
+        $daily = ReadinessForm::FindOrFail($id);
+        $daily->delete();
+        return $this->success('Readiness Delete Successfully', ['success' => true, 'data' => null]);
     }
 
     private function calculateReadinessRate($checklistData)
