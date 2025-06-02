@@ -46,6 +46,11 @@
                         CheckList 
                     </x-nav-link>
                 </div>
+                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('plan.index')" :active="request()->routeIs('plan.index') || request()->routeIs('plan.create') || request()->routeIs('plan.edit') || request()->routeIs('plan.show')">
+                        Plan
+                    </x-nav-link>
+                </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('audit.index')" :active="request()->routeIs('audit.index') || request()->routeIs('audit.create') || request()->routeIs('audit.edit') || request()->routeIs('audit.show')">
                         Audit 
@@ -62,13 +67,13 @@
                     </x-nav-link>
                 </div>
                  <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('fetch.notification')">
+                    <x-nav-link :href="route('fetch.notification')" style="margin-left: -25px;">
                        <i class="fa fa-bell" style="font-size:18px"></i>
                     </x-nav-link>
                 </div>
                 <!-- KEY : MULTIPERMISSION ends -->
             </div>
-
+  
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">

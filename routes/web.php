@@ -10,6 +10,7 @@ use App\Http\Controllers\CheckListController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TalkAnimationController;
 use App\Http\Controllers\DailyReadinessController;
+use App\Http\Controllers\PlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('audit', AuditController::class);
     Route::resource('action', ActionController::class);
     Route::resource('event', EventController::class);
+    Route::resource('plan', PlanController::class);
     Route::resource('checklist', CheckListController::class);
     Route::delete('/event/destory/{id}', [EventController::class, 'destroy'])->name('event.destroy');
     Route::delete('/audit/destory/{id}', [AuditController::class, 'destroy'])->name('audit.destroy');
