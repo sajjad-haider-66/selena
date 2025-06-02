@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('actions', function (Blueprint $table) {
             $table->id();
            $table->string('origin');
-            $table->integer('origin_id')->nullable();
+            $table->integer('action_number')->nullable();
+            $table->text('issue_description')->nullable();
             $table->text('description');
             $table->dateTime('issued_date')->nullable();
             $table->enum('type', ['Immediate', 'Corrective', 'Preventive'])->default('Preventive');
-            $table->Integer('verifier_id')->nullable();
+            $table->string('verifier_id')->nullable();
             $table->date('due_date');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

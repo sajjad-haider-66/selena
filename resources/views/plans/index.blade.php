@@ -82,40 +82,32 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
-                
-                <a href="{{ route('event.index') }}" title="Back"
-                   class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500">
-                    Go Back
-                </a>
-                <a href="{{ route('event.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold uppercase bg-green-600 text-white rounded-md hover:bg-green-500" style="float: right">
-                {{ __('Report an Event') }}
+
+                <a href="{{ route('plan.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold uppercase bg-green-600 text-white rounded-md hover:bg-green-500" style="float: right">
+                {{ __('Create Plan') }}
                 </a>
                 <div class="card-body">
                     <table id="event_table" class="table table-bordered table-striped">
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Date</th>
-                                <th>Lieu</th>
-                                <th>Type</th>
-                                <th>Emetteur</th>
-                                <th>Cotation</th>
-                                <th>Actions</th>
-                            </tr>
+                          <tr>
+                            <th>Plan Number</th>
+                            <th>Main Enterprise 1</th>
+                            <th>Subcontractor 1</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach ($events as $event)
+                            @foreach ($plans as $plan)
                             <tr>
-                                <td>{{ $event->id }}</td>
-                                <td>{{ $event->date }}</td>
-                                <td>{{ $event->lieu }}</td>
-                                <td>{{ $event->type }}</td>
-                                <td>{{ $event->emetteur }}</td>
-                                <td>{{ $event->cotation }}</td>
+                               <td>{{ $plan->plan_number }}</td>
+                                <td>{{ $plan->main_enterprise_1 }}</td>
+                                <td>{{ $plan->subcontractor_1 }}</td>
+                                <td>{{ $plan->location }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
-                                    <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="btn btn-sm btn-danger delete-events" data-id="{{ $event->id }}" title="Delete"><i class="fa fa-trash"></i></a>
+                                    <a href="{{ route('plan.show', $plan->id) }}" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
+                                    {{-- <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a> --}}
+                                    <a href="#" class="btn btn-sm btn-danger delete-plans" data-id="{{ $plan->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach
@@ -135,10 +127,10 @@
             "lengthChange": false,
         });
 
-        $('body').on('click', '.delete-events', function () {
-            deleteEvents($(this));
+        $('body').on('click', '.delete-plans', function () {
+            deletePlans($(this));
         });
-        function deleteEvents(data) {
+        function deletePlans(data) {
                 let active = "Delete";
                  let remove_id = data.data("id");
 
@@ -164,7 +156,7 @@
                                 ),
                             },
                             data: { '_method': 'DELETE' },
-                            url: "event/destory/" + remove_id,
+                            url: "plan/destory/" + remove_id,
                             type: 'Post',
                             success: function (data) {
                                 console.log(data);

@@ -110,12 +110,10 @@
                     @endif
                     
                     <!-- Permission based button -->
-                    @can('sse-create')
-                    <a title="new" href="{{ route('sse.create') }}" class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500 active:bg-green-700 focus:outline-none focus:border-green-700 focus:shadow-outline-gray disabled:opacity-25">
-                        Créer Nouvelle Action SSE
+                    <a href="{{ route('action.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold uppercase bg-green-600 text-white rounded-md hover:bg-green-500" style="float: right">
+                        {{ __('Create CheckList') }}
                     </a>
-                    @endcan
-                    
+                        
                     <!-- The Form -->
                     <form method="POST" action="">
                         @csrf

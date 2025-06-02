@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('/talk/destory/{id}', [TalkAnimationController::class, 'destroy'])->name('talk.destroy');
     Route::delete('/daily_readiness/destory/{id}', [DailyReadinessController::class, 'destroy'])->name('daily_readniness.destroy');
     Route::delete('/checklist/destory/{id}', [CheckListController::class, 'destroy'])->name('checklist.destroy');
+    Route::delete('/plan/destory/{id}', [PlanController::class, 'destroy'])->name('plan.destroy');
     Route::get('fetch/notification', [DailyReadinessController::class, 'Notification'])->name('fetch.notification');
     Route::post('/talk/{id}/materials', [TalkAnimationController::class, 'uploadMaterials'])->name('talk_animation.materials');
     Route::post('/talk/{id}/attendance', [TalkAnimationController::class, 'markAttendance'])->name('talk_animation.attendance');

@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ActionUpdateRequest;
+use App\Traits\ApiResponse;
 
 class ActionController extends Controller
 {
-
+    use ApiResponse;
     /**
      * Display a listing of the resource.
      *
@@ -43,8 +44,8 @@ class ActionController extends Controller
      */
     public function create()
     {
-        $products = Product::where('status', Product::STATUS_ACTIVE)->get();
-        return view('actions.create', compact('products'));
+        // $products = Product::where('status', Product::STATUS_ACTIVE)->get();
+        return view('actions.create');
     }
 
     /**
@@ -52,87 +53,51 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'origin.*.mase' => 'nullable|boolean',
-            'origin.*.direction' => 'nullable|boolean',
-            'origin.*.verifications' => 'nullable|boolean',
-            'origin.*.document' => 'nullable|boolean',
-            'origin.*.audits' => 'nullable|boolean',
-            'origin.*.accident' => 'nullable|boolean',
-            'origin.*.incident' => 'nullable|boolean',
-            'origin.*.animations' => 'nullable|boolean',
-            'origin.*.demandes' => 'nullable|boolean',
-            'origin.*.communication' => 'nullable|boolean',
-            'origin.*.veille' => 'nullable|boolean',
-            'origin.*.comite' => 'nullable|boolean',
-            'new_action_number' => 'required_if:origin.new_action_number,null|string',
-            'new_description' => 'required_if:origin.new_description,null|string',
-            'new_date' => 'required_if:origin.new_date,null|date',
-            'actions.*.i' => 'nullable|boolean',
-            'actions.*.c' => 'nullable|boolean',
-            'actions.*.p' => 'nullable|boolean',
-            'new_action_date' => 'required_if:actions.new_action_date,null|date',
-            'new_action_description' => 'required_if:actions.new_action_description,null|string',
-            'new_action_pilot' => 'required_if:actions.new_action_pilot,null|string',
-            'new_action_deadline' => 'required_if:actions.new_action_deadline,null|date',
-            'new_action_progress' => 'required_if:actions.new_action_progress,null|integer|min:0|max:100',
-        ]);
+        // dd($request->all());
+         $request->validate([
+            'action_number' => 'required',
+         ]);
+        // $jsonData = [
+        //     'origin' => $request->input('origin', []),
+        //     'actions' => $request->input('actions', []),
+        // ];
 
-        $jsonData = [
-            'origin' => $request->input('origin', []),
-            'actions' => $request->input('actions', []),
-        ];
-
-        // Handle new action row
-        if ($request->filled('new_action_number')) {
-            $jsonData['origin'][] = array_filter([
-                'mase' => $request->input('new_origin.mase'),
-                'direction' => $request->input('new_origin.direction'),
-                'verifications' => $request->input('new_origin.verifications'),
-                'document' => $request->input('new_origin.document'),
-                'audits' => $request->input('new_origin.audits'),
-                'accident' => $request->input('new_origin.accident'),
-                'incident' => $request->input('new_origin.incident'),
-                'animations' => $request->input('new_origin.animations'),
-                'demandes' => $request->input('new_origin.demandes'),
-                'communication' => $request->input('new_origin.communication'),
-                'veille' => $request->input('new_origin.veille'),
-                'comite' => $request->input('new_origin.comite'),
-                'description' => $request->input('new_description'),
-                'issued_date' => $request->input('new_date'),
-            ]);
-        }
-
-        if ($request->filled('new_action_date')) {
-            $jsonData['actions'][] = array_filter([
-                'issued_date' => $request->input('new_action_date'),
-                'description' => $request->input('new_action_description'),
-                'i' => $request->input('new_action_i'),
-                'c' => $request->input('new_action_c'),
-                'p' => $request->input('new_action_p'),
-                'pilot' => $request->input('new_action_pilot'),
-                'deadline' => $request->input('new_action_deadline'),
-                'start_date' => $request->input('new_action_started'),
-                'end_date' => $request->input('new_action_completed'),
-                'verifier' => $request->input('new_action_verifier'),
-                'verified_date' => $request->input('new_action_verified'),
-                'progress_rate' => $request->input('new_action_progress'),
-                'efficiency' => $request->input('new_action_efficiency'),
-                'comment' => $request->input('new_action_comment'),
-            ]);
-        }
+        // if ($request->filled('new_action_date')) {
+        //     $jsonData['actions'][] = array_filter([
+        //         'issued_date' => $request->input('new_action_date'),
+        //         'description' => $request->input('new_action_description'),
+        //         'i' => $request->input('new_action_i'),
+        //         'c' => $request->input('new_action_c'),
+        //         'p' => $request->input('new_action_p'),
+        //         'pilot' => $request->input('new_action_pilot'),
+        //         'deadline' => $request->input('new_action_deadline'),
+        //         'start_date' => $request->input('new_action_started'),
+        //         'end_date' => $request->input('new_action_completed'),
+        //         'verifier' => $request->input('new_action_verifier'),
+        //         'verified_date' => $request->input('new_action_verified'),
+        //         'progress_rate' => $request->input('new_action_progress'),
+        //         'efficiency' => $request->input('new_action_efficiency'),
+        //         'comment' => $request->input('new_action_comment'),
+        //     ]);
+        // }
 
         $action = Action::create([
-            'origin' => 'SSE Action', // Default origin
-            'origin_id' => 1, // Default origin_id (can be dynamic)
-            'description' => $jsonData['actions'][0]['description'] ?? 'No description',
-            'issued_date' => $jsonData['actions'][0]['issued_date'] ?? now(),
-            'type' => $this->getActionType($jsonData['actions'][0]),
-            'responsible_id' => Auth::id(),
-            'json_data' => json_encode($jsonData),
+            'action_number' =>  $request->action_number,
+            'origin' =>  $request->origin,
+            'issue_description' =>  $request->issue_description,
+            'start_date' =>  $request->issue_date,
+            'description' =>  $request->description,
+            'type' =>  $request->type,
+            'pilot_id' =>  $request->pilot,
+            'due_date' =>  $request->deadline,
+            'verifier_id' =>  $request->verifier,
+            'verified_date' =>  $request->verified_date,
+            'comments' =>  $request->comment,
+            'progress_rate' =>  $request->progress_percentage,
+            'efficiency' =>  $request->effectiveness,
         ]);
 
-        return redirect()->back()->with('success', 'Actions saved successfully.');
+        return $this->success('Action Created Successfully', ['success' => true, 'data' => null]);
     }
 
     private function getActionType($actionData)

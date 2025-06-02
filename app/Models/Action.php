@@ -10,11 +10,12 @@ class Action extends Model
     use HasFactory;
     
     protected $table = 'actions';
-    protected $primaryKey = 'id';
     protected $fillable = [
-        'origin', 'origin_id', 'description', 'issued_date', 'type', 'pilot_id',
+        'origin', 'description', 'issued_date', 'type', 'pilot_id',
         'start_date', 'end_date', 'verified_date', 'progress_rate', 'efficiency',
-        'comments', 'json_data', 'due_date' // To store origin and actions arrays
+        'comments', 'json_data', 'due_date',
+        'action_number',
+        'verifier_id',
     ];
 
     protected $casts = [
@@ -43,8 +44,8 @@ class Action extends Model
         return $this->save();
     }
 
-    public function generateNotification(): Notification
+    public function generateNotification()
     {
-        return new \App\Notifications\ActionNotification($this);
+        // return new Notification;
     }
 }

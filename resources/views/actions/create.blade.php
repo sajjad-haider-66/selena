@@ -87,51 +87,129 @@
                    class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500">
                     Go Back
                 </a>
-                {{-- <a href="{{ route('action.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold uppercase bg-green-600 text-white rounded-md hover:bg-green-500" style="float: right">
-                {{ __('Report an Event') }}
-                </a> --}}
-                <div class="card-body">
-                    <table id="event_table" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Due Date</th>
-                                <th>Description</th>
-                                <th>Type</th>
-                                <th>Comment</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($actions as $form)
-                            <tr>
-                                <td>{{ $form->id }}</td>
-                                <td>{{ $form->due_date }}</td>
-                                <td>{{ $form->description }}</td>
-                                <td>{{ $form->type }}</td>
-                                <td>{{ $form->comment }}</td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
-                                    <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
-                                    <a href="#" class="btn btn-sm btn-danger" title="Delete"><i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="container">
+                    <h1>Détail d’action</h1>
+                    <form id="actionForm">
+                        @csrf
+                        <div class="form-section">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td><label for="action_number">Détail d’action N° :</label></td>
+                                    <td><input type="text" name="action_number" id="action_number" class="form-control" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="origin">Origine :</label></td>
+                                    <td><input type="text" name="origin" id="origin" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="issue_description">Descriptions du dysfonctionnement/amélioration :</label></td>
+                                    <td><textarea name="issue_description" id="issue_description" class="form-control"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="issue_date">Date d’émission :</label></td>
+                                    <td><input type="date" name="issue_date" id="issue_date" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="description">Description :</label></td>
+                                    <td><textarea name="description" id="description" class="form-control"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="type">Type (I/C/P) :</label></td>
+                                    <td>
+                                        <select name="type" id="type" class="form-control">
+                                            <option value="">Select Type</option>
+                                            <option value="Immediate">I</option>
+                                            <option value="Corrective">C</option>
+                                            <option value="Preventive">P</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label for="pilot">Pilote :</label></td>
+                                    <td><input type="text" name="pilot" id="pilot" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="deadline">Délai :</label></td>
+                                    <td><input type="date" name="deadline" id="deadline" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="verifier">Vérificateur :</label></td>
+                                    <td><input type="text" name="verifier" id="verifier" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="verified_date">Action vérifiée le :</label></td>
+                                    <td><input type="date" name="verified_date" id="verified_date" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="comment">Commentaire (optionnel) :</label></td>
+                                    <td><textarea name="comment" id="comment" class="form-control"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="progress_percentage">Taux d’avancement :</label></td>
+                                    <td><input type="number" name="progress_percentage" id="progress_percentage" class="form-control" min="0" max="100" step="1"></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="effectiveness">Efficacité :</label></td>
+                                         <select name="effectiveness" id="effectiveness" class="form-control">
+                                            <option value="">Select Type</option>
+                                            <option value="O">O</option>
+                                            <option value="N">N</option>
+                                        </select>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                 </div>
-               
             </div>
         </div>
     </div>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css">
-<script src="https://cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
     <script>
-    $(document).ready(function () {
-        $('#event_table').DataTable({
-            responsive: true,
-            "lengthChange": false,
+        $(document).ready(function () {
+            // AJAX Form Submission
+            $('#actionForm').on('submit', function (e) {
+                e.preventDefault();
+
+                // Reset messages
+                $('#success-message').hide();
+                $('#error-message').hide();
+                $('.form-control').removeClass('is-invalid');
+                $('.form-check-input').removeClass('is-invalid');
+
+                const formData = $(this).serialize();
+                const submitButton = $(this).find('button[type="submit"]');
+                submitButton.prop('disabled', true);
+
+                $.ajax({
+                    url: '{{ route("action.store") }}',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        
+                        if (response.responseCode == 200) {
+                            $('#success-message').text('Form submitted successfully!').show();
+                            toastr.success('Form submitted successfully!');
+                            setTimeout(() => {
+                            window.location.href = '{{ route('action.index') }}';
+                            }, 2000);
+                        }
+                    },
+                    error: function (xhr) {
+                        const errors = xhr.responseJSON.errors;
+                        let errorMessage = 'Please fix the following errors:<br>';
+                        toastr.error('Please fix the following errors:<br>');
+                        $.each(errors, function (key, value) {
+                            errorMessage += `- ${value[0]}<br>`;
+                            $(`[name="${key}"]`).addClass('is-invalid');
+                        });
+                        $('#error-message').html(errorMessage).show();
+                        submitButton.prop('disabled', false);
+                    }
+                });
+            });
         });
-    });
-</script>
+    </script>
 </x-app-layout>
