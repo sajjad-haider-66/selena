@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('nom')->nullable();
             $table->string('entreprise')->nullable();
             $table->string('signature')->nullable();
+            $table->string('form_heading')->nullable();
             $table->foreignIdFor(User::class)->nullable();
             $table->json('checklist_data')->nullable();
             $table->float('readiness_rate')->nullable();

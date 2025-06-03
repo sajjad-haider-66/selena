@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             CreateSuperManagerSeeder::class,
             CreateClientSeeder::class,
             CreateUserSeeder::class,
+            CheckListSeeder::class,
         ]);
     }
 }

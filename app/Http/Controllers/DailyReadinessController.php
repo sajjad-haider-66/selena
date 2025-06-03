@@ -50,10 +50,11 @@ class DailyReadinessController extends Controller
         $userId = Auth::id();
 
         // Check if a submission exists for today
-        $hasSubmittedToday = ReadinessForm::userToday($userId)
+        $hasSubmittedToday = ReadinessForm::where('user_id', $userId)
             ->whereDate('created_at', $today)
-            ->get();
-            // dd($hasSubmittedToday);
+            ->pluck('form_heading')
+            ->toArray();
+            
         // Return the view with the checklist data and today's date
 
         return view('readiness.create', compact('checklistsByCategory', 'today', 'hasSubmittedToday'));
@@ -78,6 +79,7 @@ class DailyReadinessController extends Controller
                 'commentaires' => $request->commentaires,
                 'nom' => $request->nom,
                 'entreprise' => $request->entreprise,
+                'form_heading' => $request->form_heading,
                 'user_id' => Auth::id(),
                 'checklist_data' => $request->checklist_data,
                 'readiness_rate' => $readinessRate,

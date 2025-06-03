@@ -151,6 +151,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <input type="hidden" name="form_heading" id="form_heading" value="{{ \Illuminate\Support\Str::slug($category) }}">
                                     <div class="col-md-6 mb-3">
                                         <label for="company_name-{{ \Illuminate\Support\Str::slug($category) }}" class="form-label">Entreprise observée (Company)</label>
                                         <input type="text" name="company_name" id="company_name-{{ \Illuminate\Support\Str::slug($category) }}" class="form-control">
@@ -207,7 +208,7 @@
                                     </div>
                                 </div>
 
-                                @if (!$hasSubmittedToday)
+                                @if (!in_array(\Illuminate\Support\Str::slug($category), $hasSubmittedToday))
                                     <button type="submit" class="btn btn-submit w-100">Submit Checklist</button>
                                 @else
                                     <div class="alert alert-info">This form has already been submitted for today.</div>

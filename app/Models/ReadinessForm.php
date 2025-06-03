@@ -12,7 +12,7 @@ class ReadinessForm extends Model
      'commentaires',
      'nom',
      'entreprise',
-      'permit_number', 'user_id', 'checklist_data', 'readiness_rate', 'status'
+    'permit_number', 'user_id', 'checklist_data', 'readiness_rate', 'status', 'form_heading'
     ];
     protected $casts = [
         'checklist_data' => 'array',
