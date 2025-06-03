@@ -267,7 +267,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 mt-5 mt-lg-0">
-                    <img src="dashboard.jpg" alt="Tableau de Bord Selena" class="img-fluid dashboard-preview">
+                    <img src="{{ asset('images/dashboard.jpg') }}" alt="Tableau de Bord Selena" class="img-fluid dashboard-preview">
                 </div>
             </div>
         </div>
@@ -377,7 +377,7 @@
         <div class="container py-5">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0">
-                    <img src="checklist-work-initiation.jpg" alt="Checklist d'Initiation du Travail" class="img-fluid rounded-3 shadow">
+                    <img src="{{ asset('images/checklist-work-initiation.jpg') }}" alt="Checklist d'Initiation du Travail" class="img-fluid rounded-3 shadow">
                 </div>
                 <div class="col-lg-6">
                     <h2 class="fw-bold mb-4">Score de Sécurité pour l'Initiation du Travail</h2>
@@ -394,7 +394,7 @@
         <div class="container py-5">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-5 mb-lg-0">
-                    <img src="compliance.png" alt="Solution de Conformité" class="img-fluid rounded-3 shadow">
+                    <img src="{{ asset('images/compliance.png') }}" alt="Solution de Conformité" class="img-fluid rounded-3 shadow">
                 </div>
                 <div class="col-lg-6">
                     <h2 class="fw-bold mb-4">Solutions de Conformité de Bout en Bout</h2>
