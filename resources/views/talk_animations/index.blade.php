@@ -42,7 +42,7 @@
                                     <td>
                                         <a href="{{ route('talk_animation.show', $talk->id) }}" class="btn btn-sm btn-info" title="View"><i
                                                 class="fa fa-eye"></i></a>
-                                        <a href="#" class="btn btn-sm btn-warning" title="Edit"><i
+                                        <a href="{{ route('talk_animation.edit', $talk->id) }}" class="btn btn-sm btn-warning" title="Edit"><i
                                                 class="fa fa-pencil"></i></a>
                                         <a href="#" class="btn btn-sm btn-danger delete-talks" data-id="{{ $talk->id }}" title="Delete"><i
                                                 class="fa fa-trash"></i></a>

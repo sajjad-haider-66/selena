@@ -4,7 +4,9 @@
             Talk Event: {{ $talk->theme }}
         </h2>
     </x-slot>
-
+    @php
+        $participants = json_decode($talk->participants);
+    @endphp
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -24,7 +26,30 @@
                         <p><strong>Location:</strong> {{ $talk->lieu }}</p>
                         <p><strong>Theme:</strong> {{ $talk->theme }}</p>
                         <p><strong>Animator:</strong> {{ $talk->animateur }}</p>
-                        <p><strong>Participants:</strong> {{ $talk->participants_count }}</p>
+                        <div class="border-t pt-6">
+                            <h3 class="text-lg font-semibold mb-4 text-indigo-700">👥 Participants</h3>
+
+                            <div class="overflow-x-auto">
+                                <table class="table-auto w-full text-sm border-collapse border border-gray-200 shadow-sm rounded-md">
+                                    <thead class="bg-indigo-100 text-indigo-800">
+                                        <tr>
+                                            <th class="px-4 py-2 border border-gray-300 text-left">#</th>
+                                            <th class="px-4 py-2 border border-gray-300 text-left">Name</th>
+                                            <th class="px-4 py-2 border border-gray-300 text-left">Signature</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (json_decode($talk->participants) as $index => $participant)
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="px-4 py-2 border border-gray-300">{{ $index + 1 }}</td>
+                                                <td class="px-4 py-2 border border-gray-300">{{ $participant->name }}</td>
+                                                <td class="px-4 py-2 border border-gray-300">{{ $participant->signature }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <p><strong>Status:</strong> {{ $talk->status }}</p>
                     </div>
 
@@ -88,7 +113,7 @@
                             <h3 class="text-lg font-semibold mb-2 text-indigo-700">📚 Materials</h3>
                             <ul class="list-disc list-inside text-blue-600">
                                 @foreach ($talk->materials as $material)
-                                    <li><a href="{{ asset('storage/app/public/' . $material) }}" target="_blank" class="underline">View Material</a></li>
+                                    <li><a href="{{ asset('storage/' . $material) }}" target="_blank" class="underline">View Material</a></li>
                                 @endforeach
                             </ul>
                         </div>

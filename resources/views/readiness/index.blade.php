@@ -146,7 +146,7 @@
                                 </td>
                                 <td>{{ $talk->readiness_rate }}%</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ route('daily_readiness.show', $talk['id'])}}" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
                                     <a href="#" class="btn btn-sm btn-danger delete-readiness" data-id="{{ $talk->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>

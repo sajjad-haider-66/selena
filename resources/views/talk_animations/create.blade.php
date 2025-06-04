@@ -144,7 +144,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4">
-                                    <textarea name="points" rows="4" style="width:100%; border:none; padding:8px;">Saisir les points couverts</textarea>
+                                    <textarea name="points" rows="4" style="width:100%; border:none; padding:8px;" placeholder="Saisir les points couverts"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -153,7 +153,7 @@
                             <tr>
                                 <td colspan="4">
                                     <div>
-                                        <textarea name="commentaires" rows="2" style="width:100%; border:none; padding:8px;">Entrer des commentaires</textarea>
+                                        <textarea name="commentaires" rows="2" style="width:100%; border:none; padding:8px;" placeholder="Entrer des commentaires"></textarea>
                                         {{-- <img src="{{ asset('images/corrosive_pictogram.png') }}" alt="Pictogramme Corrosif" class="corrosive-img"> --}}
                                     </div>
                                 </td>

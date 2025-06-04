@@ -24,9 +24,9 @@ class ReadinessForm extends Model
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
-    public function checklists()
+    public function checklist()
     {
-        return $this->hasMany(Checklist::class, 'form_id', 'form_id');
+        return $this->hasMany(Checklist::class, 'id', 'checklist_id');
     }
 
     public function checklistAnswers()

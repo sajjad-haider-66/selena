@@ -116,10 +116,22 @@ class DailyReadinessController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show($id)
     {
-      
+        $readiness = ReadinessForm::findOrFail($id);
+        
+        // Decode the checklist_data JSON
+        $checklistData = $readiness->checklist_data;
+        
+        // Extract checklist IDs
+        $checklistIds = array_column($checklistData, 'checklist_id');
+        
+        // Fetch questions from the checklist table
+        $questions = Checklist::whereIn('id', $checklistIds)->get()->keyBy('id');
+
+        return view('readiness.show', compact('readiness', 'checklistData', 'questions'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

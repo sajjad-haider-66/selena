@@ -36,7 +36,7 @@ class CheckListController extends Controller
      */
     public function create()
     {
-        return view('Checklists.create');
+        return view('checklists.create');
     }
 
     /**
@@ -62,7 +62,8 @@ class CheckListController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $checklists = Checklist::where('category', $id)->get();
+        return view('checklists.show', compact('checklists'));
     }
 
     /**

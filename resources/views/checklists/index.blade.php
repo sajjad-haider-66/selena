@@ -102,7 +102,7 @@
                                 <td>{{ $checklist->category }}</td>
                                 <td>{{ $checklist->question_count }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ route('checklist.show', $checklist->category) }}" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
                                     <a href="{{ route('checklist.edit', $checklist->category) }}" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
                                     <a href="#" class="btn btn-sm btn-danger delete-cheklist" data-name="{{ $checklist->category }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
