@@ -10,7 +10,7 @@
         .form-section { margin-bottom: 25px; }
         .form-section h4 { background: #f8f9fa; padding: 10px; border: 1px solid #000; text-align: center; }
         input[type="text"], input[type="date"], input[type="time"], textarea { width: 100%; }
-        .checkbox-list { columns: 2; -webkit-columns: 2; -moz-columns: 2; }
+        .checkbox-list { columns: 1; -webkit-columns: 1; -moz-columns: 1; }
         .checkbox-list label { display: block; }
     </style>
 
@@ -137,6 +137,21 @@
                                             <label><input type="checkbox" name="travail[]" value="Travaux de démolition"> Travaux de démolition</label>
                                             <label><input type="checkbox" name="travail[]" value="Intervention sur portique de lavage"> Intervention sur portique de lavage</label>
                                             <label><input type="checkbox" name="travail[]" value="Autres"> Autres <input type="text" name="travail_autre"></label>
+                                            <hr><label class="mt-2"><strong><u>SITUATION PARTICULIÈRE</u></strong></label>
+                                            <label><input type="checkbox" name="travail[]" value="Présence de public "> Présence de public </label>
+                                            <label><input type="checkbox" name="travail[]" value="Espace confiné / fouille"> Espace confiné / fouille</label>
+                                            <label><input type="checkbox" name="travail[]" value="Travaux en hauteur"> Travaux en hauteur</label>
+                                            <label><input type="checkbox" name="travail[]" value="Volumes de sécurité"> Volumes de sécurité</label>
+                                            <label><input type="checkbox" name="travail[]" value="Autres"> Autres (précisez) : <input type="text" name="travail_autre"></label>
+                                            <hr><label class="mt-2"><strong><u>MOYENS / OUTILS </u></strong></label>
+                                            <label><input type="checkbox" name="travail[]" value="Manuel "> Manuel </label>
+                                            <label><input type="checkbox" name="travail[]" value="Matériel électrique"> Matériel électrique</label>
+                                            <label><input type="checkbox" name="travail[]" value="Matériel pneumatique"> Matériel pneumatique</label>
+                                            <label><input type="checkbox" name="travail[]" value="Nacelle "> Nacelle </label>
+                                            <label><input type="checkbox" name="travail[]" value="PIR / PIRL "> PIR / PIRL </label>
+                                            <label><input type="checkbox" name="travail[]" value="Grue"> Grue</label>
+                                            <label><input type="checkbox" name="travail[]" value="Echafaudage"> Echafaudage</label>
+                                            <label><input type="checkbox" name="travail[]" value="Autres"> Autres (précisez) : <input type="text" name="travail_autre"></label>
                                         </div>
                                     </td>
                                     <td>
@@ -154,8 +169,24 @@
                                             <label><input type="checkbox" name="risques[]" value="Coupure, brûlure, choc…"> Coupure, brûlure, choc…</label>
                                             <label><input type="checkbox" name="risques[]" value="Bruit"> Bruit</label>
                                             <label><input type="checkbox" name="risques[]" value="Risques chimiques"> Risques chimiques</label>
+                                            <label><input type="checkbox" name="risques[]" value="- Hydrocarbure "> - Hydrocarbure </label>
+                                            <label><input type="checkbox" name="risques[]" value="- GPLC / GNC / GNL "> - GPLC / GNC / GNL </label>
+                                            <label><input type="checkbox" name="risques[]" value="- Autres produits "> - Autres produits </label>
                                             <label><input type="checkbox" name="risques[]" value="Risque biologique"> Risque biologique</label>
-                                            <label><input type="checkbox" name="risques[]" value="Risque ergonomiques"> Risque ergonomiques</label>
+                                            <label><input type="checkbox" name="risques[]" value="Risque"> Risque</label>
+                                            <label><input type="checkbox" name="risques[]" value="- Manipulation de charges"> - Manipulation de charges</label>
+                                            <label><input type="checkbox" name="risques[]" value="- Contrainte de postures"> - Contrainte de postures</label>
+                                            <label><input type="checkbox" name="risques[]" value="Risques pour l’environnement : "> Risques pour l’environnement : </label>
+                                            <label><input type="checkbox" name="risques[]" value="- Pollution air"> - Pollution air</label>
+                                            <label><input type="checkbox" name="risques[]" value="- Pollution sol"> - Pollution sol</label>
+                                            <label><input type="checkbox" name="risques[]" value="- Pollution eau"> - Pollution eau</label>
+                                            <label><input type="checkbox" name="risques[]" value="Autres"> Autres <input type="text" name="risques_autre"></label>
+                                            <hr><label class="mt-2"><strong><u>DOCUMENTS DISPONIBLES </u></strong></label>
+                                            <label><input type="checkbox" name="risques[]" value="Fiche de Données Sécurité "> Fiche de Données Sécurité </label>
+                                            <label><input type="checkbox" name="risques[]" value="Document Technique"> Amiante</label>
+                                            <label><input type="checkbox" name="risques[]" value="Déclaration d’Intention de"> Commencement de Travaux</label>
+                                            <label><input type="checkbox" name="risques[]" value="Plans de réseaux"> Plans de réseaux</label>
+                                            <label><input type="checkbox" name="risques[]" value="Certificat de dégazage "> Certificat de dégazage </label>
                                             <label><input type="checkbox" name="risques[]" value="Autres"> Autres <input type="text" name="risques_autre"></label>
                                         </div>
                                     </td>
@@ -175,6 +206,18 @@
                                             <label><input type="checkbox" name="formations[]" value="Obturation des égouts / regards"> Obturation des égouts / regards</label>
                                             <label><input type="checkbox" name="formations[]" value="Consignation des réseaux électriques / hydrauliques"> Consignation des réseaux électriques / hydrauliques</label>
                                             <label><input type="checkbox" name="formations[]" value="Outillage / matériel ATEX"> Outillage / matériel ATEX</label>
+                                            <label><input type="checkbox" name="formations[]" value="Balisage de la zone, aide à la"> circulation</label>
+                                            <label><input type="checkbox" name="formations[]" value="Autres"> Autres <input type="text" name="formations_autre"></label>
+                                            <label><input type="checkbox" name="formations[]" value="Port d’EPI et autres équipements spécifiques :"> Port d’EPI et autres équipements spécifiques :</label>
+                                            <label><input type="checkbox" name="formations[]" value="- Appareil respiratoire, ventilation forcée"> - Appareil respiratoire, ventilation forcée</label>
+                                            <label><input type="checkbox" name="formations[]" value="- Harnais, baudrier, filet de sécurité,sangle de retenue">- Harnais, baudrier, filet de sécurité,sangle de retenue </label>
+                                            <label><input type="checkbox" name="formations[]" value="- Mise à disposition casqueanti-bruit">- Mise à disposition casqueanti-bruit</label>
+                                            <label><input type="checkbox" name="formations[]" value="- Aide à la manutention">- Aide à la manutention </label>
+                                            <label><input type="checkbox" name="formations[]" value="Autres"> Autres <input type="text" name="formations_autre"></label>
+                                            <label><input type="checkbox" name="formations[]" value="Permis spécifique :">Permis spécifique : </label>
+                                            <label><input type="checkbox" name="formations[]" value="- Permis de feu"> - Permis de feu</label>
+                                            <label><input type="checkbox" name="formations[]" value="- Permis delevage">- Permis delevage </label>
+                                            <label><input type="checkbox" name="formations[]" value="- Permis de fouille">- Permis de fouille </label>
                                             <label><input type="checkbox" name="formations[]" value="Autres"> Autres <input type="text" name="formations_autre"></label>
                                         </div>
                                     </td>
@@ -182,46 +225,116 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- Mesures préventives -->
-                    <div class="form-section">
-                        <h4>MESURES PRÉVENTIVES</h4>
-                        <textarea name="preventive_measures" rows="3"></textarea>
+                    <!-- VALIDATION AVANT LES TRAVAUX -->
+                    <div class="card mb-4">
+                        <div class="text-center card-header font-weight-bold">
+                            VALIDATION AVANT LES TRAVAUX
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
+                                <div class="col-md-6">
+                                    <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
+                                    <div class="form-group">
+                                        <label>1- Nom:</label>
+                                        <input type="text" name="avant_entreprise_1" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>2- Nom:</label>
+                                        <input type="text" name="avant_entreprise_2" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>3- Nom:</label>
+                                        <input type="text" name="avant_entreprise_3" class="form-control">
+                                    </div>
+                                </div>
+                                <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
+                                <div class="col-md-6">
+                                    <h6>RESPONSABLE DE LA STATION OU SON REPRÉSENTANT</h6>
+                                    <div class="form-group">
+                                        <label>Date :</label>
+                                        <input type="date" name="avant_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Heure :</label>
+                                        <input type="time" name="avant_heure" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nom :</label>
+                                        <input type="text" name="avant_responsable_nom" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Permis et documents -->
-                    <div class="form-section">
-                        <h4>PERMIS ET DOCUMENTS</h4>
-                        <table class="table table-bordered">
-                            <tr>
-                                <td><label><input type="checkbox" name="pir_pirl" value="1"> PIR/PIRL</label></td>
-                                <td><label><input type="checkbox" name="document_technique_amiante" value="1"> Document Technique Amiante</label></td>
-                            </tr>
-                            <tr>
-                                <td><label><input type="checkbox" name="grue" value="1"> Grue</label></td>
-                                <td><label><input type="checkbox" name="declaration_commencement_travaux" value="1"> Déclaration d'intention de Commencement de Travaux</label></td>
-                            </tr>
-                            <tr>
-                                <td><label><input type="checkbox" name="echafaudage" value="1"> Échafaudage</label></td>
-                                <td><label><input type="checkbox" name="plans_reseaux" value="1"> Plans de Réseaux</label></td>
-                            </tr>
-                            <tr>
-                                <td><label><input type="checkbox" name="certificat_degazage" value="1"> Certificat de dégazage</label></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Permis de feu :</td>
-                                <td><input type="text" name="permis_de_feu"></td>
-                            </tr>
-                            <tr>
-                                <td>Permis spécifique :</td>
-                                <td><input type="text" name="permis_specifique"></td>
-                            </tr>
-                            <tr>
-                                <td>Autres (préciser) :</td>
-                                <td><input type="text" name="autres_permis"></td>
-                            </tr>
-                        </table>
+                    <!-- VALIDATION APRÈS LES TRAVAUX -->
+                    <div class="card mb-4">
+                        <div class="text-center card-header font-weight-bold">
+                            VALIDATION APRÈS LES TRAVAUX
+                        </div>
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="apres_travail_termine" id="apres_travail_termine">
+                                <label class="form-check-label" for="apres_travail_termine">
+                                    Le travail est terminé
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="apres_travail_non_termine" id="apres_travail_non_termine">
+                                <label class="form-check-label" for="apres_travail_non_termine">
+                                    Le travail n'est pas terminé
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="apres_station_normale" id="apres_station_normale">
+                                <label class="form-check-label" for="apres_station_normale">
+                                    La station est rendue à une exploitation normale
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" name="apres_chantier_propre" id="apres_chantier_propre">
+                                <label class="form-check-label" for="apres_chantier_propre">
+                                    Le chantier a été propre et en sécurité, la reprise du travail fera l’objet d’une nouvelle autorisation de travail prévue le :
+                                </label>
+                                <input type="date" name="apres_nouvelle_autorisation" class="form-control mt-2" style="width:auto;">
+                            </div>
+
+                            <div class="row">
+                                <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
+                                <div class="col-md-6">
+                                    <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
+                                    <div class="form-group">
+                                        <label>1. Nom:</label>
+                                        <input type="text" name="apres_entreprise_1_nom" class="form-control">
+                                        <label>Date:</label>
+                                        <input type="date" name="apres_entreprise_1_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>2. Nom:</label>
+                                        <input type="text" name="apres_entreprise_2_nom" class="form-control">
+                                        <label>Date:</label>
+                                        <input type="date" name="apres_entreprise_2_date" class="form-control">
+                                    </div>
+                                </div>
+                                <!-- RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT) -->
+                                <div class="col-md-6">
+                                    <h6>RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT)</h6>
+                                    <div class="form-group">
+                                        <label>Date :</label>
+                                        <input type="date" name="apres_responsable_date" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Heure :</label>
+                                        <input type="time" name="apres_responsable_heure" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nom :</label>
+                                        <input type="text" name="apres_responsable_nom" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>

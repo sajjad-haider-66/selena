@@ -106,7 +106,7 @@
                                 <td>{{ $plan->location }}</td>
                                 <td>
                                     <a href="{{ route('plan.show', $plan->id) }}" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
-                                    {{-- <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a> --}}
+                                    <a href="{{ route('plan.edit', $plan->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
                                     <a href="#" class="btn btn-sm btn-danger delete-plans" data-id="{{ $plan->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
