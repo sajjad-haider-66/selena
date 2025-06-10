@@ -1,47 +1,196 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Show - Audit Details') }}
+            {{ __('View - Audit') }}
         </h2>
     </x-slot>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
-                <a title="back" href="{{ route('products.index') }}"
-                    class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500 active:bg-green-700 focus:outline-none focus:border-green-700 focus:shadow-outline-gray disabled:opacity-25">
-                    Go back
-                </a>
-                <div class="mb-4">
-                    <label for="name" class="block mb-2 text-sm font-bold text-gray-700 inline-flex">Product Name :
-                    </label>
-                    <span>{{ $product->name }}</span>
-                </div>
 
-                <div class="mb-4">
-                    <label for="description" class="block mb-2 text-sm font-bold text-gray-700 inline-flex">{{ __('Description') }} :
-                    </label>
-                    <span>{{ $product->description }}</span>
-                </div>
+    <style>
+        .section-title {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
 
-                <div class="mb-4">
-                    <label for="image" class="block mb-2 text-sm font-bold text-gray-700">Image "</label>
-                    <img src="{{ asset('storage/products/' . $product->image) }}" heigth="150" width="150" />
-                </div>
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
 
-                <div class="mb-4">
-                    <label for="parentcategory_name"
-                        class="block mb-2 text-sm font-bold text-gray-700 inline-flex">{{ __('Parent category') }} : </label>
-                     <span>{{ $product->getParentCatHasOne->name }}</span>
-                </div>
+        .score-table th,
+        .score-table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: center;
+        }
 
-                <div class="mb-4">
-                    <label for="price" class="block mb-2 text-sm font-bold text-gray-700 inline-flex">Price </label>
-                    <span>{{ $product->price }}</span>                    
-                </div>
+        .score-table th {
+            background-color: #007bff;
+            color: white;
+        }
 
-                <div class="mb-4">
-                    <label for="qty" class="block mb-2 text-sm font-bold text-gray-700 inline-flex">Quantity </label>
-                    <span>{{ $product->qty }}</span>
+        .action-row {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .btn.btn-primary {
+            background-color: #0d6efd !important;
+            color: white !important;
+        }
+
+        .btn.btn-secondary {
+            background-color: #d4d4d4 !important;
+            color: white !important;
+        }
+    </style>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4>Détails de l'Audit</h4>
+                    <a href="{{ route('audit.edit', $audit->id) }}" class="btn btn-secondary">Edit Audit</a>
+                </div>
+                <div class="card-body">
+                    <!-- Meta Info -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Date</label>
+                            <p>{{ $audit->date }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Lieu (site / chantier)</label>
+                            <p>{{ $audit->lieu }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="fw-bold">Auditeur</label>
+                            <p>{{ $audit->auditeur }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold">Nom de l'intervenant</label>
+                            <p>{{ $audit->intervenant }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Questions Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center align-middle">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th style="width: 50%;">Thèmes abordés</th>
+                                    <th>TS</th>
+                                    <th>S</th>
+                                    <th>IS</th>
+                                    <th>SO</th>
+                                    <th>Commentaires</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $questions = [
+                                        'L\'intervenant et son métier' => [
+                                            'Quelle est votre mission, les enjeux client, les résultats à fournir ?',
+                                            'Quels sont les risques associés à votre métier (risques classiques, coactivité, produits chimiques) ?',
+                                            'Quelles sont les formations nécessaires (habilitation électrique, autorisations, GIES ½, etc..) ?',
+                                            'Quelles sont les habilitations nécessaires ? Sont-elles suffisantes ?',
+                                            'Quelles sont les consignes d’urgence du site ? Alerte Gaz / H2S / incendie ?',
+                                        ],
+                                        'L\'intervenant et ses moyens' => [
+                                            'Quels sont les EPI pour cette mission ?',
+                                            'État visuel ?',
+                                            'Sont-ils adaptés au travail ?',
+                                            'Correctement porté ?',
+                                        ],
+                                        'L\'intervenant et son environnement' => [
+                                            'Quels sont les risques liés à l\'environnement client (Culture SSE) ?',
+                                            'Quels sont les moyens d\'accès au site et zone d\'intervention ?',
+                                            'Respecte-t-il les consignes de sécurité du chantier ?',
+                                            'Quelle est la démarche MASE de votre entreprise ?',
+                                            'Y a-t-il un Plan de Prévention ou PPSPS ? 3 principaux risques ?',
+                                        ],
+                                        'L\'intervenant et son relationnel' => [
+                                            'Attentes du client en termes de savoir-être ?',
+                                            'Remontées d’informations récentes ?',
+                                            '(difficultés, aléas, bonnes pratiques, SD…) que vous avez réalisé récemment ?',
+                                            'Dernier thème de causerie / animation SSE ?',
+                                        ],
+                                    ];
+
+                                    $radios = ['TS', 'S', 'IS', 'SO'];
+                                    $index = 0;
+                                @endphp
+
+                                @foreach ($questions as $section => $qs)
+                                    <tr class="table-primary fw-bold text-start">
+                                        <td colspan="6">{{ $section }}</td>
+                                    </tr>
+
+                                    @foreach ($qs as $q)
+                                        <tr>
+                                            <td class="text-start">{{ $q }}</td>
+                                            @foreach ($radios as $r)
+                                                <td>
+                                                    {{ isset($audit->responses[$index]) && $audit->responses[$index]['note'] == $r ? '✓' : '' }}
+                                                </td>
+                                            @endforeach
+                                            <td>
+                                                {{ isset($audit->responses[$index]) ? $audit->responses[$index]['comment'] : '' }}
+                                            </td>
+                                        </tr>
+                                        @php $index++; @endphp
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5>Culture SSE terrain</h5>
+                    <p>{{ $audit->culture_sse }}</p>
+                    <p><strong>QSER Score:</strong> {{ $audit->qser_score ?? 'N/A' }}</p>
+
+                    <h5 class="mt-4">Actions à mettre en place</h5>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-secondary text-center">
+                                <tr class="table-primary">
+                                    <th>Action(s)</th>
+                                    <th>Responsable</th>
+                                    <th>Délai</th>
+                                    <th>Type d'Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!empty($audit->actions))
+                                    @foreach($audit->actions as $action)
+                                        <tr class="action-row">
+                                            <td>{{ $action['description'] }}</td>
+                                            <td>{{ $action['responsable'] }}</td>
+                                            <td>{{ $action['delai'] }}</td>
+                                            <td>{{ $action['type'] == 'I' ? 'Imméd. (I)' : ($action['type'] == 'C' ? 'Corrective (C)' : 'Préventive (P)') }}</td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="4" class="text-center">No actions defined.</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Back Button -->
+                    <div class="text-center">
+                        <a href="{{ route('audit.index') }}" class="btn btn-primary">Back to Audits</a>
+                    </div>
                 </div>
             </div>
         </div>

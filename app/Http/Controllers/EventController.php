@@ -181,7 +181,7 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::findOrFail($id);
-        return view('event.show', compact('event'));
+        return view('events.show', compact('event'));
     }
 
     /**
@@ -189,15 +189,134 @@ class EventController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $event = Event::findOrFail($id);
+        return view('events.edit', compact('event'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Event $event)
     {
-        //
+        $data = $request->validate([
+            'date' => 'required|date',
+            'lieu' => 'required|string',
+            'type' => 'required',
+            'emetteur' => 'nullable|string',
+            'circonstances' => 'nullable|string',
+            'risques' => 'nullable|string',
+            'analyse' => 'nullable|array',
+            'frequence' => 'nullable|in:1,2,3,4',
+            'gravite' => 'nullable|in:1,2,3,4',
+            'propositions' => 'nullable|array',
+            'mesures' => 'nullable|array',
+            'actions' => 'nullable|array',
+            'attachments' => 'nullable|array',
+            'attachments.*' => 'file|mimes:jpg,jpeg,png,mp4,mov|max:20480', // 20MB max
+        ]);
+
+        // Calculate cotation
+        $frequence = $data['frequence'] ?? 1;
+        $gravite = $data['gravite'] ?? 1;
+        $cotation = $frequence * $gravite;
+
+        // Process actions
+        $actions = $data['actions'] ?? [];
+        if ($cotation > 10) {
+            $actions[] = [
+                'description' => 'Urgent action required',
+                'responsible' => 'RQSE Team',
+                'deadline' => now()->addHours(24)->toDateString(),
+                'type' => 'I',
+            ];
+        } elseif ($cotation > 6) {
+            $actions[] = [
+                'description' => 'Action within 48h',
+                'responsible' => 'RQSE Team',
+                'deadline' => now()->addDays(2)->toDateString(),
+                'type' => 'C',
+            ];
+        } elseif ($cotation > 1) {
+            $actions[] = [
+                'description' => 'Action within 1 week',
+                'responsible' => 'RQSE Team',
+                'deadline' => now()->addDays(7)->toDateString(),
+                'type' => 'P',
+            ];
+        }
+
+        // Handle attachments
+        $existingAttachments = json_decode($event->attachments, true) ?? [];
+        $newAttachments = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('events', 'public');
+                $newAttachments[] = $path;
+            }
+        }
+        $attachments = array_merge($existingAttachments, $newAttachments);
+
+        // Update event
+        $event->update([
+            'date' => $data['date'],
+            'lieu' => $data['lieu'],
+            'type' => $data['type'],
+            'emetteur' => $data['emetteur'],
+            'securite' => $request->has('securite'),
+            'sante' => $request->has('sante'),
+            'environnement' => $request->has('environnement'),
+            'rse' => $request->has('rse'),
+            'circonstances' => $data['circonstances'],
+            'risques' => $data['risques'],
+            'analyse' => json_encode($data['analyse'] ?? []),
+            'cotation' => $cotation,
+            'frequence' => $frequence,
+            'gravite' => $gravite,
+            'propositions' => json_encode($data['propositions'] ?? []),
+            'mesures' => json_encode($data['mesures'] ?? []),
+            'actions' => json_encode($actions),
+            'attachments' => json_encode($attachments),
+        ]);
+
+        // Update or create associated action
+        // $action = Action::where('origin_id', $event->id)->where('origin', 'Event-' . $event->id)->first();
+        // if ($action) {
+        //     $action->update([
+        //         'description' => 'Address ' . $data['risques'],
+        //         'deadline' => $actions[0]['deadline'] ?? now()->addDays(7),
+        //         'json_data' => json_encode(['event_id' => $event->id, 'progress' => $action->progress_rate]),
+        //         'due_date' => now()->addDays(7),
+        //         'comments' => 'Action updated from event editing',
+        //     ]);
+        // } else {
+        //     Action::create([
+        //         'origin' => 'Event-' . $event->id,
+        //         'origin_id' => $event->id,
+        //         'description' => 'Address ' . $data['risques'],
+        //         'issued_date' => now(),
+        //         'pilot_id' => $this->assignResponsible($event->type, $cotation),
+        //         'deadline' => $actions[0]['deadline'] ?? now()->addDays(7),
+        //         'json_data' => json_encode(['event_id' => $event->id, 'progress' => 0]),
+        //         'due_date' => now()->addDays(7),
+        //         'progress_rate' => 0,
+        //         'efficiency' => 'N',
+        //         'comments' => 'Action generated from event editing',
+        //     ]);
+        // }
+
+        // Notify users
+        $notification = Notification::create([
+            'to_user_id' => Auth::id(),
+            'from_user_id' => Auth::id(),
+            'action' => 'user_event_update_notify',
+            'message' => 'Event has been updated',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Event updated successfully.',
+            'redirect' => route('event.index'),
+        ]);
     }
 
     /**

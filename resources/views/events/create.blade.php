@@ -326,7 +326,8 @@
 
                         <div class="form-group">
                             <label class="form-label">Actions à mettre en place</label>
-                            <table class="action-table">
+                        <div id="actions-container" class="table-responsive mb-3">
+                            <table class="table table-bordered align-middle">
                                 <thead>
                                     <tr>
                                         <th>Action</th>
@@ -354,6 +355,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <button type="button" id="add-action" class="btn btn-secondary mb-3">Add Action</button>
 
                         <div class="form-group">
                             <label class="form-label">Attachments (Photos/Videos)</label>
@@ -374,6 +376,33 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+              let actionCount = 0;
+
+            // Add Action Dynamically
+            $('#add-action').on('click', function () {
+                actionCount++;
+                const newAction = `
+                    <tr class="action-row">
+                        <td><textarea name="actions[${actionCount}][description]" class="form-control" required></textarea></td>
+                        <td><input type="text" name="actions[${actionCount}][responsable]" class="form-control" required></td>
+                        <td><input type="date" name="actions[${actionCount}][delai]" class="form-control" required></td>
+                        <td>
+                            <select name="actions[${actionCount}][type]" class="form-select" required>
+                                <option value="I">Imméd. (I)</option>
+                                <option value="C">Corrective (C)</option>
+                                <option value="P">Préventive (P)</option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>
+                    </tr>
+                `;
+                $('#actions-container table tbody').append(newAction);
+            });
+
+            // Remove Action
+            $(document).on('click', '.remove-action', function () {
+                $(this).closest('tr').remove();
+            });
             $('#eventForm').on('submit', function(e) {
                 e.preventDefault();
 

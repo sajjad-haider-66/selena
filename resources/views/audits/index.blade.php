@@ -113,8 +113,8 @@
                                 <td>{{ $audit->intervenant }}</td>
                                 <td>{{ $audit->culture_sse }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
-                                    <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
+                                    <a href="{{ route('audit.show', $audit->id) }}" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ route('audit.edit', $audit->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
                                     <a href="#" class="btn btn-sm btn-danger delete-audits" data-id="{{ $audit->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>

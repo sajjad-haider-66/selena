@@ -142,28 +142,123 @@ class AuditController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        $product->with('getParentCatHasOne')->where('user_id', auth()->user()->id);
-        return view('products.show', compact('product'));
+        $audit = Audit::findOrFail($id);
+        return view('audits.show', compact('audit'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        $parent_category = Category::where('status', Category::STATUS_ACTIVE)->get();
-        //$subCategories = SubCategory::where('status', SubCategory::STATUS_ACTIVE)->get();
-        return view('products.edit', compact('product', 'parent_category'));
+        $audit = Audit::findOrFail($id);
+        // Decode JSON if it's a string
+        if (is_string($audit->responses)) {
+            $audit->responses = json_decode($audit->responses, true);
+        }
+        if (is_string($audit->actions)) {
+            $audit->actions = json_decode($audit->actions, true);
+        }
+        return view('audits.edit', compact('audit'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(AuditUpdateRequest $request, Product $product)
+    public function update(Request $request, $id)
     {
+        // Validate the request data
+        $data = $request->validate([
+            'date' => 'required|date',
+            'lieu' => 'required|string',
+            'auditeur' => 'required|string',
+            'intervenant' => 'required|string',
+            'responses' => 'nullable|array',
+            'culture_sse' => 'required|in:++,+,-=/,-,--',
+            'actions' => 'nullable|array',
+        ]);
 
+        // Find the existing audit record
+        $audit = Audit::findOrFail($id);
+
+        // Calculate score based on responses
+        $totalScore = 0;
+        if ($request->has('responses')) {
+            foreach ($request->input('responses') as $response) {
+                $note = $response['note'] ?? '';
+                switch ($note) {
+                    case 'TS':
+                        $totalScore += 2;
+                        break;
+                    case 'S':
+                        $totalScore += 1;
+                        break;
+                    case 'IS':
+                        $totalScore -= 1;
+                        break;
+                    case 'SO':
+                        $totalScore += 0;
+                        break;
+                }
+            }
+        }
+
+        // Calculate QSER score based on range
+        $qserScore = $totalScore;
+        if ($qserScore >= 12) {
+            $cultureQser = '++';
+        } elseif ($qserScore >= 0) {
+            $cultureQser = '+';
+        } elseif ($qserScore >= -12) {
+            $cultureQser = '-';
+        } else {
+            $cultureQser = '--';
+        }
+
+        // Process responses array
+        $responses = [];
+        if ($request->has('responses')) {
+            foreach ($request->input('responses') as $index => $response) {
+                if (isset($response['note']) && !empty($response['note'])) {
+                    $responses[] = [
+                        'question' => $request->input("responses.{$index}.question") ?? "Question {$index}",
+                        'note' => $response['note'],
+                        'comment' => $response['comment'] ?? '',
+                    ];
+                }
+            }
+        }
+
+        // Process actions array
+        $actions = $data['actions'] ?? [];
+        if ($data['culture_sse'] === '--' || in_array('IS', array_column($responses, 'note'))) {
+            $actions[] = [
+                'description' => 'Address immediate risks identified',
+                'responsable' => 'RQSE Team',
+                'delai' => now()->addDays(3)->toDateString(),
+                'type' => 'I',
+            ];
+        }
+
+        // Update the audit record
+        $audit->update([
+            'date' => $data['date'],
+            'lieu' => $data['lieu'],
+            'auditeur' => $data['auditeur'],
+            'intervenant' => $data['intervenant'],
+            'responses' => $responses, // Laravel will JSON encode due to $casts
+            'culture_sse' => $cultureQser, // Updated with calculated QSER
+            'qser_score' => $qserScore,   // Updated QSER score
+            'actions' => $actions,        // Laravel will JSON encode due to $casts
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Audit updated successfully.',
+            'redirect' => route('audit.index'),
+        ]);
     }
 
     /**

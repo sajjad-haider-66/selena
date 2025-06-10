@@ -1,130 +1,409 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit - Audit') }}
+            {{ __('Edit Event') }}
         </h2>
     </x-slot>
+
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-table th,
+        .action-table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .category-title {
+            background-color: #007bff;
+            color: white;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .category-content {
+            display: block;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+    </style>
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
-                <a title="back" href="{{ route('products.index') }}"
-                    class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500 active:bg-green-700 focus:outline-none focus:border-green-700 focus:shadow-outline-gray disabled:opacity-25">
-                    Go back
-                </a>
-                <!-- Calls when validation errors triggers starts -->
-                @if ($errors->any())
-                    <div class="alert alert-danger rounded-b text-red-600 px-4 py-3 shadow-md my-3" role="alert">
-                        <p><strong>Opps Something went wrong</strong></p>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                <!-- Calls when validation errors triggers ends -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <div id="success-message" class="alert alert-success" style="display: none;"></div>
+                    <div id="error-message" class="alert alert-danger" style="display: none;"></div>
 
-                <!-- Calls when session error triggers starts -->
-                @if (session('error'))
-                    <div class="alert alert-danger rounded-b text-red-600 px-4 py-3 shadow-md my-3" role="alert">
-                        <div class="flex">
-                            <div>
-                                <p class="text-sm text-danger">{{ session('error') }}</p>
+                    <form id="eventForm" method="POST" action="{{ route('event.update', $event->id) }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" name="date" class="form-control" value="{{ $event->date }}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Lieu (site / chantier)</label>
+                                    <input type="text" name="lieu" class="form-control" value="{{ $event->lieu }}" required>
+                                </div>
+                            </div>
+                            <div class="col col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Type d'événement</label>
+                                    <select name="type" class="form-control" required>
+                                        <option value="">Sélectionner</option>
+                                        <option value="Dangerous situation" {{ $event->type == 'Dangerous situation' ? 'selected' : '' }}>Situation Dangereuse</option>
+                                        <option value="Near miss" {{ $event->type == 'Near miss' ? 'selected' : '' }}>Presque Accident</option>
+                                        <option value="Work accident" {{ $event->type == 'Work accident' ? 'selected' : '' }}>Accident du Travail (AT)</option>
+                                        <option value="Occupational illness" {{ $event->type == 'Occupational illness' ? 'selected' : '' }}>Maladie Professionnelle (MP)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Émetteur</label>
+                                    <input type="text" name="emetteur" class="form-control" value="{{ $event->emetteur }}">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endif
-                <!-- Calls when session error triggers ends -->
-                <form action="{{ route('products.update', $product->id) }}" method="POST"
-                    enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <div class="mb-4">
-                        <label for="name" class="block mb-2 text-sm font-bold text-gray-700">Product Name <span
-                                class="text-red-600">*</span></label>
-                        <input type="text"
-                            class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                            name="name" placeholder="Enter Audit name" value="{{ old('name', $product->name) }}"
-                            required>
-                        @error('name')
-                            <span class="text-red-600">{{ $message }}
-                            </span>
-                        @enderror
-                    </div>
 
-                    <div class="mb-4">
-                        <label for="description"
-                            class="block mb-2 text-sm font-bold text-gray-700">{{ __('Description') }} </label>
-                        <textarea class="form-control" cols="40" rows="7" name="description"
-                            placeholder="{{ __('Enter Audit description') }}">{{ old('description', $product->description) }}</textarea>
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Catégories</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="securite" id="securite" {{ $event->securite ? 'checked' : '' }}>
+                                    <label for="securite">Sécurité</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="sante" id="sante" {{ $event->sante ? 'checked' : '' }}>
+                                    <label for="sante">Santé</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="environnement" id="environnement" {{ $event->environnement ? 'checked' : '' }}>
+                                    <label for="environnement">Environnement</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" name="rse" id="rse" {{ $event->rse ? 'checked' : '' }}>
+                                    <label for="rse">RSE</label>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="mb-4">
-                        <label for="image" class="block mb-2 text-sm font-bold text-gray-700">Image </label>
-                        <img src="{{ asset('storage/products/' . $product->image) }}" heigth="100" width="100" />
-                        <input type="file"
-                            class="w-50 px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                            name="image" accept=".jpg, .png, .jpeg, .gif">
-                        @error('image')
-                            <span class="text-red-600">{{ $message }}
-                            </span>
-                        @enderror
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Circonstances détaillées</label>
+                            <textarea name="circonstances" class="form-control" rows="4" required>{{ $event->circonstances }}</textarea>
+                        </div>
 
-                    <div class="mb-4">
-                        <label for="parentcategory_name"
-                            class="block mb-2 text-sm font-bold text-gray-700">{{ __('Parent category') }} <span
-                                class="text-red-600">*</span></label>
-                        <select class="form-select" name="select_parent_cat" id="select_parent_cat" required>
-                            <option readonly disabled>{{ __('Select Parent category') . '--' }}</option>
-                            @foreach ($parent_category as $parent_cat)
-                                <option value="{{ $parent_cat->id }}"
-                                    @if (old('select_parent_cat') && $parent_cat->id == old('select_parent_cat')) selected
-                                    @elseif(!old('select_parent_cat') && $parent_cat->id == $product->parent_category_id)
-                                        selected @endif>
-                                    {{ $parent_cat->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('select_parent_cat')
-                            <span class="text-red-600 text-danger">{{ $message }}
-                            </span>
-                        @enderror
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Risques encourus</label>
+                            <textarea name="risques" class="form-control" rows="2">{{ $event->risques }}</textarea>
+                        </div>
 
-                    <div class="mb-4">
-                        <label for="price" class="block mb-2 text-sm font-bold text-gray-700">Price <span
-                                class="text-red-600">*</span></label>
-                        <input type="text"
-                            class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                            name="price" min="1" maxlength="13" placeholder="Enter Product price"
-                            value="{{ old('price', $product->price) }}" required>
-                        @error('price')
-                            <span class="text-red-600">{{ $message }}
-                            </span>
-                        @enderror
-                    </div>
+                        <div class="form-group">
+                            <label class="form-label">Analyse simplifiée (Sélectionnez les manquements)</label>
+                            @php
+                                $analyse = json_decode($event->analyse, true) ?? [];
+                            @endphp
 
-                    <div class="mb-4">
-                        <label for="qty" class="block mb-2 text-sm font-bold text-gray-700">Quantity <span
-                                class="text-red-600">*</span></label>
-                        <input type="number"
-                            class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline numberonly"
-                            name="qty" min="1" max="4294967295" placeholder="Enter Product Quantity"
-                            value="{{ old('qty', $product->qty) }}" required>
-                        @error('qty')
-                            <span class="text-red-600">{{ $message }}
-                            </span>
-                        @enderror
-                    </div>
+                            <!-- Sécurité des accès -->
+                            <div class="category-title" onclick="toggleCategory('securite_acces')">Sécurité des accès</div>
+                            <div id="securite_acces" class="category-content">
+                                <div class="checkbox-group">
+                                    @foreach ([
+                                        'Chute de plain-pied ou escalier',
+                                        'Chute dans trémie sans protection ou mal protégée',
+                                        'Chute de hauteur',
+                                        'Chute d’objet',
+                                        'Franchissement d’un balisage ou d’un garde-corps',
+                                        'Cheminement non sécurisé (manque de visibilité, obstacle, etc.)'
+                                    ] as $item)
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" name="analyse[securite_acces][]" value="{{ $item }}"
+                                                {{ isset($analyse['securite_acces']) && in_array($item, $analyse['securite_acces']) ? 'checked' : '' }}>
+                                            {{ $item }}
+                                        </div>
+                                    @endforeach
+                                    <div class="checkbox-item">
+                                        <input type="text" name="analyse[securite_acces][other]"
+                                            value="{{ $analyse['securite_acces']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div>
-                        <button title="update" type="submit"
-                            class="inline-flex items-center px-4 py-2 my-3 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-800 border border-transparent rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25">
-                            Update
-                        </button>
-                    </div>
-                </form>
+                            <!-- Matériel de sécurité -->
+                            <div class="category-title" onclick="toggleCategory('materiel_securite')">Matériel de sécurité</div>
+                            <div id="materiel_securite" class="category-content">
+                                <div class="checkbox-group">
+                                    @foreach ([
+                                        'Matériel de sécurité non vérifié',
+                                        'Matériel de sécurité inadapté',
+                                        'Matériel de sécurité indisponible',
+                                        'Non respect d’une consigne de sécurité',
+                                        'Non port des EPI',
+                                        'Non utilisation d’EPC'
+                                    ] as $item)
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" name="analyse[materiel_securite][]" value="{{ $item }}"
+                                                {{ isset($analyse['materiel_securite']) && in_array($item, $analyse['materiel_securite']) ? 'checked' : '' }}>
+                                            {{ $item }}
+                                        </div>
+                                    @endforeach
+                                    <div class="checkbox-item">
+                                        <input type="text" name="analyse[materiel_securite][other]"
+                                            value="{{ $analyse['materiel_securite']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Information sur les risques -->
+                            <div class="category-title" onclick="toggleCategory('info_risques')">Information sur les risques</div>
+                            <div id="info_risques" class="category-content">
+                                <div class="checkbox-group">
+                                    @foreach ([
+                                        'Absence de PdP ou de PPSPS',
+                                        'Non communication du PdP ou du PPSPS au collaborateur',
+                                        'Information sur les risques potentiels incomplète ou absente',
+                                        'Absence d’accueil sécurité sur le site'
+                                    ] as $item)
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" name="analyse[info_risques][]" value="{{ $item }}"
+                                                {{ isset($analyse['info_risques']) && in_array($item, $analyse['info_risques']) ? 'checked' : '' }}>
+                                            {{ $item }}
+                                        </div>
+                                    @endforeach
+                                    <div class="checkbox-item">
+                                        <input type="text" name="analyse[info_risques][other]"
+                                            value="{{ $analyse['info_risques']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ambiances et situations de travail -->
+                            <div class="category-title" onclick="toggleCategory('ambiances')">Ambiances et situations de travail</div>
+                            <div id="ambiances" class="category-content">
+                                <div class="checkbox-group">
+                                    @foreach ([
+                                        'Produits toxiques, nocifs',
+                                        'Produits corrosifs, irritants',
+                                        'Risque électrique',
+                                        'Risque d’incendie, d’explosion',
+                                        'Risques liés à la coactivité',
+                                        'Modification des risques en cours de mission',
+                                        'Conditions d’hygiène dans les locaux'
+                                    ] as $item)
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" name="analyse[ambiances][]" value="{{ $item }}"
+                                                {{ isset($analyse['ambiances']) && in_array($item, $analyse['ambiances']) ? 'checked' : '' }}>
+                                            {{ $item }}
+                                        </div>
+                                    @endforeach
+                                    <div class="checkbox-item">
+                                        <input type="text" name="analyse[ambiances][other]"
+                                            value="{{ $analyse['ambiances']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Formation sécurité / Habilitations -->
+                            <div class="category-title" onclick="toggleCategory('formation')">Formation sécurité / Habilitations</div>
+                            <div id="formation" class="category-content">
+                                <div class="checkbox-group">
+                                    @foreach ([
+                                        'Formation sécurité insuffisante ou absente',
+                                        'Intervention d’un collaborateur non habilité',
+                                        'Habilitation périmée, à réexaminée'
+                                    ] as $item)
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" name="analyse[formation][]" value="{{ $item }}"
+                                                {{ isset($analyse['formation']) && in_array($item, $analyse['formation']) ? 'checked' : '' }}>
+                                            {{ $item }}
+                                        </div>
+                                    @endforeach
+                                    <div class="checkbox-item">
+                                        <input type="text" name="analyse[formation][other]"
+                                            value="{{ $analyse['formation']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Fréquence d’exposition</label>
+                                    <select name="frequence" class="form-control" required>
+                                        <option value="1" {{ $event->frequence == 1 ? 'selected' : '' }}>Faible (< 1 fois/an)</option>
+                                        <option value="2" {{ $event->frequence == 2 ? 'selected' : '' }}>Moyenne (< 1 fois/mois)</option>
+                                        <option value="3" {{ $event->frequence == 3 ? 'selected' : '' }}>Grande (> 1 fois/mois)</option>
+                                        <option value="4" {{ $event->frequence == 4 ? 'selected' : '' }}>Grande (> 1 fois/semaine)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Gravité des dommages</label>
+                                    <select name="gravite" class="form-control" required>
+                                        <option value="1" {{ $event->gravite == 1 ? 'selected' : '' }}>Gêne ou dommage léger</option>
+                                        <option value="2" {{ $event->gravite == 2 ? 'selected' : '' }}>Blessure légère</option>
+                                        <option value="3" {{ $event->gravite == 3 ? 'selected' : '' }}>Blessure grave</option>
+                                        <option value="4" {{ $event->gravite == 4 ? 'selected' : '' }}>Blessure mortelle</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Propositions pour éviter</label>
+                                    @php
+                                        $propositions = json_decode($event->propositions, true) ?? [];
+                                    @endphp
+                                    <textarea name="propositions[0]" class="form-control" rows="2">{{ $propositions[0] ?? '' }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Mesures pour éviter accident</label>
+                            @php
+                                $mesures = json_decode($event->mesures, true) ?? [];
+                            @endphp
+                            <div class="checkbox-group">
+                                @foreach (['Information', 'Organisation', 'Equipement', 'Autre'] as $mesure)
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" name="mesures[]" value="{{ $mesure }}"
+                                            {{ in_array($mesure, $mesures) ? 'checked' : '' }}>
+                                        <label>{{ $mesure == 'Equipement' ? 'Equipement de sécurité' : $mesure }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Actions à mettre en place</label>
+                            <table class="action-table">
+                                <thead>
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>Responsable</th>
+                                        <th>Délai</th>
+                                        <th>Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $actions = json_decode($event->actions, true) ?? [];
+                                    @endphp
+                                    @foreach ($actions as $index => $action)
+                                        <tr>
+                                            <td><input type="text" name="actions[{{ $index }}][description]" class="form-control" value="{{ $action['description'] ?? '' }}"></td>
+                                            <td><input type="text" name="actions[{{ $index }}][responsible]" class="form-control" value="{{ $action['responsible'] ?? '' }}"></td>
+                                            <td><input type="date" name="actions[{{ $index }}][deadline]" class="form-control" value="{{ $action['deadline'] ?? '' }}"></td>
+                                            <td>
+                                                <select name="actions[{{ $index }}][type]" class="form-select">
+                                                    <option value="I" {{ ($action['type'] ?? '') == 'I' ? 'selected' : '' }}>Immédiate (I)</option>
+                                                    <option value="C" {{ ($action['type'] ?? '') == 'C' ? 'selected' : '' }}>Corrective (C)</option>
+                                                    <option value="P" {{ ($action['type'] ?? '') == 'P' ? 'selected' : '' }}>Préventive (P)</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Attachments (Photos/Videos)</label>
+                            <input type="file" name="attachments[]" multiple class="form-control">
+                            @if ($event->attachments)
+                                @php
+                                    $existingAttachments = json_decode($event->attachments, true) ?? [];
+                                @endphp
+                                @foreach ($existingAttachments as $attachment)
+                                    <div>
+                                        <a href="{{ Storage::url($attachment) }}" target="_blank">View Attachment</a>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" style="background-color: #007bff">Mettre à jour</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#eventForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+                var submitButton = $(this).find('button[type="submit"]');
+                submitButton.prop('disabled', true);
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.success) {
+                            $('#success-message').text(response.message).show();
+                            toastr.success(response.message);
+                            setTimeout(() => {
+                                window.location.href = response.redirect;
+                            }, 2000);
+                        }
+                    },
+                    error: function(xhr) {
+                        var errors = xhr.responseJSON.errors;
+                        var errorMessage = 'Please fix the following errors:<br>';
+                        toastr.error('Please fix the following errors:<br>');
+                        $.each(errors, function(key, value) {
+                            errorMessage += `- ${value[0]}<br>`;
+                        });
+                        $('#error-message').html(errorMessage).show();
+                        submitButton.prop('disabled', false);
+                    }
+                });
+            });
+
+            window.toggleCategory = function(categoryId) {
+                const content = document.getElementById(categoryId);
+                content.classList.toggle('active');
+            };
+        });
+    </script>
 </x-app-layout>

@@ -113,8 +113,8 @@
                                 <td>{{ $event->emetteur }}</td>
                                 <td>{{ $event->cotation }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
-                                    <a href="#" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
+                                    <a href="{{ route('event.show', $event->id) }}" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ route('event.edit', $event->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="fa fa-pencil"></i></a>
                                     <a href="#" class="btn btn-sm btn-danger delete-events" data-id="{{ $event->id }}" title="Delete"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
