@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Action;
 use App\Models\Attendance;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\TalkAnimation;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TalkAnimationUpdateRequest;
-use App\Traits\ApiResponse;
 
 class TalkAnimationController extends Controller
 {
@@ -121,6 +122,23 @@ class TalkAnimationController extends Controller
             'status' => 'scheduled',
         ]);
 
+        if ($actions) {
+            Action::create([
+                'origin' => 'TalkAnimation-' . $talk->id,
+                'action_number' => $this->random_number(),
+                'description' => 'Address ' . $data['description'],
+                'issued_date' => now(),
+                'pilot_id' => auth()->user()->id ?? 0,
+                'deadline' => $actions[0]['delai'] ?? now()->addDays(7),
+                'json_data' => json_encode(['talk_id' => $talk->id, 'progress' => 0]),
+                'due_date' => now()->addDays(7),
+                'progress_rate' => 0,
+                'efficiency' => 'N',
+                'type' => 'Immediate',
+                'comments' => 'Action generated from event editing',
+            ]);
+        } 
+
         // Notify and Invite Users
         // $users = User::where('role', '!=', 'RQSE Manager')->get();
         // Notification::send($users, new TalkInvitation($talk));
@@ -130,6 +148,11 @@ class TalkAnimationController extends Controller
             'message' => 'Talk event created successfully.',
             'redirect' => route('talk_animation.index'),
         ]);
+    }
+
+    function random_number($min = 0, $max = 1000)
+    {
+        return mt_rand($min, $max);
     }
 
     /**

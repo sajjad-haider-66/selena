@@ -29,6 +29,7 @@ return new class extends Migration
             $table->text('comments')->nullable();
             $table->enum('status', ['Not Started', 'In Progress', 'Completed'])->default('Not Started');
             $table->string('pilot_id')->nullable();
+            $table->string('action_form_type')->nullable();
              $table->json('json_data')->nullable();
             $table->timestamps();
             

@@ -189,7 +189,7 @@
                                 <th width="5%">I</th>
                                 <th width="5%">C</th>
                                 <th width="5%">P</th>
-                                <th width="5%">Remove</th>
+                                {{-- <th width="5%">Remove</th> --}}
                             </tr>
                             <tr class="action-row">
                                 <td><input type="text" name="action[0]"></td>
@@ -198,7 +198,7 @@
                                 <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="0"></td>
                                 <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="0"></td>
                                 <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="0"></td>
-                                <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
+                                {{-- <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td> --}}
                             </tr>
                         </table>
                         <button type="button" id="add-action" class="btn btn-secondary btn-sm mt-2" style="background-color: #746c6c;">Add Action</button>
