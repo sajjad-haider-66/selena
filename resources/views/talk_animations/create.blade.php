@@ -17,12 +17,12 @@
             text-align: left;
         }
         th {
-            background-color: #007bff;
-            color: white;
+            background-color: rgba(0, 0, 0, .03);
+            color: rgb(0, 0, 0);
         }
         .blue-header {
-            background-color: #007bff;
-            color: white;
+            background-color: rgba(0, 0, 0, .03);
+            color: #000000;
             text-align: center;
         }
         .checkbox-group {
@@ -94,7 +94,9 @@
                         Create New Talk/Animation
                     </a>
                     @endcan
-                    
+                     <div class="card-header text-black d-flex justify-content-between align-items-center">
+                        <h4>Talk Animation</h4>
+                    </div>
                     <!-- The Form -->
                     <form id="talkForm" method="POST">
                         @csrf
@@ -201,7 +203,7 @@
                                 {{-- <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td> --}}
                             </tr>
                         </table>
-                        <button type="button" id="add-action" class="btn btn-secondary btn-sm mt-2" style="background-color: #746c6c;">Add Action</button>
+                        <button type="button" id="add-action" class="btn btn-outline-dark btn-sm mt-2">Add Action</button>
                         <div class="action-legend mt-2">I : Action Immédiate ; C : Action Corrective ; P : Action Préventive</div>
                         
                         <div class="mt-6">

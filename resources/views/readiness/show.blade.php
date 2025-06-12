@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="mt-4">
-                    <a href="{{ route('daily_readiness.index') }}" class="btn btn-primary">Back to Readiness List</a>
+                    <a href="{{ route('daily_readiness.index') }}" class="btn btn-primary">Back</a>
                 </div>
             </div>
         </div>

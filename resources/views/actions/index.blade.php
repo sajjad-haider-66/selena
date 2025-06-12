@@ -111,11 +111,11 @@
                     
                     <!-- Permission based button -->
                     <a href="{{ route('action.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold uppercase bg-green-600 text-white rounded-md hover:bg-green-500" style="float: right">
-                        {{ __('Create CheckList') }}
+                        {{ __('Create Action') }}
                     </a>
                         
                     <!-- The Form -->
-                    <form method="POST" action="">
+                    <form method="POST" action="" class="mt-5">
                         @csrf
                         
                         <!-- Title and Progress -->
@@ -330,11 +330,11 @@
                             <p class="text-sm text-gray-600">I : Action Immédiate ; C : Action Corrective ; P : Action Préventive</p>
                         </div>
                         
-                        <div class="mt-6">
+                        {{-- <div class="mt-6">
                             <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest  focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: #0066cc">
                                 Enregistrer les modifications
                             </button>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>

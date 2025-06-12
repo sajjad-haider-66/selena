@@ -59,12 +59,31 @@
             background-color: #fd290d !important;
             color: white !important;
         }
+           th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(0, 0, 0, .03);
+            color: rgb(0, 0, 0);
+        }
+         .blue-header {
+            background-color: rgba(0, 0, 0, .03);
+            color: #000000;
+            text-align: center;
+        }
+          .action-legend {
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+        }
     </style>
 
     <div class="row justify-content-center mt-4">
         <div class="col-md-10">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div class="card-header text-dark d-flex justify-content-between align-items-center">
                     <h4>Formulaire d'Audit</h4>
                 </div>
                 <div class="card-body">
@@ -99,7 +118,7 @@
                         <!-- Questions Table -->
                         <div class="table-responsive">
                             <table class="table table-bordered text-center align-middle">
-                                <thead class="table-primary">
+                                <thead class="table-secondry">
                                     <tr>
                                         <th style="width: 50%;">Thèmes abordés</th>
                                         <th>TS</th>
@@ -145,7 +164,7 @@
                                     @endphp
 
                                     @foreach ($questions as $section => $qs)
-                                        <tr class="table-primary fw-bold text-start">
+                                        <tr class="table-secondry fw-bold text-start">
                                             <td colspan="6">{{ $section }}</td>
                                         </tr>
 
@@ -183,7 +202,7 @@
                         <div id="actions-container" class="table-responsive mb-3">
                             <table class="table table-bordered align-middle">
                                 <thead class="table-secondary text-center">
-                                    <tr class="table-primary">
+                                    <tr class="table-secondry">
                                         <th>Action(s)</th>
                                         <th>Responsable</th>
                                         <th>Délai</th>
@@ -206,11 +225,14 @@
                                 </tbody>
                             </table>
                         </div>
-                        <button type="button" id="add-action" class="btn btn-secondary mb-3">Add Action</button>
+                        <button type="button" id="add-action" class="btn btn-outline-dark mb-3">Add Action</button>
+                        <div class="action-legend mt-2">I : Action Immédiate ; C : Action Corrective ; P : Action Préventive</div>
 
                         <!-- Submit -->
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                          <div class="mt-6">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">
+                                Enregistrer
+                            </button>
                         </div>
                     </form>
                 </div>

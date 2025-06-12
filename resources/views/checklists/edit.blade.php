@@ -6,11 +6,10 @@
     </x-slot>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
-                <a title="back" href="{{ route('checklist.index') }}"
-                    class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500 active:bg-green-700 focus:outline-none focus:border-green-700 focus:shadow-outline-gray disabled:opacity-25">
-                    Go back
-                </a>
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4 mb-2">
+                <div class="card-header text-black d-flex justify-content-between align-items-center">
+                    <h4>Check List</h4>
+                </div>
                 <!-- Calls when validation errors triggers starts -->
                 @if ($errors->any())
                     <div class="alert alert-danger rounded-b text-red-600 px-4 py-3 shadow-md my-3" role="alert">
@@ -46,7 +45,7 @@
                             <input type="text" name="category" class="form-control" value="{{ $checklists[0]['category'] }}" required>
                         </div>
                         <div class="col-md-3 mt-4">
-                            <button type="button" id="add-more" class="btn btn-info mb-3">Add More</button>
+                            <button type="button" id="add-more" class="btn btn-outline-dark mb-3">Add More</button>
                         </div>
                     </div>
                     <div class="row mb-3" id="checklist-container">
@@ -68,9 +67,8 @@
 
                     </div>
 
-                    <div>
-                        <button title="update" type="submit"
-                            class="inline-flex items-center px-4 py-2 my-3 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-800 border border-transparent rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25">
+                    <div class="mt-6">
+                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">
                             Update
                         </button>
                     </div>

@@ -31,7 +31,7 @@
         .checklist-item {
             padding: 15px;
             border-bottom: 1px solid #dee2e6;
-            background-color: #e7f1ff;
+            background-color: #eff0f2;
             border-radius: 5px;
             margin-bottom: 10px;
         }
@@ -98,9 +98,11 @@
             transition: background-color 0.3s ease;
         }
 
-        .btn-submit:hover {
-            background-color: #0056b3;
+        .head-read{
+            background-color: #ebeef1;
         }
+
+      
         .nav-tabs .nav-link:hover {
         border-color: #227ed9 #2c6eaf #fff;
         }
@@ -129,7 +131,7 @@
             @foreach ($checklistsByCategory as $category => $questions)
                 <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="category-{{ \Illuminate\Support\Str::slug($category) }}" role="tabpanel">
                     <div class="card shadow-sm border-0 mt-4">
-                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div class="card-header text-black d-flex justify-content-between align-items-center head-read">
                             <h4 class="mb-0">{{ $category ?: 'Uncategorized' }} Checklist</h4>
                             <span class="badge bg-light text-dark">Total Energies</span>
                         </div>
@@ -209,7 +211,11 @@
                                 </div>
 
                                 @if (!in_array(\Illuminate\Support\Str::slug($category), $hasSubmittedToday))
-                                    <button type="submit" class="btn btn-submit w-100">Submit Checklist</button>
+                                     <div class="mt-6">
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">
+                                            Enregistrer
+                                        </button>
+                                    </div>
                                 @else
                                     <div class="alert alert-info">This form has already been submitted for today.</div>
                                 @endif

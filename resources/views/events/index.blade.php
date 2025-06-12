@@ -83,12 +83,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
                 
-                <a href="{{ route('event.index') }}" title="Back"
+                {{-- <a href="{{ route('event.index') }}" title="Back"
                    class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500">
                     Go Back
-                </a>
+                </a> --}}
                 <a href="{{ route('event.create') }}" class="btn btn-primary inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold uppercase bg-green-600 text-white rounded-md hover:bg-green-500" style="float: right">
-                {{ __('Report an Event') }}
+                {{ __('Create Event') }}
                 </a>
                 <div class="card-body">
                     <table id="event_table" class="table table-bordered table-striped">

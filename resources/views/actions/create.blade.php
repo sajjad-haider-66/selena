@@ -83,12 +83,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
                 
-                <a href="{{ route('action.index') }}" title="Back"
-                   class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500">
-                    Go Back
-                </a>
                 <div class="container">
-                    <h1>Détail d’action</h1>
+                    <div class="card-header text-black d-flex justify-content-between align-items-center">
+                        <h2><strong>Détail d’action</strong></h2>
+                    </div>
                     <form id="actionForm">
                         @csrf
                         <div class="form-section">
@@ -159,7 +157,11 @@
                             </table>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                         <div class="mt-6">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">
+                                Enregistrer
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

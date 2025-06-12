@@ -54,7 +54,6 @@
             background-color: #d4d4d4 !important;
             color: white !important;
         }
-
         .btn.btn-danger {
             background-color: #fd290d !important;
             color: white !important;
@@ -64,7 +63,7 @@
     <div class="row justify-content-center mt-4">
         <div class="col-md-10">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div class="card-header text-black d-flex justify-content-between align-items-center">
                     <h4>Check List</h4>
                 </div>
                 <div class="card-body">
@@ -80,7 +79,7 @@
                                 <input type="text" name="category" class="form-control" required>
                             </div>
                             <div class="col-md-3 mt-4">
-                                <button type="button" id="add-more" class="btn btn-info mb-3">Add More</button>
+                                <button type="button" id="add-more" class="btn btn-outline-dark mb-3">Add More</button>
                             </div>
                         </div>
                         <div class="row mb-3" id="checklist-container">
@@ -96,8 +95,10 @@
 
                         </div>
                         <!-- Submit -->
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
+                      <div class="mt-6">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">
+                                Enregistrer
+                            </button>
                         </div>
                     </form>
                 </div>
