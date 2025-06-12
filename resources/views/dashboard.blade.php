@@ -45,7 +45,7 @@
                             <div class="card text-white bg-primary h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Pending Actions</h6>
-                                    <h3>{{ $pendingActions }}</h3>
+                                    <h3>{{ $pendingActionsCount }}</h3>
                                     <p class="card-text">Due this week</p>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                             <div class="card text-white bg-success h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Daily Readiness</h6>
-                                    <h3>{{ $dailyReadiness }}%</h3>
+                                    <h3>{{ $dailyReadinessCount }}</h3>
                                     <p class="card-text">Operational</p>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                             <div class="card text-white bg-warning h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Open Events</h6>
-                                    <h3>{{ $openEvents }}</h3>
+                                    <h3>{{ $pendingEvents }}</h3>
                                     <p class="card-text">Active</p>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                             <div class="card text-white bg-danger h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Upcoming Audits/Talks</h6>
-                                    <h3>{{ $upcomingAudits }}</h3>
+                                    <h3>{{ $upcomingAuditsCount }}</h3>
                                     <p class="card-text">Next 7 days</p>
                                 </div>
                             </div>
@@ -126,73 +126,77 @@
     
     <script>
         $(document).ready(function() {
-    // Doughnut Chart for Events Status
-    const $canvas = $('#eventsStatusChart');
-    if ($canvas.length) {
-        const ctx = $canvas[0].getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Pending', 'Completed', 'Processing'],
-                datasets: [{
-                    label: 'Events Status',
-                    data: [5, 8, 3], // Sample data: replace with actual data
-                    backgroundColor: [
-                        'rgba(59, 130, 246, 0.6)', // Blue for Pending
-                        'rgba(34, 197, 94, 0.6)',  // Green for Completed
-                        'rgba(234, 179, 8, 0.6)'   // Yellow for Processing
-                    ],
-                    borderColor: [
-                        'rgba(59, 130, 246, 1)',
-                        'rgba(34, 197, 94, 1)',
-                        'rgba(234, 179, 8, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            color: '#4B5563',
-                            font: {
-                                size: 14
+        // Doughnut Chart for Events Status
+        const $canvas = $('#eventsStatusChart');
+        if ($canvas.length) {
+            const ctx = $canvas[0].getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Completed', 'Processing'],
+                    datasets: [{
+                        label: 'Events Status',
+                        data: [
+                            {{ $chartData['events_status']['pending'] }},
+                            {{ $chartData['events_status']['completed'] }},
+                            {{ $chartData['events_status']['processing'] }}
+                        ], // Sample data: replace with actual data
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.6)', // Blue for Pending
+                            'rgba(34, 197, 94, 0.6)',  // Green for Completed
+                            'rgba(234, 179, 8, 0.6)'   // Yellow for Processing
+                        ],
+                        borderColor: [
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(34, 197, 94, 1)',
+                            'rgba(234, 179, 8, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#4B5563',
+                                font: {
+                                    size: 14
+                                }
                             }
+                        },
+                        tooltip: {
+                            backgroundColor: '#1F2937',
+                            titleColor: '#FFFFFF',
+                            bodyColor: '#FFFFFF',
+                            cornerRadius: 8
                         }
-                    },
-                    tooltip: {
-                        backgroundColor: '#1F2937',
-                        titleColor: '#FFFFFF',
-                        bodyColor: '#FFFFFF',
-                        cornerRadius: 8
                     }
                 }
-            }
-        });
-    }
+            });
+        }
 
-    // Optional: Update chart based on filter change (e.g., Timeframe dropdown)
-    $('.form-select').on('change', function() {
-        // Example AJAX call to fetch new data
-        $.ajax({
-            url: '/api/events-data', // Replace with your API endpoint
-            method: 'GET',
-            data: { timeframe: $(this).val() },
-            success: function(data) {
-                const chart = Chart.getChart('eventsStatusChart');
-                if (chart) {
-                    chart.data.datasets[0].data = [data.pending, data.completed, data.processing];
-                    chart.update();
-                }
-            },
-            error: function() {
-                console.error('Failed to fetch events data');
-            }
+        // Optional: Update chart based on filter change (e.g., Timeframe dropdown)
+        $('.form-select').on('change', function() {
+                // Example AJAX call to fetch new data
+                $.ajax({
+                    url: 'admin/dashboard/events-data', // Updated to your controller route
+                    method: 'GET',
+                    data: { timeframe: $(this).val() },
+                    success: function(data) {
+                        const chart = Chart.getChart('eventsStatusChart');
+                        if (chart) {
+                            chart.data.datasets[0].data = [data.pending, data.completed, data.processing];
+                            chart.update();
+                        }
+                    },
+                    error: function() {
+                        console.error('Failed to fetch events data');
+                    }
+                });
+            });
         });
-    });
-});
         function exportToPDF() {
             alert('Exporting to PDF...');
         }
@@ -259,10 +263,10 @@
         }
 
         // Initialize charts
-        createChart('pendingActionsChart', 'Pending Actions', [5, 4, 6, 3, 5, 4, 5], 'rgba(59, 130, 246,');
-        createChart('dailyReadinessChart', 'Daily Readiness (%)', [90, 92, 88, 95, 91, 93, 92], 'rgba(34, 197, 94,');
-        createChart('openEventsChart', 'Open Events', [2, 3, 1, 4, 3, 2, 3], 'rgba(234, 179, 8,');
-        createChart('upcomingAuditsChart', 'Upcoming Audits/Talks', [1, 2, 0, 1, 2, 3, 2], 'rgba(239, 68, 68,');
+            createChart('pendingActionsChart', 'Pending Actions', @json($chartData['pending_actions']), 'rgba(59, 130, 246,');
+            createChart('dailyReadinessChart', 'Daily Readiness (%)', @json($chartData['daily_readiness']), 'rgba(34, 197, 94,');
+            createChart('openEventsChart', 'Open Events', @json($chartData['open_events']), 'rgba(234, 179, 8,');
+            createChart('upcomingAuditsChart', 'Upcoming Audits/Talks', @json($chartData['upcoming_audits']), 'rgba(239, 68, 68,');
     </script>
     
 </x-app-layout>

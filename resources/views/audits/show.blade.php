@@ -125,6 +125,11 @@
                                         ],
                                     ];
 
+                                    // Ensure responses is an array
+                                    $responses = is_string($audit->responses)
+                                        ? json_decode($audit->responses, true)
+                                        : $audit->responses;
+                                    $responses = is_array($responses) ? $responses : [];
                                     $radios = ['TS', 'S', 'IS', 'SO'];
                                     $index = 0;
                                 @endphp
@@ -139,11 +144,11 @@
                                             <td class="text-start">{{ $q }}</td>
                                             @foreach ($radios as $r)
                                                 <td>
-                                                    {{ isset($audit->responses[$index]) && $audit->responses[$index]['note'] == $r ? '✓' : '' }}
+                                                    {{ isset($responses[$index]) && is_array($responses[$index]) && $responses[$index]['note'] == $r ? '✓' : '' }}
                                                 </td>
                                             @endforeach
                                             <td>
-                                                {{ isset($audit->responses[$index]) ? $audit->responses[$index]['comment'] : '' }}
+                                                {{ isset($responses[$index]) && is_array($responses[$index]) ? $responses[$index]['comment'] : '' }}
                                             </td>
                                         </tr>
                                         @php $index++; @endphp
@@ -154,7 +159,7 @@
                     </div>
 
                     <h5>Culture SSE terrain</h5>
-                    <p>{{ $audit->culture_sse }}</p>
+                    <p>{{ $audit->culture_sse ?? 'N/A' }}</p>
                     <p><strong>QSER Score:</strong> {{ $audit->qser_score ?? 'N/A' }}</p>
 
                     <h5 class="mt-4">Actions à mettre en place</h5>
@@ -169,13 +174,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (!empty($audit->actions))
-                                    @foreach($audit->actions as $action)
+                                @if (!empty($audit->actions) && is_array($audit->actions))
+                                    @foreach ($audit->actions as $action)
                                         <tr class="action-row">
-                                            <td>{{ $action['description'] }}</td>
-                                            <td>{{ $action['responsable'] }}</td>
-                                            <td>{{ $action['delai'] }}</td>
-                                            <td>{{ $action['type'] == 'I' ? 'Imméd. (I)' : ($action['type'] == 'C' ? 'Corrective (C)' : 'Préventive (P)') }}</td>
+                                            <td>{{ $action['description'] ?? '' }}</td>
+                                            <td>{{ $action['responsable'] ?? '' }}</td>
+                                            <td>{{ $action['delai'] ?? '' }}</td>
+                                            <td>
+                                                {{ $action['type'] == 'I' ? 'Imméd. (I)' : ($action['type'] == 'C' ? 'Corrective (C)' : 'Préventive (P)') }}
+                                            </td>
                                         </tr>
                                     @endforeach
                                 @else
@@ -188,7 +195,7 @@
                     </div>
 
                     <!-- Back Button -->
-                    <div class="text-center">
+                    <div class="text-center" style="float: left;">
                         <a href="{{ route('audit.index') }}" class="btn btn-primary">Back to Audits</a>
                     </div>
                 </div>

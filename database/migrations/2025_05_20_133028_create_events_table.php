@@ -31,6 +31,7 @@ return new class extends Migration
             $table->json('mesures')->nullable(); // Array of measures
             $table->json('actions')->nullable(); // Array of actions with responsible, deadline, type
             $table->json('attachments')->nullable(); // Photos or videos
+            $table->string('status')->default('pending'); // pending, completed, processing
             $table->boolean('validated')->default(false);
             $table->timestamps();
             

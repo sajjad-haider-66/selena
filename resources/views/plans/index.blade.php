@@ -91,7 +91,7 @@
                         <thead>
                           <tr>
                             <th>Plan Number</th>
-                            <th>Main Enterprise 1</th>
+                            <th>External Company 1</th>
                             <th>Subcontractor 1</th>
                             <th>Location</th>
                             <th>Actions</th>
@@ -101,7 +101,7 @@
                             @foreach ($plans as $plan)
                             <tr>
                                <td>{{ $plan->plan_number }}</td>
-                                <td>{{ $plan->main_enterprise_1 }}</td>
+                                <td>{{ $plan->external_company_1 }}</td>
                                 <td>{{ $plan->subcontractor_1 }}</td>
                                 <td>{{ $plan->location }}</td>
                                 <td>

@@ -62,6 +62,9 @@ return new class extends Migration
             $table->string('fire_permit')->nullable(); // Permis de feu
             $table->string('specific_permit')->nullable(); // Permis spécifique
             $table->string('other_permit')->nullable(); // Autres (préciser)
+            $table->boolean('work_completed')->default(false);
+            $table->boolean('station_normal')->default(false); // Station normale
+            $table->boolean('site_clean_safe')->default(false);
             $table->timestamps();
         });
     }

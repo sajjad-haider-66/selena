@@ -59,6 +59,11 @@ Route::get('/', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard/events-data', [DashboardController::class, 'getEventsData']);
+Route::get('/dashboard/audits-data', [DashboardController::class, 'getAuditsData']);
+Route::get('/dashboard/talks-data', [DashboardController::class, 'getTalksData']);
+Route::get('/dashboard/plan-data', [DashboardController::class, 'getPlanData']);
+Route::get('/dashboard/checklist-data', [DashboardController::class, 'getChecklistData']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
