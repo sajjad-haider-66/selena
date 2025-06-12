@@ -1,16 +1,19 @@
 <?php
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ActionController;
-use App\Http\Controllers\CheckListController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CheckListController;
 use App\Http\Controllers\TalkAnimationController;
 use App\Http\Controllers\DailyReadinessController;
-use App\Http\Controllers\PlanController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,13 +26,39 @@ use App\Http\Controllers\PlanController;
 |
 */
 
+Route::get('/storage/talks/{filename}', function ($filename) {
+    $path = storage_path('app/public/talks/' . $filename);
+
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    return response($file, 200)->header('Content-Type', $type);
+});
+
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created successfully';
+})->middleware('auth'); //  Protect with auth or other middleware
+
+Route::get('/cache-clear', function () {
+    Artisan::call('optimize:clear');
+    return 'Cache cleared successfully';
+})->middleware('auth'); //  Protect with auth or restrict to local environment
+
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

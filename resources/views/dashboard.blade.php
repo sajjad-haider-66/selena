@@ -45,7 +45,7 @@
                             <div class="card text-white bg-primary h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Pending Actions</h6>
-                                    <h3>5</h3>
+                                    <h3>{{ $pendingActions }}</h3>
                                     <p class="card-text">Due this week</p>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                             <div class="card text-white bg-success h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Daily Readiness</h6>
-                                    <h3>92%</h3>
+                                    <h3>{{ $dailyReadiness }}%</h3>
                                     <p class="card-text">Operational</p>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                             <div class="card text-white bg-warning h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Open Events</h6>
-                                    <h3>3</h3>
+                                    <h3>{{ $openEvents }}</h3>
                                     <p class="card-text">Active</p>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                             <div class="card text-white bg-danger h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Upcoming Audits/Talks</h6>
-                                    <h3>2</h3>
+                                    <h3>{{ $upcomingAudits }}</h3>
                                     <p class="card-text">Next 7 days</p>
                                 </div>
                             </div>
