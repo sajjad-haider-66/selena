@@ -113,11 +113,10 @@
                                 <th>Thème :</th>
                                 <td><input type="text" name="theme" value="Les produits corrosifs" required></td>
                                 <th>Animateur(s)</th>
-                                <td><input type="text" name="animateur" required></td>
-                            </tr>
-                            <tr>
-                                <th>Signature</th>
-                                <td colspan="3"><input type="text" name="signature"></td>
+                                <td class="animatuer-section">
+                                    <input class="form-control first-input" type="text" name="animateur[0]" required>
+                                    <button type="button" id="add-animateur" class="btn btn-outline-dark btn-sm mt-2">Add More</button>
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="4">
@@ -138,6 +137,10 @@
                                             <input type="checkbox" name="rse" id="rse">
                                             <label for="rse">RSE</label>
                                         </div>
+                                          <div class="checkbox-item Surete">
+                                            <input type="checkbox" name="Surete" id="Surete">
+                                            <label for="Surete">Surete</label>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -155,8 +158,7 @@
                             <tr>
                                 <td colspan="4">
                                     <div>
-                                        <textarea name="commentaires" rows="2" style="width:100%; border:none; padding:8px;" placeholder="Entrer des commentaires"></textarea>
-                                        {{-- <img src="{{ asset('images/corrosive_pictogram.png') }}" alt="Pictogramme Corrosif" class="corrosive-img"> --}}
+                                        <input type="file" name="corrosive_image" accept="image/*" class="form-control mb-2">
                                     </div>
                                 </td>
                             </tr>
@@ -168,8 +170,8 @@
                                 <th colspan="2">Participants</th>
                             </tr>
                             <tr>
-                                <th width="50%">NOM, Prénom</th>
-                                <th width="50%">Signature</th>
+                                <th width="50%">NOM</th>
+                                <th width="50%">Prénom</th>
                             </tr>
                             @for ($i = 0; $i < 6; $i++)
                             <tr>
@@ -223,17 +225,38 @@
         $(document).ready(function () {
             let actionCount = 0;
 
-            // Add Action Dynamically
-            $('#add-action').on('click', function () {
+            // Add anim Dynamically
+            $('#add-animateur').on('click', function () {
                 actionCount++;
                 const newAction = `
+                    <div class="input-group mt-2 remove-animateur-input">
+                        <input type="text" name="animateur[${animCount}]" class="form-control" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-danger  remove-animateur">Remove</button>
+                        </div>
+                    </div>
+                `;
+                $(this).before(newAction);
+            });
+
+            // Remove anim
+            $(document).on('click', '.remove-animateur', function () {
+                $(this).closest('.remove-animateur-input').remove();
+            });
+
+            let animCount = 0;
+
+            // Add Action Dynamically
+            $('#add-action').on('click', function () {
+                animCount++;
+                const newAction = `
                     <tr class="action-row">
-                        <td><input type="text" name="action[${actionCount}]"></td>
-                        <td><input type="text" name="responsable[${actionCount}]"></td>
-                        <td><input type="date" name="delai[${actionCount}]"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="${actionCount}"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="${actionCount}"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="${actionCount}"></td>
+                        <td><input type="text" name="action[${animCount}]"></td>
+                        <td><input type="text" name="responsable[${animCount}]"></td>
+                        <td><input type="date" name="delai[${animCount}]"></td>
+                        <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="${animCount}"></td>
+                        <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="${animCount}"></td>
+                        <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="${animCount}"></td>
                         <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
                     </tr>
                 `;
