@@ -16,34 +16,10 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
-                @if(auth()->user()->can('user-list'))
-                    <!-- KEY : MULTIPERMISSION starts -->
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index') || request()->routeIs('users.create') || request()->routeIs('users.edit') || request()->routeIs('users.show')">
-                            Users
-                        </x-nav-link>
-                    </div>
-                @endif
-                @if(auth()->user()->can('role-list'))
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index') || request()->routeIs('roles.create') || request()->routeIs('roles.edit') || request()->routeIs('roles.show')">
-                        Roles
-                    </x-nav-link>
-                </div>
-                @endif
+            
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('talk_animation.index')" :active="request()->routeIs('talk_animation.index') || request()->routeIs('talk_animation.create') || request()->routeIs('talk_animation.edit') || request()->routeIs('talk_animation.show')">
                         Talk/Animation
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('daily_readiness.index')" :active="request()->routeIs('daily_readiness.index') || request()->routeIs('daily_readiness.create') || request()->routeIs('daily_readiness.edit') || request()->routeIs('daily_readiness.show')">
-                        Daily Readiness 
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('checklist.index')" :active="request()->routeIs('checklist.index') || request()->routeIs('checklist.create') || request()->routeIs('checklist.edit') || request()->routeIs('checklist.show')">
-                        CheckList 
                     </x-nav-link>
                 </div>
                  <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -66,13 +42,72 @@
                         Actions
                     </x-nav-link>
                 </div>
-                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('fetch.notification')" style="margin-left: -25px;">
-                       <i class="fa fa-bell" style="font-size:18px"></i>
+                <div x-data="{ open: false }" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <!-- Dropdown Button -->
+                    <x-nav-link @click="open = !open" class="focus:outline-none" style="cursor: pointer">
+                        Daily Work Readiness
+                          <div class="ml-1">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
                     </x-nav-link>
+
+                    <!-- Dropdown Menu -->
+                    <div x-show="open" @click.outside="open = false" class="absolute mt-5 w-48 bg-white rounded-md shadow-lg z-10">
+                        <x-nav-link 
+                            :href="route('daily_readiness.index')" 
+                            :active="request()->routeIs('daily_readiness.*')"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                            Daily Readiness
+                        </x-nav-link>
+                        <x-nav-link 
+                            :href="route('checklist.index')" 
+                            :active="request()->routeIs('checklist.*')"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                            Checklist
+                        </x-nav-link>
+                    </div>
                 </div>
-                <!-- KEY : MULTIPERMISSION ends -->
-            </div>
+                  <div x-data="{ open: false }" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <!-- Dropdown Button -->
+                    <x-nav-link @click="open = !open" class="focus:outline-none" style="cursor: pointer">
+                        Settings
+                          <div class="ml-1">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                    </x-nav-link>
+
+                    <!-- Dropdown Menu -->
+                    <div x-show="open" @click.outside="open = false" class="absolute mt-5 w-48 bg-white rounded-md shadow-lg z-10">
+                        @if(auth()->user()->can('user-list'))
+                            <!-- KEY : MULTIPERMISSION starts -->
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index') || request()->routeIs('users.create') || request()->routeIs('users.edit') || request()->routeIs('users.show')">
+                                    Users
+                                </x-nav-link>
+                            </div>
+                        @endif
+                        @if(auth()->user()->can('role-list'))
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index') || request()->routeIs('roles.create') || request()->routeIs('roles.edit') || request()->routeIs('roles.show')">
+                                    Roles
+                                </x-nav-link>
+                            </div>
+                        @endif
+                            </div>
+                            </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <x-nav-link :href="route('fetch.notification')" style="margin-left: -25px;">
+                                <i class="fa fa-bell" style="font-size:18px"></i>
+                                </x-nav-link>
+                            </div>
+                            <!-- KEY : MULTIPERMISSION ends -->
+                        </div>
   
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">

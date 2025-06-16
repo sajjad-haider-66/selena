@@ -165,21 +165,34 @@
                         </table>
                         
                         <!-- Participants Table -->
-                        <table>
-                            <tr>
-                                <th colspan="2">Participants</th>
-                            </tr>
-                            <tr>
-                                <th width="50%">NOM</th>
-                                <th width="50%">Prénom</th>
-                            </tr>
-                            @for ($i = 0; $i < 6; $i++)
-                            <tr>
-                                <td><input type="text" name="participant_name[]"></td>
-                                <td><input type="text" name="participant_signature[]"></td>
-                            </tr>
-                            @endfor
+                        <table id="participants-table" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Participants</th>
+                                </tr>
+                                <tr>
+                                    <th width="45%">NOM</th>
+                                    <th width="45%">Prénom</th>
+                                    <th width="10%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="participant-body">
+                                <tr class="participant-row">
+                                    <td><input type="text" name="participant_name[]" class="form-control"></td>
+                                    <td><input type="text" name="participant_signature[]" class="form-control"></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm remove-rows" disabled>Remove</button></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <button type="button" id="add-participant" class="btn btn-outline-dark btn-sm">Add More</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
+
+
                         
                         <!-- Actions Table -->
                         <table id="actions-table">
@@ -265,6 +278,23 @@
 
             // Remove Action
             $(document).on('click', '.remove-action', function () {
+                $(this).closest('tr').remove();
+            });
+
+            // add participant
+
+            $('#add-participant').on('click', function () {
+                var newRow = `
+                    <tr class="participant-row">
+                        <td><input type="text" name="participant_name[]" class="form-control"></td>
+                        <td><input type="text" name="participant_signature[]" class="form-control"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Remove</button></td>
+                    </tr>`;
+                $('#participant-body').append(newRow);
+            });
+
+            // Remove button handler
+            $(document).on('click', '.remove-row', function () {
                 $(this).closest('tr').remove();
             });
 

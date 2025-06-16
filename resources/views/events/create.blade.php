@@ -88,6 +88,7 @@
                                         <option value="Near miss">Presque Accident</option>
                                         <option value="Work accident">Accident du Travail (AT)</option>
                                         <option value="Occupational illness">Maladie Professionnelle (MP)</option>
+                                        <option value="Incident">Incident</option>
                                     </select>
                                 </div>
 
@@ -120,12 +121,16 @@
                                     <input type="checkbox" name="rse" id="rse">
                                     <label for="rse">RSE</label>
                                 </div>
+                                 <div class="checkbox-item">
+                                    <input type="checkbox" name="surete" id="surete">
+                                    <label for="surete">Surete</label>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Circonstances détaillées</label>
-                            <textarea name="circonstances" class="form-control" rows="4" required></textarea>
+                            <input type="file" name="circon" id="circon">
                         </div>
 
                         <div class="form-group">
@@ -157,10 +162,7 @@
                                     <div class="checkbox-item"><input type="checkbox"
                                             name="analyse[securite_acces][]" value="Cheminement non sécurisé">
                                         Cheminement non sécurisé (manque de visibilité, obstacle, etc.)</div>
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[securite_acces][other]"
-                                            placeholder="Autre manquement (optionnel)">
-                                    </div>
+                               
                                 </div>
                             </div>
 
@@ -190,10 +192,6 @@
                                     <div class="checkbox-item"><input type="checkbox"
                                             name="analyse[materiel_securite][]" value="Non utilisation d’EPC"> Non
                                         utilisation d’EPC</div>
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[materiel_securite][other]"
-                                            placeholder="Autre manquement (optionnel)">
-                                    </div>
                                 </div>
                             </div>
 
@@ -212,10 +210,6 @@
                                         Information sur les risques incomplète</div>
                                     <div class="checkbox-item"><input type="checkbox" name="analyse[info_risques][]"
                                             value="Absence d’accueil sécurité sur le site"> Absence d’accueil sécurité
-                                    </div>
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[info_risques][other]"
-                                            placeholder="Autre manquement (optionnel)">
                                     </div>
                                 </div>
                             </div>
@@ -242,10 +236,6 @@
                                     <div class="checkbox-item"><input type="checkbox" name="analyse[ambiances][]"
                                             value="Conditions d’hygiène dans les locaux"> Conditions d’hygiène
                                         insuffisantes</div>
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[ambiances][other]"
-                                            placeholder="Autre manquement (optionnel)">
-                                    </div>
                                 </div>
                             </div>
 
@@ -262,11 +252,11 @@
                                         habilité</div>
                                     <div class="checkbox-item"><input type="checkbox" name="analyse[formation][]"
                                             value="Habilitation périmée, à réexaminée"> Habilitation périmée</div>
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[formation][other]"
-                                            placeholder="Autre manquement (optionnel)">
-                                    </div>
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Autre</label>
+                                <textarea name="autre" class="form-control" rows="2"></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -323,40 +313,38 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label class="form-label">Actions à mettre en place</label>
-                        <div id="actions-container" class="table-responsive mb-3">
-                            <table class="table table-bordered align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>Responsable</th>
-                                        <th>Délai</th>
-                                        <th>Type</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><input type="text" name="actions[0][description]"
-                                                class="form-control"></td>
-                                        <td><input type="text" name="actions[0][responsible]"
-                                                class="form-control"></td>
-                                        <td><input type="date" name="actions[0][deadline]" class="form-control">
-                                        </td>
-                                        <td>
-                                            <select name="actions[0][type]" class="form-select">
-                                                <option value="I">Immédiate (I)</option>
-                                                <option value="C">Corrective (C)</option>
-                                                <option value="P">Préventive (P)</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div id="actions-container" class="table-responsive mb-3">
+                                <table class="table table-bordered align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Action</th>
+                                            <th>Responsable</th>
+                                            <th>Délai</th>
+                                            <th>Type</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="action-row">
+                                            <td><textarea name="actions[0][description]" class="form-control" required></textarea></td>
+                                            <td><input type="text" name="actions[0][responsable]" class="form-control" required></td>
+                                            <td><input type="date" name="actions[0][delai]" class="form-control" id="deadline" required></td>
+                                            <td>
+                                                <select name="actions[0][type]" class="form-select" required>
+                                                    <option value="I">Imméd. (I)</option>
+                                                    <option value="C">Corrective (C)</option>
+                                                    <option value="P">Préventive (P)</option>
+                                                </select>
+                                            </td>
+                                            <td><button type="button" class="btn btn-danger remove-actions" disabled>Remove</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="button" id="add-action" class="btn btn-outline-dark mb-3">Add Action</button>
                         </div>
-                        <button type="button" id="add-action" class="btn btn-outline-dark mb-3">Add Action</button>
-
                         <div class="form-group">
                             <label class="form-label">Attachments (Photos/Videos)</label>
                             <input type="file" name="attachments[]" multiple class="form-control">
@@ -368,6 +356,11 @@
                             </button>
                         </div>
                     </form>
+                    <!-- Risk Calculation Display -->
+                    <div id="riskDisplay" class="mt-3">
+                        Cotation du risque : <span id="riskValue"></span>
+                        <div id="riskMessage"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -377,7 +370,17 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-              let actionCount = 0;
+            let actionCount = 0;
+
+            // Toggle category visibility
+            $('.category-title').click(function() {
+                $(this).next('.category-content').toggle();
+            });
+
+            // Show/hide "Other Measure" input
+            $('#otherMeasure').change(function() {
+                $('#otherMeasureInput').toggle(this.checked);
+            });
 
             // Add Action Dynamically
             $('#add-action').on('click', function () {
@@ -386,7 +389,7 @@
                     <tr class="action-row">
                         <td><textarea name="actions[${actionCount}][description]" class="form-control" required></textarea></td>
                         <td><input type="text" name="actions[${actionCount}][responsable]" class="form-control" required></td>
-                        <td><input type="date" name="actions[${actionCount}][delai]" class="form-control" required></td>
+                        <td><input type="date" name="actions[${actionCount}][delai]" class="form-control" id="deadline${actionCount}" required></td>
                         <td>
                             <select name="actions[${actionCount}][type]" class="form-select" required>
                                 <option value="I">Imméd. (I)</option>
@@ -398,12 +401,63 @@
                     </tr>
                 `;
                 $('#actions-container table tbody').append(newAction);
+                updateDeadline(actionCount);
             });
 
             // Remove Action
             $(document).on('click', '.remove-action', function () {
                 $(this).closest('tr').remove();
             });
+
+            // Calculate risk and update deadline
+            function calculateRisk() {
+                const frequence = parseInt($('select[name="frequence"]').val());
+                const gravite = parseInt($('select[name="gravite"]').val());
+                const risk = frequence * gravite;
+                $('#riskValue').text(risk);
+
+                let message = '';
+                if (risk <= 4) {
+                    message = 'Action à entreprendre sous 1 semaine (Recueil des faits ci-dessus suffisant)';
+                    updateAllDeadlines(7);
+                } else if (risk <= 10) {
+                    message = 'Action à entreprendre sous 48 h (Recueil des faits ci-dessus suffisant)';
+                    updateAllDeadlines(2);
+                } else {
+                    message = 'Action urgente à entreprendre immédiatement (Réalisation arbre des causes systématiquement)';
+                    updateAllDeadlines(0);
+                }
+                $('#riskMessage').html(`<strong>${message}</strong>`);
+            }
+
+            function updateDeadline(index) {
+                const risk = parseInt($('#riskValue').text()) || 0;
+                const deadlineField = $(`#deadline${index}`);
+                if (risk <= 4) {
+                    deadlineField.val(getDateAfterDays(7));
+                } else if (risk <= 10) {
+                    deadlineField.val(getDateAfterDays(2));
+                } else {
+                    deadlineField.val(new Date().toISOString().split('T')[0]);
+                }
+            }
+
+            function updateAllDeadlines(days) {
+                $('#actions-container table tbody tr').each(function() {
+                    const deadlineField = $(this).find('input[type="date"]');
+                    deadlineField.val(getDateAfterDays(days));
+                });
+            }
+
+            function getDateAfterDays(days) {
+                const date = new Date();
+                date.setDate(date.getDate() + days);
+                return date.toISOString().split('T')[0];
+            }
+
+            // Initial calculation
+            $('select[name="frequence"], select[name="gravite"]').change(calculateRisk);
+            calculateRisk();
             $('#eventForm').on('submit', function(e) {
                 e.preventDefault();
 
