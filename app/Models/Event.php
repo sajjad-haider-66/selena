@@ -13,7 +13,8 @@ class Event extends Model
     protected $fillable = [
         'date', 'lieu', 'type', 'emetteur', 'securite', 'sante', 'environnement', 'rse',
         'circonstances', 'risques', 'analyse', 'cotation', 'frequence', 'gravite',
-        'propositions', 'mesures', 'actions', 'attachments', 'validated','status'
+        'propositions', 'mesures', 'actions', 'attachments', 'validated','status', 'path',
+        'autre', 'autre_checkbox',
     ];
 
     protected $casts = [

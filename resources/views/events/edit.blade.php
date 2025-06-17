@@ -114,12 +114,16 @@
                                     <input type="checkbox" name="rse" id="rse" {{ $event->rse ? 'checked' : '' }}>
                                     <label for="rse">RSE</label>
                                 </div>
+                                  <div class="checkbox-item">
+                                    <input type="checkbox" name="surete" id="surete" {{ $event->surete ? 'checked' : '' }}>
+                                    <label for="surete">Surete</label>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label">Circonstances détaillées</label>
-                            <textarea name="circonstances" class="form-control" rows="4" required>{{ $event->circonstances }}</textarea>
+                            <input type="file" name="image" id="image" accept="image/*" class="form-control mb-2">
                         </div>
 
                         <div class="form-group">
@@ -151,10 +155,6 @@
                                             {{ $item }}
                                         </div>
                                     @endforeach
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[securite_acces][other]"
-                                            value="{{ $analyse['securite_acces']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
-                                    </div>
                                 </div>
                             </div>
 
@@ -176,10 +176,6 @@
                                             {{ $item }}
                                         </div>
                                     @endforeach
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[materiel_securite][other]"
-                                            value="{{ $analyse['materiel_securite']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
-                                    </div>
                                 </div>
                             </div>
 
@@ -199,10 +195,7 @@
                                             {{ $item }}
                                         </div>
                                     @endforeach
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[info_risques][other]"
-                                            value="{{ $analyse['info_risques']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
-                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -225,10 +218,6 @@
                                             {{ $item }}
                                         </div>
                                     @endforeach
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[ambiances][other]"
-                                            value="{{ $analyse['ambiances']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
-                                    </div>
                                 </div>
                             </div>
 
@@ -247,11 +236,11 @@
                                             {{ $item }}
                                         </div>
                                     @endforeach
-                                    <div class="checkbox-item">
-                                        <input type="text" name="analyse[formation][other]"
-                                            value="{{ $analyse['formation']['other'] ?? '' }}" placeholder="Autre manquement (optionnel)">
-                                    </div>
                                 </div>
+                            </div>
+                              <div class="form-group">
+                                <label class="form-label">Autre</label>
+                                <textarea name="autre" id="autre" class="form-control" rows="2">{{ $event->autre ?? '' }}</textarea>
                             </div>
                         </div>
 
@@ -358,6 +347,11 @@
                             </button>
                         </div>
                     </form>
+                    <!-- Risk Calculation Display -->
+                    <div id="riskDisplay" class="mt-3">
+                        Cotation du risque : <span id="riskValue"></span>
+                        <div id="riskMessage"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -367,6 +361,104 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+         let actionCount = 0;
+
+            // Toggle category visibility
+            $('.category-title').click(function() {
+                $(this).next('.category-content').toggle();
+            });
+
+            // Show/hide "Other Measure" input
+            $('#otherMeasure').change(function() {
+                $('#otherMeasureInput').toggle(this.checked);
+            });
+
+            // Add Action Dynamically
+            $('#add-action').on('click', function () {
+                actionCount++;
+                const newAction = `
+                    <tr class="action-row">
+                        <td><textarea name="actions[${actionCount}][description]" class="form-control" required></textarea></td>
+                        <td><input type="text" name="actions[${actionCount}][responsable]" class="form-control" required></td>
+                        <td><input type="date" name="actions[${actionCount}][delai]" class="form-control" id="deadline${actionCount}" required></td>
+                        <td>
+                            <select name="actions[${actionCount}][type]" class="form-select" required>
+                                <option value="I">Imméd. (I)</option>
+                                <option value="C">Corrective (C)</option>
+                                <option value="P">Préventive (P)</option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>
+                    </tr>
+                `;
+                $('#actions-container table tbody').append(newAction);
+                updateDeadline(actionCount);
+            });
+
+            // Remove Action
+            $(document).on('click', '.remove-action', function () {
+                $(this).closest('tr').remove();
+            });
+
+            // Calculate risk and update deadline
+            function calculateRisk() {
+                const frequence = parseInt($('select[name="frequence"]').val());
+                const gravite = parseInt($('select[name="gravite"]').val());
+                const risk = frequence * gravite;
+                $('#riskValue').text(risk);
+
+                let message = '';
+                if (risk <= 4) {
+                    message = 'Action à entreprendre sous 1 semaine (Recueil des faits ci-dessus suffisant)';
+                    updateAllDeadlines(7);
+                } else if (risk <= 10) {
+                    message = 'Action à entreprendre sous 48 h (Recueil des faits ci-dessus suffisant)';
+                    updateAllDeadlines(2);
+                } else {
+                    message = 'Action urgente à entreprendre immédiatement (Réalisation arbre des causes systématiquement)';
+                    updateAllDeadlines(0);
+                }
+                $('#riskMessage').html(`<strong>${message}</strong>`);
+            }
+
+            function updateDeadline(index) {
+                const risk = parseInt($('#riskValue').text()) || 0;
+                const deadlineField = $(`#deadline${index}`);
+                if (risk <= 4) {
+                    deadlineField.val(getDateAfterDays(7));
+                } else if (risk <= 10) {
+                    deadlineField.val(getDateAfterDays(2));
+                } else {
+                    deadlineField.val(new Date().toISOString().split('T')[0]);
+                }
+            }
+
+            function updateAllDeadlines(days) {
+                $('#actions-container table tbody tr').each(function() {
+                    const deadlineField = $(this).find('input[type="date"]');
+                    deadlineField.val(getDateAfterDays(days));
+                });
+            }
+
+            function getDateAfterDays(days) {
+                const date = new Date();
+                date.setDate(date.getDate() + days);
+                return date.toISOString().split('T')[0];
+            }
+
+            $('body').on('click', '#autre_input', function (e) {
+                if ($('#autre_input').is(":checked")) {
+                    $(".autre_input_show").slideDown("fast");
+                }
+                else {
+                    $(".autre_input_show").slideUp("fast");
+                }
+            });
+
+            // Initial calculation
+            $('select[name="frequence"], select[name="gravite"]').change(calculateRisk);
+            calculateRisk();
+
             $('#eventForm').on('submit', function(e) {
                 e.preventDefault();
 

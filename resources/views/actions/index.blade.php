@@ -119,17 +119,17 @@
                         @csrf
                         
                         <!-- Title and Progress -->
-                        <div class="header-yellow mb-2 p-2">Suivi des actions SSE</div>
-                        <div class="mb-4">
-                            <label class="block">l'avancement = 75%</label>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 75%"></div>
-                            </div>
+                        <div class="header-yellow">The requested Actions table</div>
+                        <div style="text-align: center; margin-bottom: 10px;">
+                            <div>Plan d'Actions Global SSE</div>
+                            <div>Taux d'avancement global des actions : <progress value="60" max="100"></progress> 60%</div>
+                            <input type="text" placeholder="Rechercher action, source, pilote...">
+                            <button>Filtrer/Rechercher</button>
                         </div>
                         
                         <!-- Origin Table -->
                         <table class="mb-6">
-                            <tr>
+                            {{-- <tr>
                                 <th class="narrow-col">N° de l'action</th>
                                 <th class="narrow-col vertical-text">Audit système MASE</th>
                                 <th class="narrow-col vertical-text">Revue de direction / Bilan SSE</th>
@@ -145,48 +145,10 @@
                                 <th class="narrow-col vertical-text">Comité SSE TRIMESTRIELS</th>
                                 <th class="medium-col">Descriptions du dysfonctionnement / amélioration</th>
                                 <th class="medium-col">Date d'émission</th>
-                            </tr>
-                            
-                            <!-- Sample Data Row 1 -->
-                            <tr>
-                                <td>2025-001</td>
-                                <td><input type="checkbox" name="origin[0][mase]" checked></td>
-                                <td><input type="checkbox" name="origin[0][direction]"></td>
-                                <td><input type="checkbox" name="origin[0][verifications]"></td>
-                                <td><input type="checkbox" name="origin[0][document]"></td>
-                                <td><input type="checkbox" name="origin[0][audits]"></td>
-                                <td><input type="checkbox" name="origin[0][accident]"></td>
-                                <td><input type="checkbox" name="origin[0][incident]"></td>
-                                <td><input type="checkbox" name="origin[0][animations]"></td>
-                                <td><input type="checkbox" name="origin[0][demandes]"></td>
-                                <td><input type="checkbox" name="origin[0][communication]"></td>
-                                <td><input type="checkbox" name="origin[0][veille]"></td>
-                                <td><input type="checkbox" name="origin[0][comite]"></td>
-                                <td>Manque de formation sur les risques chimiques</td>
-                                <td>04/01/2025</td>
-                            </tr>
-                            
-                            <!-- Sample Data Row 2 -->
-                            <tr>
-                                <td>2025-002</td>
-                                <td><input type="checkbox" name="origin[1][mase]"></td>
-                                <td><input type="checkbox" name="origin[1][direction]"></td>
-                                <td><input type="checkbox" name="origin[1][verifications]"></td>
-                                <td><input type="checkbox" name="origin[1][document]"></td>
-                                <td><input type="checkbox" name="origin[1][audits]" checked></td>
-                                <td><input type="checkbox" name="origin[1][accident]"></td>
-                                <td><input type="checkbox" name="origin[1][incident]"></td>
-                                <td><input type="checkbox" name="origin[1][animations]"></td>
-                                <td><input type="checkbox" name="origin[1][demandes]"></td>
-                                <td><input type="checkbox" name="origin[1][communication]"></td>
-                                <td><input type="checkbox" name="origin[1][veille]"></td>
-                                <td><input type="checkbox" name="origin[1][comite]"></td>
-                                <td>EPI non conformes sur chantier Bâtiment C</td>
-                                <td>15/02/2025</td>
-                            </tr>
-                            
+                            </tr> --}}
+                    
                             <!-- Sample Data Row 3 -->
-                            <tr>
+                            {{-- <tr>
                                 <td>2025-003</td>
                                 <td><input type="checkbox" name="origin[2][mase]"></td>
                                 <td><input type="checkbox" name="origin[2][direction]"></td>
@@ -202,128 +164,58 @@
                                 <td><input type="checkbox" name="origin[2][comite]"></td>
                                 <td>Presque accident lors de la manipulation de produits corrosifs</td>
                                 <td>23/03/2025</td>
-                            </tr>
+                            </tr> --}}
                             
-                            <!-- Add New Row -->
-                            <tr>
-                                <td><input type="text" name="new_action_number" placeholder="N° action"></td>
-                                <td><input type="checkbox" name="new_origin[mase]"></td>
-                                <td><input type="checkbox" name="new_origin[direction]"></td>
-                                <td><input type="checkbox" name="new_origin[verifications]"></td>
-                                <td><input type="checkbox" name="new_origin[document]"></td>
-                                <td><input type="checkbox" name="new_origin[audits]"></td>
-                                <td><input type="checkbox" name="new_origin[accident]"></td>
-                                <td><input type="checkbox" name="new_origin[incident]"></td>
-                                <td><input type="checkbox" name="new_origin[animations]"></td>
-                                <td><input type="checkbox" name="new_origin[demandes]"></td>
-                                <td><input type="checkbox" name="new_origin[communication]"></td>
-                                <td><input type="checkbox" name="new_origin[veille]"></td>
-                                <td><input type="checkbox" name="new_origin[comite]"></td>
-                                <td><input type="text" name="new_description" placeholder="Description"></td>
-                                <td><input type="date" name="new_date"></td>
-                            </tr>
-                        </table>
                         
                         <!-- Actions Table -->
-                        <table>
-                            <tr>
-                                <th rowspan="2">Date d'émission</th>
-                                <th rowspan="2">Description</th>
-                                <th rowspan="2" class="narrow-col">I</th>
-                                <th rowspan="2" class="narrow-col">C</th>
-                                <th rowspan="2" class="narrow-col">P</th>
-                                <th rowspan="2">Pilote</th>
-                                <th rowspan="2">Delai</th>
-                                <th colspan="2">Avancement de l'action</th>
-                                <th colspan="5">Vérification de l'efficacité de l'action</th>
-                            </tr>
-                            <tr>
-                                <th class="narrow-col">Action démarrée le</th>
-                                <th class="narrow-col">Action terminée le</th>
-                                <th>Vérificateur</th>
-                                <th>Action vérifiée le</th>
-                                <th class="narrow-col">Taux d'avancement</th>
-                                <th class="narrow-col">Efficacité : O / N</th>
-                                <th>Commentaire</th>
-                            </tr>
-                            
-                            <!-- Sample Data Row 1 -->
-                            <tr>
-                                <td>04/01/2025</td>
-                                <td>Mettre en place une formation sur les risques chimiques pour tout le personnel</td>
-                                <td><input type="checkbox" name="actions[0][i]"></td>
-                                <td><input type="checkbox" name="actions[0][c]" checked></td>
-                                <td><input type="checkbox" name="actions[0][p]" checked></td>
-                                <td>Martin D.</td>
-                                <td>31/03/2025</td>
-                                <td>15/01/2025</td>
-                                <td>20/03/2025</td>
-                                <td>Dubois J.</td>
-                                <td>05/04/2025</td>
-                                <td>100%</td>
-                                <td>O</td>
-                                <td>Formation complète réalisée pour 100% du personnel</td>
-                            </tr>
-                            
-                            <!-- Sample Data Row 2 -->
-                            <tr>
-                                <td>15/02/2025</td>
-                                <td>Audit complet des EPI sur tous les chantiers</td>
-                                <td><input type="checkbox" name="actions[1][i]" checked></td>
-                                <td><input type="checkbox" name="actions[1][c]"></td>
-                                <td><input type="checkbox" name="actions[1][p]"></td>
-                                <td>Robert L.</td>
-                                <td>15/03/2025</td>
-                                <td>20/02/2025</td>
-                                <td>14/03/2025</td>
-                                <td>Lambert P.</td>
-                                <td>20/03/2025</td>
-                                <td>100%</td>
-                                <td>O</td>
-                                <td>Tous les EPI ont été vérifiés et remplacés si nécessaire</td>
-                            </tr>
-                            
-                            <!-- Sample Data Row 3 -->
-                            <tr>
-                                <td>23/03/2025</td>
-                                <td>Révision des procédures de manipulation des produits corrosifs</td>
-                                <td><input type="checkbox" name="actions[2][i]"></td>
-                                <td><input type="checkbox" name="actions[2][c]"></td>
-                                <td><input type="checkbox" name="actions[2][p]" checked></td>
-                                <td>Sophie M.</td>
-                                <td>30/04/2025</td>
-                                <td>01/04/2025</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>50%</td>
-                                <td></td>
-                                <td>Procédures en cours de révision</td>
-                            </tr>
-                            
-                            <!-- Add New Action Row -->
-                            <tr>
-                                <td><input type="date" name="new_action_date"></td>
-                                <td><input type="text" name="new_action_description" placeholder="Description"></td>
-                                <td><input type="checkbox" name="new_action_i"></td>
-                                <td><input type="checkbox" name="new_action_c"></td>
-                                <td><input type="checkbox" name="new_action_p"></td>
-                                <td><input type="text" name="new_action_pilot" placeholder="Pilote"></td>
-                                <td><input type="date" name="new_action_deadline"></td>
-                                <td><input type="date" name="new_action_started"></td>
-                                <td><input type="date" name="new_action_completed"></td>
-                                <td><input type="text" name="new_action_verifier" placeholder="Vérificateur"></td>
-                                <td><input type="date" name="new_action_verified"></td>
-                                <td><input type="text" name="new_action_progress" placeholder="%"></td>
-                                <td>
-                                    <select name="new_action_efficiency">
-                                        <option value="">-</option>
-                                        <option value="O">O</option>
-                                        <option value="N">N</option>
-                                    </select>
-                                </td>
-                                <td><input type="text" name="new_action_comment" placeholder="Commentaire"></td>
-                            </tr>
+                        <table id="actionsTable" class="display">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">N°</th>
+                                    <th rowspan="2">Origine</th>
+                                    <th rowspan="2">DESC. DYSFONCTIONNEMENT/ AMELIORATION</th>
+                                    <th rowspan="2">Emission</th>
+                                    <th rowspan="2">Description action</th>
+                                    <th rowspan="2">Type</th>
+                                    <th rowspan="2">Pilote</th>
+                                    <th rowspan="2">Délai</th>
+                                    <th colspan="2">Démarrée le</th>
+                                    <th colspan="2">Terminée le</th>
+                                    <th rowspan="2">Vérificateur</th>
+                                    <th rowspan="2">Vérifiée le</th>
+                                    <th rowspan="2">Avancement</th>
+                                    <th rowspan="2">Efficacité</th>
+                                    <th rowspan="2">Commentaire</th>
+                                </tr>
+                                <tr>
+                                    <th>Action démarrée le</th>
+                                    <th>Action terminée le</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($actions as $action)
+                                    <tr>
+                                        <td>{{ $action['id'] }}</td>
+                                        <td>{{ $action['origine'] }}</td>
+                                        <td>{{ $action['desc_dysfonctionnement'] }}</td>
+                                        <td>{{ $action['emission_date'] }}</td>
+                                        <td>{{ $action['description'] }}</td>
+                                        <td>{{ $action['type'] }}</td>
+                                        <td>{{ $action['pilote'] }}</td>
+                                        <td>{{ $action['delai'] }}</td>
+                                        <td>{{ $action['demarree_le'] }}</td>
+                                        <td>{{ $action['terminee_le'] }}</td>
+                                        <td>{{ $action['verificateur'] }}</td>
+                                        <td>{{ $action['verifiee_le'] }}</td>
+                                        <td>
+                                            <progress value="{{ $action['avancement'] }}" max="100"></progress>
+                                            {{ $action['avancement'] }}%
+                                        </td>
+                                        <td>{{ $action['efficacite'] }}</td>
+                                        <td>{{ $action['commentaire'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                         
                         <div class="mb-4 mt-6">
@@ -341,9 +233,13 @@
         </div>
     </div>
         <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
+            $(document).ready(function() {
+                $('#actionsTable').DataTable();
+            });
             $('#submitForm').on('click', function(e) {
                 e.preventDefault();
 

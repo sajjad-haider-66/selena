@@ -55,11 +55,8 @@ class EventController extends Controller
             'lieu' => 'required|string',
             'type' => 'required',
             'emetteur' => 'nullable|string',
-            // 'securite' => 'nullable|boolean',
-            // 'sante' => 'nullable|boolean',
-            // 'environnement' => 'nullable|boolean',
-            // 'rse' => 'nullable|boolean',
-            'circonstances' => 'nullable|string',
+            'autre' => 'nullable|string',
+            'autre_checkbox' => 'nullable|string',
             'risques' => 'nullable|string',
             'analyse' => 'nullable|array',
             'frequence' => 'nullable|in:1,2,3,4',
@@ -109,6 +106,12 @@ class EventController extends Controller
             }
         }
 
+         // Handle single image
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $single_image = $file->store('events', 'public');
+        }
+
         $event = Event::create([
             'date' => $data['date'],
             'lieu' => $data['lieu'],
@@ -118,12 +121,14 @@ class EventController extends Controller
             'sante' => $request->has('sante'),
             'environnement' => $request->has('environnement'),
             'rse' => $request->has('rse'),
-            'circonstances' => $data['circonstances'],
             'risques' => $data['risques'],
+            'autre' => $data['autre'],
+            'autre_checkbox' => $data['autre_checkbox'],
             'analyse' => json_encode($data['analyse'] ?? []),
             'cotation' => $cotation,
             'frequence' => $frequence,
             'gravite' => $gravite,
+            'path' => $single_image ?? null,
             'propositions' => json_encode($data['propositions'] ?? []),
             'mesures' => json_encode($data['mesures'] ?? []),
             'actions' => json_encode($actions),
@@ -133,7 +138,7 @@ class EventController extends Controller
         // Auto-generate Action
         $priority = $cotation > 10 ? 'High' : ($cotation > 6 ? 'Medium' : 'Low');
         $action = Action::create([
-            'origin' => 'Event-' . $event->id,
+            'origin' => 'Evenement',
             'origin_id' => $event->id,
             'description' => 'Address ' . $data['risques'],
             'issued_date' => now(),

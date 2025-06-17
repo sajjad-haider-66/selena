@@ -130,7 +130,7 @@
 
                         <div class="form-group">
                             <label class="form-label">Circonstances détaillées</label>
-                            <input type="file" name="circon" id="circon">
+                            <input type="file" name="image" id="image" accept="image/*" class="form-control mb-2">
                         </div>
 
                         <div class="form-group">
@@ -255,7 +255,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Autre</label>
-                                <textarea name="autre" class="form-control" rows="2"></textarea>
+                                <textarea name="autre" id="autre" class="form-control" rows="2"></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -289,8 +289,6 @@
                             </div>
                         </div>
 
-
-
                         <div class="form-group">
                             <label class="form-label">Mesures pour éviter accident</label>
                             <div class="checkbox-group">
@@ -313,7 +311,7 @@
                             </div>
                         </div>
                         <div class="form-group autre_input_show" style="display: none;">
-                            <input type="text" name="autre_mesure" id="otherMeasureInput" class="form-control " placeholder="Veuillez préciser">
+                            <input type="text" name="autre_checkbox" id="autre_checkbox" class="form-control " placeholder="Veuillez préciser">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Actions à mettre en place</label>
@@ -469,6 +467,7 @@
             // Initial calculation
             $('select[name="frequence"], select[name="gravite"]').change(calculateRisk);
             calculateRisk();
+            
             $('#eventForm').on('submit', function(e) {
                 e.preventDefault();
 

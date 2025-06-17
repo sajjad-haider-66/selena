@@ -35,8 +35,8 @@ class ActionController extends Controller
      */
     public function index()
     {
-        $actions = Action::where('pilot_id', auth()->user()->id)->orderBy('updated_at', 'desc')->get();
-        return view('actions.index', compact('actions'));
+        $action = Action::where('pilot_id', auth()->user()->id)->orderBy('updated_at', 'desc')->get();
+        return view('actions.index', compact('action'));
     }
 
     /**
@@ -50,7 +50,7 @@ class ActionController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */
+    */
     public function store(Request $request)
     {
         // dd($request->all());

@@ -23,6 +23,9 @@ return new class extends Migration
             $table->boolean('rse')->default(false);
             $table->text('circonstances')->nullable();
             $table->text('risques')->nullable();
+            $table->text('path')->nullable();
+            $table->string('autre')->nullable();
+            $table->string('autre_checkbox')->nullable();
             $table->json('analyse')->nullable(); // Array of checked risk factors
             $table->integer('cotation')->nullable();
             $table->string('frequence')->nullable(); // 1, 2, 3, 4
