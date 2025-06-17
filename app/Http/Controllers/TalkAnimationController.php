@@ -50,18 +50,18 @@ class TalkAnimationController extends Controller
      */
     public function store(Request $request)
     {
+       
         $data = $request->validate([
             'date' => 'required|date',
             'lieu' => 'required|string',
             'theme' => 'required|string',
-            'animateur' => 'required|string',
+            'animateur' => 'nullable|array',
             'signature' => 'nullable|string',
             // 'security' => 'nullable|boolean',
             // 'health' => 'nullable|boolean',
             // 'environment' => 'nullable|boolean',
             // 'rse' => 'nullable|boolean',
             'points' => 'nullable|string',
-            'commentaires' => 'nullable|string',
             'participant_name' => 'nullable|array',
             'participant_signature' => 'nullable|array',
             'action' => 'nullable|array',
@@ -104,6 +104,12 @@ class TalkAnimationController extends Controller
             }
         }
 
+        // Handle attachments (assuming file upload via AJAX)
+        if ($request->hasFile('corrosive_image')) {
+            $file = $request->file('corrosive_image');
+            $path = $file->store('talks', 'public');
+        }
+
         $talk = TalkAnimation::create([
             'date' => $data['date'],
             'created_by' => auth()->user()->id,
@@ -116,9 +122,9 @@ class TalkAnimationController extends Controller
             'environment' => $request->has('environment')?? 'dummy',
             'rse' => $request->has('rse')?? 'dummy',
             'points' => $data['points'],
-            'commentaires' => $data['commentaires'],
             'participants' => json_encode($participants),
             'actions' => json_encode($actions),
+            'path' => $path ?? null,
             'status' => 'scheduled',
         ]);
 
@@ -295,10 +301,9 @@ class TalkAnimationController extends Controller
             'date' => 'required|date',
             'lieu' => 'required|string',
             'theme' => 'required|string',
-            'animateur' => 'required|string',
+            'animateur' => 'nullable|array',
             'signature' => 'nullable|string',
             'points' => 'nullable|string',
-            'commentaires' => 'nullable|string',
             'participant_name' => 'nullable|array',
             'participant_signature' => 'nullable|array',
             'action' => 'nullable|array',
@@ -344,6 +349,15 @@ class TalkAnimationController extends Controller
             }
         }
 
+        // Handle attachments (assuming file upload via AJAX)
+        if ($request->hasFile('corrosive_image')) {
+            $file = $request->file('corrosive_image');
+            $path = $file->store('talks', 'public');
+            $data['path'] = $path; // Update path in data
+        } else {
+            $data['path'] = $talkAnimation->path; // Keep existing path if no new file uploaded
+        }
+
         // Update the TalkAnimation
         $talkAnimation->update([
             'date' => $data['date'],
@@ -356,7 +370,7 @@ class TalkAnimationController extends Controller
             'environment' => $request->has('environment') ?? 'dummy',
             'rse' => $request->has('rse') ?? 'dummy',
             'points' => $data['points'],
-            'commentaires' => $data['commentaires'],
+            'path' => $data['path'],
             'participants' => json_encode($participants),
             'actions' => json_encode($actions),
             'status' => 'scheduled',

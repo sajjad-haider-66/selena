@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('lieu');
             $table->string('theme');
-            $table->string('animateur');
+            $table->json('animateur');
             $table->string('signature')->nullable();
             $table->boolean('security')->default(false);
             $table->boolean('health')->default(false);
@@ -26,11 +26,12 @@ return new class extends Migration
             $table->boolean('rse')->default(false);
             $table->text('points')->nullable();
             $table->text('commentaires')->nullable();
+            $table->text('path')->nullable();
             $table->json('participants')->nullable(); // Array of participants with name and signature
             $table->json('actions')->nullable(); // Array of actions with type
             $table->json('materials')->nullable(); // Uploaded materials or recordings
             $table->json('feedback')->nullable(); // Feedback or concerns from users
-             $table->string('status')->default('scheduled'); // scheduled, completed, archived
+            $table->string('status')->default('scheduled'); // scheduled, completed, archived
             $table->text('notes')->nullable(); // Additional notes for archiving
             $table->timestamps();
         });

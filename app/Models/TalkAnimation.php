@@ -14,7 +14,7 @@ class TalkAnimation extends Model
         'date', 'lieu', 'theme', 'animateur', 'signature',
         'security', 'health', 'environment', 'rse',
         'points', 'commentaires', 'participants', 'actions',
-        'materials', 'feedback', 'status', 'notes', 'created_by'
+        'materials', 'feedback', 'status', 'notes', 'created_by','path',
     ];
 
     protected $casts = [
@@ -22,6 +22,7 @@ class TalkAnimation extends Model
         'actions' => 'array',
         'materials' => 'array',
         'feedback' => 'array',
+        'animateur' => 'array',
     ];
 
     public function creator()

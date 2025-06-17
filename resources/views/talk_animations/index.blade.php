@@ -19,8 +19,6 @@
                                 <th>Date</th>
                                 <th>Lieu</th>
                                 <th>Theme</th>
-                                <th>Animateur</th>
-                                <th>Commentaires</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -32,8 +30,6 @@
                                     <td>{{ $talk->date }}</td>
                                     <td>{{ $talk->lieu }}</td>
                                     <td>{{ $talk->theme }}</td>
-                                    <td>{{ $talk->animateur }}</td>
-                                    <td>{{ $talk->commentaires }}</td>
                                     <td>
                                         <span class="badge {{ $talk->status == 'Green' ? 'bg-success' : 'bg-danger' }}">
                                             {{ $talk->status }}

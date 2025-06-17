@@ -98,7 +98,7 @@
                         <h4>Talk Animation</h4>
                     </div>
                     <!-- The Form -->
-                    <form id="talkForm" method="POST">
+                    <form id="talkForm" enctype="multipart/form-data" method="POST">
                         @csrf
                         
                         <!-- First Table -->
@@ -137,7 +137,7 @@
                                             <input type="checkbox" name="rse" id="rse">
                                             <label for="rse">RSE</label>
                                         </div>
-                                          <div class="checkbox-item Surete">
+                                        <div class="checkbox-item Surete">
                                             <input type="checkbox" name="Surete" id="Surete">
                                             <label for="Surete">Surete</label>
                                         </div>
@@ -282,7 +282,6 @@
             });
 
             // add participant
-
             $('#add-participant').on('click', function () {
                 var newRow = `
                     <tr class="participant-row">
@@ -302,7 +301,8 @@
             $('#talkForm').on('submit', function (e) {
                 e.preventDefault();
 
-                const formData = $(this).serialize();
+                const form = this;
+                const formData = new FormData(form); // ← Properly handles files
                 const submitButton = $(this).find('button[type="submit"]');
                 submitButton.prop('disabled', true);
 
@@ -310,6 +310,8 @@
                     url: '{{ route("talk_animation.store") }}',
                     type: 'POST',
                     data: formData,
+                    contentType: false, // important for file upload
+                    processData: false, // important for file upload
                     success: function (response) {
                         toastr.success(response.message);
                         if (response.success) {
@@ -328,6 +330,7 @@
                     }
                 });
             });
+
         });
     </script>
 </x-app-layout>

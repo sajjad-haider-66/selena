@@ -147,7 +147,7 @@
                             <div id="securite_acces" class="category-content">
                                 <div class="checkbox-group">
                                     <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]"
-                                            value="Chute de plain-pied ou escalier"> Chute de plain-pied ou escalier
+                                        value="Chute de plain-pied ou escalier"> Chute de plain-pied ou escalier
                                     </div>
                                     <div class="checkbox-item"><input type="checkbox" name="analyse[securite_acces][]"
                                             value="Chute dans trémie sans protection ou mal protégée"> Chute dans trémie
@@ -162,7 +162,6 @@
                                     <div class="checkbox-item"><input type="checkbox"
                                             name="analyse[securite_acces][]" value="Cheminement non sécurisé">
                                         Cheminement non sécurisé (manque de visibilité, obstacle, etc.)</div>
-                               
                                 </div>
                             </div>
 
@@ -308,10 +307,13 @@
                                     <label>Equipement de sécurité</label>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input type="checkbox" name="mesures[]" value="Autre">
+                                    <input id="autre_input" type="checkbox" name="mesures[]" value="Autre">
                                     <label>Autre</label>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group autre_input_show" style="display: none;">
+                            <input type="text" name="autre_mesure" id="otherMeasureInput" class="form-control " placeholder="Veuillez préciser">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Actions à mettre en place</label>
@@ -454,6 +456,15 @@
                 date.setDate(date.getDate() + days);
                 return date.toISOString().split('T')[0];
             }
+
+            $('body').on('click', '#autre_input', function (e) {
+                if ($('#autre_input').is(":checked")) {
+                    $(".autre_input_show").slideDown("fast");
+                }
+                else {
+                    $(".autre_input_show").slideUp("fast");
+                }
+            });
 
             // Initial calculation
             $('select[name="frequence"], select[name="gravite"]').change(calculateRisk);

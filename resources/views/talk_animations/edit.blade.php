@@ -91,9 +91,9 @@
                         <h4>Talk Animation</h4>
                     </div>
                     <!-- The Form -->
-                    <form id="talkForm" data-id="{{ $talk['id']}}">
+                    <form id="talkForm" enctype="multipart/form-data" data-id="{{ $talk['id']}}">
                         @csrf
-                        
+                        <input type="hidden" name="_method" value="PUT">
                         <!-- First Table -->
                         <table>
                             <tr>
@@ -106,7 +106,20 @@
                                 <th>Thème :</th>
                                 <td><input type="text" name="theme" value="{{ $talk['theme'] ?? ''}}" placeholder="Les produits corrosifs" required></td>
                                 <th>Animateur(s)</th>
-                                <td><input type="text" name="animateur" value="{{ $talk['animateur'] ?? ''}}" required></td>
+                                <td class="animatuer-section">
+                                    @foreach($talk['animateur'] as $key => $animateur)
+                                        <div class="input-group mb-2">
+                                            <input class="form-control" type="text" name="animateur[{{ $key }}]" value="{{ $animateur }}" required>
+                                            @if($key > 0)
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-danger remove-animateur">Remove</button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                    <button type="button" id="add-animateur" class="btn btn-outline-dark btn-sm mt-2">Add More</button>
+                                </td>
+                              
                             </tr>
                             <tr>
                                 <th>Signature</th>
@@ -131,6 +144,10 @@
                                             <input type="checkbox" name="rse" id="rse" {{ $talk['rse'] == 1 ? 'checked' : ''}}>
                                             <label for="rse">RSE</label>
                                         </div>
+                                         <div class="checkbox-item Surete">
+                                            <input type="checkbox" name="Surete" id="Surete" {{ $talk['Surete'] == 1 ? 'checked' : ''}}>
+                                            <label for="Surete">Surete</label>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -148,8 +165,7 @@
                             <tr>
                                 <td colspan="4">
                                     <div>
-                                        <textarea name="commentaires" rows="2" style="width:100%; border:none; padding:8px;" placeholder="Entrer des commentaires">{{ $talk->commentaires }}</textarea>
-                                        {{-- <img src="{{ asset('images/corrosive_pictogram.png') }}" alt="Pictogramme Corrosif" class="corrosive-img"> --}}
+                                         <input type="file" name="corrosive_image" accept="image/*" class="form-control mb-2">
                                     </div>
                                 </td>
                             </tr>
@@ -161,15 +177,23 @@
                                 <th colspan="2">Participants</th>
                             </tr>
                             <tr>
-                                <th width="50%">NOM, Prénom</th>
-                                <th width="50%">Signature</th>
+                                <th width="50%">NOM</th>
+                                <th width="50%">Prénom</th>
                             </tr>
                             @foreach (json_decode($talk->participants, true) as $participant)
-                            <tr>
+                           <tbody id="participant-body">
+                             <tr>
                                 <td><input type="text" name="participant_name[]" value="{{ $participant['name'] }}"></td>
                                 <td><input type="text" name="participant_signature[]" value="{{ $participant['signature'] }}"></td>
                             </tr>
+                          
+                           </tbody>
                             @endforeach
+                              <tr>
+                                <td colspan="3">
+                                    <button type="button" id="add-participant" class="btn btn-outline-dark btn-sm">Add More</button>
+                                </td>
+                            </tr>
                         </table>
                         
                         <!-- Actions Table -->
@@ -240,39 +264,87 @@
                 $(this).closest('tr').remove();
             });
 
-            // AJAX Form Submission
-            $('#talkForm').on('submit', function (e) {
-                e.preventDefault();
 
-                const formData = $(this).serialize();
-                const submitButton = $(this).find('button[type="submit"]');
-                let id = $(this).data('id');
-                submitButton.prop('disabled', true);
+            let animCount = 0;
 
-                $.ajax({
-                    url: '{{ route("talk_animation.update", "") }}/' + id,
-                    type: 'PUT',
-                    data: formData,
-                    success: function (response) {
-                        if (response.responseCode == 200) {
-                            toastr.success('Talk event updated successfully.');
-                            setTimeout(() => {
-                               window.location.href = '{{ route('talk_animation.index') }}';
-                            }, 2000);
-                        }
-                    },
-                    error: function (xhr) {
-                        const errors = xhr.responseJSON.errors;
-                        let errorMessage = 'Please fix the following errors:<br>';
-                        toastr.error(response.message);
-                        $.each(errors, function (key, value) {
-                            errorMessage += `- ${value[0]}<br>`;
-                        });
-                        alert(errorMessage);
-                        submitButton.prop('disabled', false);
-                    }
-                });
+            // Add anim Dynamically
+            $('#add-animateur').on('click', function () {
+                animCount++;
+                const newAnim = `
+                    <div class="input-group mt-2 remove-animateur-input">
+                        <input type="text" name="animateur[${animCount}]" class="form-control" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-danger  remove-animateur">Remove</button>
+                        </div>
+                    </div>
+                `;
+                $(this).before(newAnim);
             });
+
+            // Remove anim
+            $(document).on('click', '.remove-animateur', function () {
+                $(this).closest('.remove-animateur-input').remove();
+            });
+
+                      // add participant
+            $('#add-participant').on('click', function () {
+                var newRow = `
+                    <tr class="participant-row">
+                        <td><input type="text" name="participant_name[]" class="form-control"></td>
+                        <td><input type="text" name="participant_signature[]" class="form-control"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Remove</button></td>
+                    </tr>`;
+                $('#participant-body').append(newRow);
+            });
+
+            // Remove button handler
+            $(document).on('click', '.remove-row', function () {
+                $(this).closest('tr').remove();
+            });
+
+            // AJAX Form Submission
+          $('#talkForm').on('submit', function (e) {
+        e.preventDefault();
+
+    const form = $(this);
+    const formData = new FormData(this); // Create FormData from the form
+    const submitButton = form.find('button[type="submit"]');
+    const id = form.data('id');
+
+    submitButton.prop('disabled', true);
+
+    $.ajax({
+        url: '{{ route("talk_animation.update", ":id") }}'.replace(':id', id), // Dynamic route with ID
+        type: 'POST', // Use POST with _method=PUT for Laravel
+        data: formData,
+        contentType: false, // Required for file uploads
+        processData: false, // Required for file uploads
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
+        },
+        success: function (response) {
+            if (response.responseCode == 200) {
+                toastr.success('Talk event updated successfully.');
+                setTimeout(() => {
+                    window.location.href = '{{ route("talk_animation.index") }}';
+                }, 2000);
+            }
+        },
+        error: function (xhr) {
+            submitButton.prop('disabled', false);
+            const errors = xhr.responseJSON?.errors || {};
+            let errorMessage = 'Please fix the following errors:<br>';
+            if (Object.keys(errors).length > 0) {
+                $.each(errors, function (key, value) {
+                    errorMessage += `- ${value[0]}<br>`;
+                });
+            } else {
+                errorMessage = xhr.responseJSON?.message || 'An error occurred.';
+            }
+            toastr.error(errorMessage);
+        }
+    });
+});
         });
     </script>
 </x-app-layout>
