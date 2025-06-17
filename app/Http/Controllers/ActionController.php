@@ -35,8 +35,8 @@ class ActionController extends Controller
      */
     public function index()
     {
-        $action = Action::where('pilot_id', auth()->user()->id)->orderBy('updated_at', 'desc')->get();
-        return view('actions.index', compact('action'));
+        $actions = Action::orderBy('updated_at', 'desc')->get();
+        return view('actions.index', compact('actions'));
     }
 
     /**

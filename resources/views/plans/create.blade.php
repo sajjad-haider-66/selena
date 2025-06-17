@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Plan de Prévention Journalier') }}
+            {{ __('Plan de Prévention') }}
         </h2>
     </x-slot>
 
@@ -53,12 +53,6 @@
                                     <td><input type="text" name="main_company_1"></td>
                                     <td><input type="text" name="subcontractor_1"></td>
                                     <td><input type="text" name="intervenant_1"></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="text" name="external_company_2"></td>
-                                    <td><input type="text" name="main_company_2"></td>
-                                    <td><input type="text" name="subcontractor_2"></td>
-                                    <td><input type="text" name="intervenant_2"></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -13,14 +13,14 @@
             font-size: 14px;
         }
         th, td {
-            border: 1px solid #d1d5db;
+            border: 1px solid #ececee;
             padding: 8px;
             text-align: center;
             vertical-align: middle;
         }
         th {
-            background-color: #0066cc;
-            color: white;
+            background-color: #fefbfb;
+            color: black;
             font-weight: bold;
         }
         .header-yellow {
@@ -32,7 +32,7 @@
             font-size: 18px;
         }
         .header-blue {
-            background-color: #0066cc;
+            background-color: #d2d2d2;
             color: white;
             font-weight: bold;
             text-align: center;
@@ -119,12 +119,28 @@
                         @csrf
                         
                         <!-- Title and Progress -->
-                        <div class="header-yellow">The requested Actions table</div>
+                        {{-- <div class="header-yellow">The requested Actions table</div>
                         <div style="text-align: center; margin-bottom: 10px;">
                             <div>Plan d'Actions Global SSE</div>
                             <div>Taux d'avancement global des actions : <progress value="60" max="100"></progress> 60%</div>
                             <input type="text" placeholder="Rechercher action, source, pilote...">
                             <button>Filtrer/Rechercher</button>
+                        </div> --}}
+
+                        <div class="header-yellow mb-2 p-2">Plan d'Actions Global SSE</div>
+                        <div class="mb-4">
+                            <label class="block">Taux d'avancement global des actions</label>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%">75%</div>
+                            </div>
+                          <div class="mt-2">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Rechercher action, source, pilote...">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">Filtrer/Rechercher</button>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                         
                         <!-- Origin Table -->
@@ -168,55 +184,57 @@
                             
                         
                         <!-- Actions Table -->
-                        <table id="actionsTable" class="display">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2">N°</th>
-                                    <th rowspan="2">Origine</th>
-                                    <th rowspan="2">DESC. DYSFONCTIONNEMENT/ AMELIORATION</th>
-                                    <th rowspan="2">Emission</th>
-                                    <th rowspan="2">Description action</th>
-                                    <th rowspan="2">Type</th>
-                                    <th rowspan="2">Pilote</th>
-                                    <th rowspan="2">Délai</th>
-                                    <th colspan="2">Démarrée le</th>
-                                    <th colspan="2">Terminée le</th>
-                                    <th rowspan="2">Vérificateur</th>
-                                    <th rowspan="2">Vérifiée le</th>
-                                    <th rowspan="2">Avancement</th>
-                                    <th rowspan="2">Efficacité</th>
-                                    <th rowspan="2">Commentaire</th>
-                                </tr>
-                                <tr>
-                                    <th>Action démarrée le</th>
-                                    <th>Action terminée le</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($actions as $action)
+                        <div class="table-responsive">
+                            <table id="actionsTable" class="display">
+                                <thead>
                                     <tr>
-                                        <td>{{ $action['id'] }}</td>
-                                        <td>{{ $action['origine'] }}</td>
-                                        <td>{{ $action['desc_dysfonctionnement'] }}</td>
-                                        <td>{{ $action['emission_date'] }}</td>
-                                        <td>{{ $action['description'] }}</td>
-                                        <td>{{ $action['type'] }}</td>
-                                        <td>{{ $action['pilote'] }}</td>
-                                        <td>{{ $action['delai'] }}</td>
-                                        <td>{{ $action['demarree_le'] }}</td>
-                                        <td>{{ $action['terminee_le'] }}</td>
-                                        <td>{{ $action['verificateur'] }}</td>
-                                        <td>{{ $action['verifiee_le'] }}</td>
-                                        <td>
-                                            <progress value="{{ $action['avancement'] }}" max="100"></progress>
-                                            {{ $action['avancement'] }}%
-                                        </td>
-                                        <td>{{ $action['efficacite'] }}</td>
-                                        <td>{{ $action['commentaire'] }}</td>
+                                        <th>N°</th>
+                                        <th>Origine</th>
+                                        <th>DESC. DYSFONCTIONNEMENT/ AMELIORATION</th>
+                                        <th>Emission</th>
+                                        <th>Description action</th>
+                                        <th>Type</th>
+                                        <th>Pilote</th>
+                                        <th>Délai</th>
+                                        <th>Démarrée le</th>
+                                        <th>Terminée le</th>
+                                        <th>Vérificateur</th>
+                                        <th>Vérifiée le</th>
+                                        <th>Avancement</th>
+                                        <th>Efficacité</th>
+                                        <th>Commentaire</th>
+                                        <th><b>Save</b></th>
+                                        <th><b>More details</b></th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($actions as $action)
+                                        <tr>
+                                            <td>{{ $action['id'] }}</td>
+                                            <td>{{ $action['origin'] }}</td>
+                                            <td>{{ $action['comments'] }}</td>
+                                            <td>{{ $action['start_date'] }}</td>
+                                            <td>{{ $action['description'] }}</td>
+                                            <td>{{ $action['type'] }}</td>
+                                            <td>{{ $action['pilot_id'] }}</td>
+                                            <td>{{ $action['due_date'] }}</td>
+                                            <td><input type="date" id="start_on" name="start_on"></td>
+                                            <td><input type="date" id="finished_on" name="finished_on"></td>
+                                            <td><input type="text" id="auditor" name="auditor"></td>
+                                            <td><input type="date" id="start_on" name="start_on"></td>
+                                            <td>
+                                                <progress value="{{ $action['progress_rate'] }}" max="100"></progress>
+                                                {{ $action['progress_rate'] }}%
+                                            </td>
+                                            <td>{{ $action['efficiency'] }}</td>
+                                            <td><textarea name="" id=""  rows="2"></textarea></td>
+                                            <td><button class="btn btn-success btn-sm">Enregistrer</button></td>
+                                            <td><button class="btn btn-primary btn-sm">Voir détail</button></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                         
                         <div class="mb-4 mt-6">
                             <p class="text-sm text-gray-600">I : Action Immédiate ; C : Action Corrective ; P : Action Préventive</p>
@@ -234,12 +252,17 @@
     </div>
         <!-- jQuery -->
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css">
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
-            $(document).ready(function() {
-                $('#actionsTable').DataTable();
+            // Initialize DataTable
+            $('#actionsTable').DataTable({
+                responsive: true,
+                "lengthChange": false,
+                scrollX: true,
             });
+
             $('#submitForm').on('click', function(e) {
                 e.preventDefault();
 
