@@ -25,7 +25,11 @@
                         <p><strong>Date:</strong> {{ $talk->date }}</p>
                         <p><strong>Location:</strong> {{ $talk->lieu }}</p>
                         <p><strong>Theme:</strong> {{ $talk->theme }}</p>
-                        <p><strong>Animator:</strong> {{ $talk->animateur }}</p>
+                        <p><strong>Animator:</strong> 
+                            @foreach ($talk->animateur as $item)
+                                {{ $item }},
+                            @endforeach
+                        </p>
                         <div class="border-t pt-6">
                             <h3 class="text-lg font-semibold mb-4 text-indigo-700">👥 Participants</h3>
 

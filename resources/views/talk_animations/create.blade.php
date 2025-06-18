@@ -236,12 +236,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            let actionCount = 0;
+            let animCount = 0;
 
             // Add anim Dynamically
             $('#add-animateur').on('click', function () {
-                actionCount++;
-                const newAction = `
+                animCount++;
+                const newAnim = `
                     <div class="input-group mt-2 remove-animateur-input">
                         <input type="text" name="animateur[${animCount}]" class="form-control" required>
                         <div class="input-group-append">
@@ -249,7 +249,7 @@
                         </div>
                     </div>
                 `;
-                $(this).before(newAction);
+                $(this).before(newAnim);
             });
 
             // Remove anim
@@ -257,19 +257,19 @@
                 $(this).closest('.remove-animateur-input').remove();
             });
 
-            let animCount = 0;
+            let actionCount = 0;
 
             // Add Action Dynamically
             $('#add-action').on('click', function () {
-                animCount++;
+                actionCount++;
                 const newAction = `
                     <tr class="action-row">
-                        <td><input type="text" name="action[${animCount}]"></td>
-                        <td><input type="text" name="responsable[${animCount}]"></td>
-                        <td><input type="date" name="delai[${animCount}]"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="${animCount}"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="${animCount}"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="${animCount}"></td>
+                        <td><input type="text" name="action[${actionCount}]"></td>
+                        <td><input type="text" name="responsable[${actionCount}]"></td>
+                        <td><input type="date" name="delai[${actionCount}]"></td>
+                        <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="${actionCount}"></td>
+                        <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="${actionCount}"></td>
+                        <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="${actionCount}"></td>
                         <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
                     </tr>
                 `;

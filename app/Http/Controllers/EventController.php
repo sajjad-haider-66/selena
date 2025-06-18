@@ -149,7 +149,7 @@ class EventController extends Controller
             'due_date' => now()->addDays(7),
             'progress_rate' => 0,
             'efficiency' => 'N',
-            'comments' => 'Action generated from event reporting',
+            'comments' => 'Action generated from event',
         ]);
 
         // Notify Client or RQSE (basic structure)

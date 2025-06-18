@@ -128,22 +128,22 @@ class TalkAnimationController extends Controller
             'status' => 'scheduled',
         ]);
 
-        // if ($actions) {
-        //     Action::create([
-        //         'origin' => 'TalkAnimation-' . $talk->id,
-        //         'action_number' => $this->random_number(),
-        //         'description' => 'Address ' . $data['description'],
-        //         'issued_date' => now(),
-        //         'pilot_id' => auth()->user()->id ?? 0,
-        //         'deadline' => $actions[0]['delai'] ?? now()->addDays(7),
-        //         'json_data' => json_encode(['talk_id' => $talk->id, 'progress' => 0]),
-        //         'due_date' => now()->addDays(7),
-        //         'progress_rate' => 0,
-        //         'efficiency' => 'N',
-        //         'type' => 'Immediate',
-        //         'comments' => 'Action generated from event editing',
-        //     ]);
-        // } 
+        if ($actions) {
+            Action::create([
+                'origin' => 'TalkAnimation',
+                'action_number' => $this->random_number(),
+                'description' => 'talk description',
+                'issued_date' => now(),
+                'pilot_id' => auth()->user()->id ?? 0,
+                'deadline' => $actions[0]['delai'] ?? now()->addDays(7),
+                'json_data' => json_encode(['talk_id' => $talk->id, 'progress' => 0]),
+                'due_date' => now()->addDays(7),
+                'progress_rate' => 0,
+                'efficiency' => 'N',
+                'type' => 'Immediate',
+                'comments' => 'Action generated from event',
+            ]);
+        } 
 
         // Notify and Invite Users
         // $users = User::where('role', '!=', 'RQSE Manager')->get();

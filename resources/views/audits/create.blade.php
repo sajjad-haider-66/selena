@@ -290,10 +290,6 @@
                         hasError = true;
                     }
                 });
-                if (!$('input[name="culture_sse"]:checked').length) {
-                    $('#error-message').text('Please select a Culture SSE score.').show();
-                    hasError = true;
-                }
                 if (hasError) return;
 
                 const formData = $(this).serialize();

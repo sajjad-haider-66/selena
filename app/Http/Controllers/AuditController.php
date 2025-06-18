@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Audit;
+use App\Models\Action;
 use App\Models\Product;
 use App\Models\Category;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\ReadinessForm;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\AuditStoreRequest;
 use App\Http\Requests\AuditUpdateRequest;
-use App\Traits\ApiResponse;
 
 class AuditController extends Controller
 {
@@ -58,7 +59,7 @@ class AuditController extends Controller
             'auditeur' => 'required|string',
             'intervenant' => 'required|string',
             'responses' => 'nullable|array',
-            'culture_sse' => 'required|in:++,+,-=/,-,--',
+            // 'culture_sse' => 'required|in:++,+,-=/,-,--',
             'actions' => 'nullable|array',
         ]);
 
@@ -112,14 +113,6 @@ class AuditController extends Controller
 
         // Process actions array
         $actions = $data['actions'] ?? [];
-        if ($data['culture_sse'] === '--' || in_array('S2', array_column($responses, 'note'))) {
-            $actions[] = [
-                'description' => 'Address immediate risks identified',
-                'responsable' => 'RQSE Team',
-                'delai' => now()->addDays(3)->toDateString(),
-                'type' => 'I',
-            ];
-        }
 
         $audit = Audit::create([
             'date' => $data['date'],
@@ -132,6 +125,23 @@ class AuditController extends Controller
             'actions' => json_encode($actions),
         ]);
 
+        if ($actions) {
+            Action::create([
+                'origin' => 'Audit',
+                'action_number' => $this->random_number(),
+                'description' => 'audit description',
+                'issued_date' => now(),
+                'pilot_id' => auth()->user()->id ?? 0,
+                'deadline' => $actions[0]['delai'] ?? now()->addDays(7),
+                'json_data' => json_encode(['audit_id' => $audit->id, 'progress' => 0]),
+                'due_date' => now()->addDays(7),
+                'progress_rate' => 0,
+                'efficiency' => 'N',
+                'type' => 'Immediate',
+                'comments' => 'Action generated from audit',
+            ]);
+        } 
+
         return response()->json([
             'success' => true,
             'message' => 'Audit submitted successfully.',
@@ -139,6 +149,10 @@ class AuditController extends Controller
         ]);
     }
 
+    function random_number($min = 0, $max = 1000)
+    {
+        return mt_rand($min, $max);
+    }
     /**
      * Display the specified resource.
      */

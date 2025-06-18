@@ -49,10 +49,10 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" name="external_company_1"></td>
-                                    <td><input type="text" name="main_company_1"></td>
-                                    <td><input type="text" name="subcontractor_1"></td>
-                                    <td><input type="text" name="intervenant_1"></td>
+                                    <td><input type="text" name="external_company[0]"></td>
+                                    <td><input type="text" name="main_company[0]"></td>
+                                    <td><input type="text" name="subcontractor[0]"></td>
+                                    <td><input type="text" name="intervenant[0]"></td>
                                 </tr>
                             </tbody>
                         </table>
