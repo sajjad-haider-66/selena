@@ -209,7 +209,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($actions as $action)
-                                        <tr>
+                                        <tr class="action-row">
                                             <td>{{ $action['id'] }}</td>
                                             <td>{{ $action['origin'] }}</td>
                                             <td>{{ $action['comments'] }}</td>
@@ -221,14 +221,14 @@
                                             <td><input type="date" id="start_on" name="start_on"></td>
                                             <td><input type="date" id="finished_on" name="finished_on"></td>
                                             <td><input type="text" id="auditor" name="auditor"></td>
-                                            <td><input type="date" id="start_on" name="start_on"></td>
+                                            <td><input type="date" id="checked_on" name="checked_on"></td>
                                             <td>
                                                 <progress value="{{ $action['progress_rate'] }}" max="100"></progress>
                                                 {{ $action['progress_rate'] }}%
                                             </td>
                                             <td>{{ $action['efficiency'] }}</td>
-                                            <td><textarea name="" id=""  rows="2"></textarea></td>
-                                            <td><button class="btn btn-success btn-sm">Enregistrer</button></td>
+                                            <td><textarea name="comments" id="comments"  rows="2"></textarea></td>
+                                            <td><button class="btn btn-success btn-sm" data-id="" id="save-actions-btn">Enregistrer</button></td>
                                             <td><button class="btn btn-primary btn-sm">Voir détail</button></td>
                                         </tr>
                                     @endforeach
@@ -262,6 +262,53 @@
                 "lengthChange": false,
                 scrollX: true,
             });
+
+            $('#save-actions-btn').on('click', function () {
+                let rows = [];
+
+                $('.action-row').each(function () {
+                    let row = {
+                        start_on: $(this).find('#start_on').val(),
+                        finished_on: $(this).find('#finished_on').val(),
+                        auditor: $(this).find('#auditor').val(),
+                        checked_on: $(this).find('#checked_on').val()
+                        comments: $(this).find('#comments').val()
+                    };
+                    rows.push(row);
+                });
+
+                $.ajax({
+                    url: `/index/${yourDynamicID}/action`,
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        actions: rows
+                    },
+                    success: function(response) {
+                            if (response.success) {
+                                $('#success-message p').text(response.message);
+                                $('#success-message').show();
+                                setTimeout(() => {
+                                    $('#success-message').hide();
+                                }, 3000);
+                            }
+                        },
+                        error: function(xhr) {
+                            var errors = xhr.responseJSON.errors;
+                            var errorMessage = '<p><strong>Opps Something went wrong</strong></p><ul>';
+                            $.each(errors, function(key, value) {
+                                errorMessage += '<li>' + value[0] + '</li>';
+                            });
+                            errorMessage += '</ul>';
+                            $('#error-message ul').html(errorMessage);
+                            $('#error-message').show();
+                            setTimeout(() => {
+                                $('#error-message').hide();
+                            }, 5000);
+                        }
+                });
+            });
+
 
             $('#submitForm').on('click', function(e) {
                 e.preventDefault();

@@ -157,4 +157,24 @@ class ActionController extends Controller
 
     }
 
+    public function indexStore(Request $request, $id)
+    {
+        $action = Action::findOrFail($id);
+        if($action)
+        {
+            foreach ($request->actions as $action) {
+                $action->update([
+                    'start_date' => $action['start_on'], // Foreign key or reference ID
+                    'end_date' => $action['finished_on'],
+                    'auditor' => $action['auditor'],
+                    'checked_on' => $action['checked_on'],
+                    'comments' => $action['comments'],
+                ]);
+            }
+
+            return $this->success('Action update Successfully', ['success' => true, 'data' => null]);
+        }
+
+    }
+
 }

@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/talk/{id}/attendance/qr', [TalkAnimationController::class, 'markAttendanceQR'])->name('talk_animation.attendance.qr');
     Route::post('/talk/{id}/feedback', [TalkAnimationController::class, 'submitFeedback'])->name('talk_animation.feedback');
     Route::post('/talk/{id}/archive', [TalkAnimationController::class, 'archive'])->name('talk_animation.archive');
+    Route::post('/index/{id}/action', [ActionController::class, 'indexStore'])->name('action.indexStore');
 });
 // KEY : MULTIPERMISSION ends
 
