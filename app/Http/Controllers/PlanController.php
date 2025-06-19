@@ -50,14 +50,7 @@ class PlanController extends Controller
         $rules = [
             'plan_number' => 'required|string|unique:plans,plan_number',
             'work_date' => 'nullable|date',
-            'external_company_1' => 'nullable|string|max:255',
-            'main_company_1' => 'nullable|string|max:255',
-            'subcontractor_1' => 'nullable|string|max:255',
-            'intervenant_1' => 'nullable|string|max:255',
-            'external_company_2' => 'nullable|string|max:255',
-            'main_company_2' => 'nullable|string|max:255',
-            'subcontractor_2' => 'nullable|string|max:255',
-            'intervenant_2' => 'nullable|string|max:255',
+            'company_name_detail' => 'nullable|array',
             'location' => 'nullable|string|max:255',
             'start_time' => 'nullable|date_format:H:i',
             'end_time' => 'nullable|date_format:H:i',
@@ -75,18 +68,13 @@ class PlanController extends Controller
             'formations' => 'nullable|array',
             'formations.*' => 'string',
             'training_certifications_other' => 'nullable|string',
-            'before_company_1' => 'nullable|string|max:255',
-            'before_company_2' => 'nullable|string|max:255',
-            'before_company_3' => 'nullable|string|max:255',
             'before_date' => 'nullable|date',
             'before_time' => 'nullable|date_format:H:i',
             'before_responsible_name' => 'nullable|string|max:255',
             'apres_travail_non_termine' => 'nullable|string', // 'on' or null
             'new_authorization_date' => 'nullable|date',
-            'after_company_1_name' => 'nullable|string|max:255',
-            'after_company_1_date' => 'nullable|date',
-            'after_company_2_name' => 'nullable|string|max:255',
-            'after_company_2_date' => 'nullable|date',
+            'company_nom_date' => 'nullable|array',
+            'avant_entreprise' => 'nullable|array',
             'after_responsible_date' => 'nullable|date',
             'after_responsible_time' => 'nullable|date_format:H:i',
             'after_responsible_name' => 'nullable|string|max:255',
@@ -99,20 +87,51 @@ class PlanController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $nomList = $request->input('apres_entreprise_nom', []);
+        $dateList = $request->input('apres_entreprise_date', []);
+ 
+        // Create an array of company names and dates
+        $companyNomDate = [];
+        for ($i = 0; $i < count($nomList); $i++)
+        {
+            $companyNomDate[] = [
+                'name' => $nomList[$i],
+                'date' => $dateList[$i],
+            ];
+        }
+
+        $external_company = $request->input('external_company', []);
+        $main_company = $request->input('main_company', []);
+        $subcontractor = $request->input('subcontractor', []);
+        $intervenant = $request->input('intervenant', []);
+
+        $comNomEntreprises = [];
+
+        foreach ($external_company as $index => $comnom) {
+            $comNomEntreprises[] = [
+                'external_company' => $comnom,
+                'main_company' => $main_company[$index] ?? null, // agar date missing ho to null
+                'subcontractor' => $subcontractor[$index] ?? null, // agar date missing ho to null
+                'intervenant' => $intervenant[$index] ?? null, // agar date missing ho to null
+            ];
+        }
+        
+        $avant_entreprise = $request->input('avant_entreprise', []);
+        $avantEntreprises = [];
+        foreach ($avant_entreprise as $key => $value) {
+            $avantEntreprises[] = [
+                'name' => $value,
+            ];
+        }
+
+
         // Create a new Plan instance
         $plan = new Plan();
 
         // Map form data to database fields
         $plan->plan_number = $request->input('plan_number');
         $plan->work_date = $request->input('work_date');
-        $plan->external_company_1 = $request->input('external_company_1');
-        $plan->main_company_1 = $request->input('main_company_1');
-        $plan->subcontractor_1 = $request->input('subcontractor_1');
-        $plan->intervenant_1 = $request->input('intervenant_1');
-        $plan->external_company_2 = $request->input('external_company_2');
-        $plan->main_company_2 = $request->input('main_company_2');
-        $plan->subcontractor_2 = $request->input('subcontractor_2');
-        $plan->intervenant_2 = $request->input('intervenant_2');
+        $plan->company_name_detail = $comNomEntreprises ? json_encode($comNomEntreprises) : null; // Store as JSON
         $plan->location = $request->input('location');
         $plan->start_time = $request->input('start_time');
         $plan->end_time = $request->input('end_time');
@@ -131,9 +150,7 @@ class PlanController extends Controller
         $plan->training_certifications_other = $request->input('training_certifications_other');
         
         // Map 'avant' fields
-        $plan->before_company_1 = $request->input('before_company_1');
-        $plan->before_company_2 = $request->input('before_company_2');
-        $plan->before_company_3 = $request->input('before_company_3');
+        $plan->avant_entreprise = $avantEntreprises ? json_encode($avantEntreprises) : null;
         $plan->before_date = $request->input('before_date');
         $plan->before_time = $request->input('before_time');
         $plan->before_responsible_name = $request->input('before_responsible_name');
@@ -143,10 +160,7 @@ class PlanController extends Controller
         
         // Map 'apres' fields
         $plan->new_authorization_date = $request->input('new_authorization_date');
-        $plan->after_company_1_name = $request->input('after_company_1_name');
-        $plan->after_company_1_date = $request->input('after_company_1_date');
-        $plan->after_company_2_name = $request->input('after_company_2_name');
-        $plan->after_company_2_date = $request->input('after_company_2_date');
+        $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : null;
         $plan->after_responsible_date = $request->input('after_responsible_date');
         $plan->after_responsible_time = $request->input('after_responsible_time');
         $plan->after_responsible_name = $request->input('after_responsible_name');
@@ -195,18 +209,12 @@ class PlanController extends Controller
      // Update the plan
     public function update(Request $request, Plan $plan)
     {
-        // Define validation rules
+        
+              // Define validation rules
         $rules = [
-            'plan_number' => 'required|string|unique:plans,plan_number,' . $plan->id,
+            // 'plan_number' => 'required|string|plan_number',
             'work_date' => 'nullable|date',
-            'external_company_1' => 'nullable|string|max:255',
-            'main_company_1' => 'nullable|string|max:255',
-            'subcontractor_1' => 'nullable|string|max:255',
-            'intervenant_1' => 'nullable|string|max:255',
-            'external_company_2' => 'nullable|string|max:255',
-            'main_company_2' => 'nullable|string|max:255',
-            'subcontractor_2' => 'nullable|string|max:255',
-            'intervenant_2' => 'nullable|string|max:255',
+            'company_name_detail' => 'nullable|array',
             'location' => 'nullable|string|max:255',
             'start_time' => 'nullable|date_format:H:i',
             'end_time' => 'nullable|date_format:H:i',
@@ -219,31 +227,9 @@ class PlanController extends Controller
             'travail.*' => 'string',
             'work_nature_other' => 'nullable|string',
             'risques' => 'nullable|array',
-            'risques.*' => 'string',
-            'risk_nature_other' => 'nullable|string',
-            'formations' => 'nullable|array',
-            'formations.*' => 'string',
-            'training_certifications_other' => 'nullable|string',
-            'before_company_1' => 'nullable|string|max:255',
-            'before_company_2' => 'nullable|string|max:255',
-            'before_company_3' => 'nullable|string|max:255',
-            'before_date' => 'nullable|date',
-            'before_time' => 'nullable|date_format:H:i',
-            'before_responsible_name' => 'nullable|string|max:255',
-            'apres_travail_termine' => 'nullable|string',
-            'apres_travail_non_termine' => 'nullable|string',
-            'apres_station_normale' => 'nullable|string',
-            'apres_chantier_propre' => 'nullable|string',
-            'new_authorization_date' => 'nullable|date',
-            'after_company_1_name' => 'nullable|string|max:255',
-            'after_company_1_date' => 'nullable|date',
-            'after_company_2_name' => 'nullable|string|max:255',
-            'after_company_2_date' => 'nullable|date',
-            'after_responsible_date' => 'nullable|date',
-            'after_responsible_time' => 'nullable|date_format:H:i',
-            'after_responsible_name' => 'nullable|string|max:255',
+            'company_nom_date' => 'nullable|array',
+            'avant_entreprise' => 'nullable|array',
         ];
-
         // Validate the request
         $validator = Validator::make($request->all(), $rules);
 
@@ -251,17 +237,47 @@ class PlanController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        $nomList = $request->input('apres_entreprise_nom', []);
+        $dateList = $request->input('apres_entreprise_date', []);
+ 
+        // Create an array of company names and dates
+        $companyNomDate = [];
+        for ($i = 0; $i < count($nomList); $i++)
+        {
+            $companyNomDate[] = [
+                'name' => $nomList[$i],
+                'date' => $dateList[$i],
+            ];
+        }
+
+        $external_company = $request->input('external_company', []);
+        $main_company = $request->input('main_company', []);
+        $subcontractor = $request->input('subcontractor', []);
+        $intervenant = $request->input('intervenant', []);
+
+        $comNomEntreprises = [];
+
+        foreach ($external_company as $index => $comnom) {
+            $comNomEntreprises[] = [
+                'external_company' => $comnom,
+                'main_company' => $main_company[$index] ?? null, // agar date missing ho to null
+                'subcontractor' => $subcontractor[$index] ?? null, // agar date missing ho to null
+                'intervenant' => $intervenant[$index] ?? null, // agar date missing ho to null
+            ];
+        }
+        
+        $avant_entreprise = $request->input('avant_entreprise', []);
+        $avantEntreprises = [];
+        foreach ($avant_entreprise as $key => $value) {
+            $avantEntreprises[] = [
+                'name' => $value,
+            ];
+        }
+
         // Map form data to database fields
         $plan->plan_number = $request->input('plan_number');
         $plan->work_date = $request->input('work_date');
-        $plan->external_company_1 = $request->input('external_company_1');
-        $plan->main_company_1 = $request->input('main_company_1');
-        $plan->subcontractor_1 = $request->input('subcontractor_1');
-        $plan->intervenant_1 = $request->input('intervenant_1');
-        $plan->external_company_2 = $request->input('external_company_2');
-        $plan->main_company_2 = $request->input('main_company_2');
-        $plan->subcontractor_2 = $request->input('subcontractor_2');
-        $plan->intervenant_2 = $request->input('intervenant_2');
+        $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : null;
         $plan->location = $request->input('location');
         $plan->start_time = $request->input('start_time');
         $plan->end_time = $request->input('end_time');
@@ -280,9 +296,7 @@ class PlanController extends Controller
         $plan->training_certifications_other = $request->input('training_certifications_other');
         
         // Map 'avant' fields
-        $plan->before_company_1 = $request->input('before_company_1');
-        $plan->before_company_2 = $request->input('before_company_2');
-        $plan->before_company_3 = $request->input('before_company_3');
+        $plan->avant_entreprise = $avantEntreprises ? json_encode($avantEntreprises) : null;
         $plan->before_date = $request->input('before_date');
         $plan->before_time = $request->input('before_time');
         $plan->before_responsible_name = $request->input('before_responsible_name');
@@ -295,10 +309,7 @@ class PlanController extends Controller
         
         // Map 'apres' fields
         $plan->new_authorization_date = $request->input('new_authorization_date');
-        $plan->after_company_1_name = $request->input('after_company_1_name');
-        $plan->after_company_1_date = $request->input('after_company_1_date');
-        $plan->after_company_2_name = $request->input('after_company_2_name');
-        $plan->after_company_2_date = $request->input('after_company_2_date');
+        $plan->company_name_detail = $comNomEntreprises ? json_encode($comNomEntreprises) : null; // Store as JSON
         $plan->after_responsible_date = $request->input('after_responsible_date');
         $plan->after_responsible_time = $request->input('after_responsible_time');
         $plan->after_responsible_name = $request->input('after_responsible_name');

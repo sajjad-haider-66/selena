@@ -91,8 +91,8 @@
                         <thead>
                           <tr>
                             <th>Plan Number</th>
-                            <th>External Company 1</th>
-                            <th>Subcontractor 1</th>
+                            <th>Work Date</th>
+                            <th>Start Time</th>
                             <th>Location</th>
                             <th>Actions</th>
                         </tr>
@@ -101,8 +101,8 @@
                             @foreach ($plans as $plan)
                             <tr>
                                <td>{{ $plan->plan_number }}</td>
-                                <td>{{ $plan->external_company_1 }}</td>
-                                <td>{{ $plan->subcontractor_1 }}</td>
+                                <td>{{ $plan->work_date }}</td>
+                                <td>{{ $plan->start_time }}</td>
                                 <td>{{ $plan->location }}</td>
                                 <td>
                                     <a href="{{ route('plan.show', $plan->id) }}" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>

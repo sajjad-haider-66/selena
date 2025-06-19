@@ -15,14 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('plan_number')->unique(); // N° A 658702
             $table->date('work_date')->nullable(); // Work date (e.g., 2003-10-28)
-            $table->string('external_company_1')->nullable(); // External company 1
-            $table->string('main_company_1')->nullable(); // Enterprise principale (renamed for consistency with form)
-            $table->string('subcontractor_1')->nullable(); // Enterprise sous-traitante
-            $table->string('intervenant_1')->nullable(); // Speaker 1 (renamed for consistency)
-            $table->string('external_company_2')->nullable(); // External company 2
-            $table->string('main_company_2')->nullable(); // Enterprise principale 2 (renamed for consistency)
-            $table->string('subcontractor_2')->nullable(); // Enterprise sous-traitante 2
-            $table->string('intervenant_2')->nullable(); // Speaker 2 (renamed for consistency, was speaker_3)
+            $table->json('company_name_detail')->nullable(); // External company 1
             $table->string('location')->nullable(); // Emplacement prévu
             $table->time('start_time')->nullable(); // Début d'intervention
             $table->time('end_time')->nullable(); // Fin d'intervention prévue
@@ -37,18 +30,13 @@ return new class extends Migration
             $table->text('risk_nature_other')->nullable(); // risques_autre
             $table->text('training_certifications')->nullable(); // Formations / Habilitations (stores formations array as JSON)
             $table->text('training_certifications_other')->nullable(); // formations_autre
-            $table->string('before_company_1')->nullable(); // avant_entreprise_1
-            $table->string('before_company_2')->nullable(); // avant_entreprise_2
-            $table->string('before_company_3')->nullable(); // avant_entreprise_3
+            $table->json('avant_entreprise')->nullable(); // avant_entreprise_1
             $table->date('before_date')->nullable(); // avant_date
             $table->time('before_time')->nullable(); // avant_heure
             $table->string('before_responsible_name')->nullable(); // avant_responsable_nom
             $table->boolean('work_not_completed')->default(false); // apres_travail_non_termine
             $table->date('new_authorization_date')->nullable(); // apres_nouvelle_autorisation
-            $table->string('after_company_1_name')->nullable(); // apres_entreprise_1_nom
-            $table->date('after_company_1_date')->nullable(); // apres_entreprise_1_date
-            $table->string('after_company_2_name')->nullable(); // apres_entreprise_2_nom
-            $table->date('after_company_2_date')->nullable(); // apres_entreprise_2_date
+            $table->json('company_nom_date')->nullable(); // apres_entreprise_1_nom
             $table->date('after_responsible_date')->nullable(); // apres_responsable_date
             $table->time('after_responsible_time')->nullable(); // apres_responsable_heure
             $table->string('after_responsible_name')->nullable(); // apres_responsable_nom

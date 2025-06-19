@@ -188,7 +188,7 @@
                             </table>
                         </div>
 
-                        <h5>Culture SSE terrain</h5>
+                        {{-- <h5>Culture SSE terrain</h5>
                         <div class="mb-3">
                             @foreach(['++', '+', '=/-', '-', '--'] as $val)
                                 <div class="form-check form-check-inline">
@@ -196,7 +196,7 @@
                                     <label class="form-check-label" for="culture_{{ $val }}">{{ $val }}</label>
                                 </div>
                             @endforeach
-                        </div>
+                        </div> --}}
                         <p id="qser-display" class="mt-2"></p>
 
                         <h5 class="mt-4">Actions à mettre en place</h5>
@@ -295,10 +295,6 @@
                         hasError = true;
                     }
                 });
-                if (!$('input[name="culture_sse"]:checked').length) {
-                    $('#error-message').text('Please select a Culture SSE score.').show();
-                    hasError = true;
-                }
                 if (hasError) return;
 
                 const formData = $(this).serialize();

@@ -23,18 +23,35 @@
                                 <th>Entreprise sous-traitante</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1.</td>
-                                <td>{{ $plans->main_enterprise_1 }}</td>
-                                <td>{{ $plans->subcontractor_1 }}</td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>{{ $plans->main_enterprise_2 }}</td>
-                                <td>{{ $plans->subcontractor_2 }}</td>
-                            </tr>
-                        </tbody>
+                     @if($plans->company_name_detail)
+                        @php
+                            $companies = json_decode($plans->company_name_detail, true);
+                        @endphp
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>External Company</th>
+                                    <th>Main Company</th>
+                                    <th>Subcontractor</th>
+                                    <th>Intervenant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($companies as $company)
+                                    <tr>
+                                        <td>{{ $company['external_company'] ?? '-' }}</td>
+                                        <td>{{ $company['main_company'] ?? '-' }}</td>
+                                        <td>{{ $company['subcontractor'] ?? '-' }}</td>
+                                        <td>{{ $company['intervenant'] ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p>No companies available.</p>
+                    @endif
+
                     </table>
                 </div>
 

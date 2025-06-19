@@ -139,7 +139,8 @@ class EventController extends Controller
         $priority = $cotation > 10 ? 'High' : ($cotation > 6 ? 'Medium' : 'Low');
         $action = Action::create([
             'origin' => 'Evenement',
-            'origin_id' => $event->id,
+            'origin_view_id' => $event->id,
+            'action_origin' => 'event',
             'description' => 'Address ' . $data['risques'],
             'issued_date' => now(),
             // 'type' => $actions[0]['type'] ?? 'Preventive',

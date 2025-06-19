@@ -190,7 +190,7 @@ class AuditController extends Controller
             'auditeur' => 'required|string',
             'intervenant' => 'required|string',
             'responses' => 'nullable|array',
-            'culture_sse' => 'required|in:++,+,-=/,-,--',
+            // 'culture_sse' => 'required|in:++,+,-=/,-,--',
             'actions' => 'nullable|array',
         ]);
 
@@ -247,14 +247,6 @@ class AuditController extends Controller
 
         // Process actions array
         $actions = $data['actions'] ?? [];
-        if ($data['culture_sse'] === '--' || in_array('IS', array_column($responses, 'note'))) {
-            $actions[] = [
-                'description' => 'Address immediate risks identified',
-                'responsable' => 'RQSE Team',
-                'delai' => now()->addDays(3)->toDateString(),
-                'type' => 'I',
-            ];
-        }
 
         // Update the audit record
         $audit->update([

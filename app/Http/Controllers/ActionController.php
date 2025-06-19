@@ -36,7 +36,9 @@ class ActionController extends Controller
     public function index()
     {
         $actions = Action::orderBy('updated_at', 'desc')->get();
-        return view('actions.index', compact('actions'));
+        $averageProgress = $actions->count() > 0 ? $actions->avg('progress_rate') : 0;
+        $progress = round($averageProgress, 2);
+        return view('actions.index', compact('actions', 'progress'));
     }
 
     /**
@@ -57,29 +59,7 @@ class ActionController extends Controller
          $request->validate([
             'action_number' => 'required',
          ]);
-        // $jsonData = [
-        //     'origin' => $request->input('origin', []),
-        //     'actions' => $request->input('actions', []),
-        // ];
-
-        // if ($request->filled('new_action_date')) {
-        //     $jsonData['actions'][] = array_filter([
-        //         'issued_date' => $request->input('new_action_date'),
-        //         'description' => $request->input('new_action_description'),
-        //         'i' => $request->input('new_action_i'),
-        //         'c' => $request->input('new_action_c'),
-        //         'p' => $request->input('new_action_p'),
-        //         'pilot' => $request->input('new_action_pilot'),
-        //         'deadline' => $request->input('new_action_deadline'),
-        //         'start_date' => $request->input('new_action_started'),
-        //         'end_date' => $request->input('new_action_completed'),
-        //         'verifier' => $request->input('new_action_verifier'),
-        //         'verified_date' => $request->input('new_action_verified'),
-        //         'progress_rate' => $request->input('new_action_progress'),
-        //         'efficiency' => $request->input('new_action_efficiency'),
-        //         'comment' => $request->input('new_action_comment'),
-        //     ]);
-        // }
+       
 
         $action = Action::create([
             'action_number' =>  $request->action_number,
@@ -159,22 +139,24 @@ class ActionController extends Controller
 
     public function indexStore(Request $request, $id)
     {
+        // Validate the request data
         $action = Action::findOrFail($id);
-        if($action)
-        {
-            foreach ($request->actions as $action) {
-                $action->update([
-                    'start_date' => $action['start_on'], // Foreign key or reference ID
-                    'end_date' => $action['finished_on'],
-                    'auditor' => $action['auditor'],
-                    'checked_on' => $action['checked_on'],
-                    'comments' => $action['comments'],
-                ]);
-            }
 
-            return $this->success('Action update Successfully', ['success' => true, 'data' => null]);
+        // Check if the action exists
+        if (!$action) {
+            return $this->error('Action not found', 404);
         }
-
+    
+        // Update the action with the provided data
+        $action->update([
+            'start_date' => $request->start_on, // Foreign key or reference ID
+            'end_date' => $request->finished_on,
+            'auditor' => $request->auditor,
+            'checked_on' => $request->checked_on,
+            'comments' => $request->comments,
+        ]); 
+        // Return a success response
+        return $this->success('Action updated successfully', ['success' => true, 'data' => null]);
     }
 
 }

@@ -45,16 +45,25 @@
                                     <th>Entreprise principale</th>
                                     <th>Entreprise sous-traitante</th>
                                     <th>Nom de l'intervenant</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                           <tbody id="company-body">
                                 <tr>
                                     <td><input type="text" name="external_company[0]"></td>
                                     <td><input type="text" name="main_company[0]"></td>
                                     <td><input type="text" name="subcontractor[0]"></td>
                                     <td><input type="text" name="intervenant[0]"></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm remove-companys" disabled>Remove</button></td>
                                 </tr>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <button type="button" id="add-company-name" class="btn btn-outline-dark btn-sm">Add More</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
 
@@ -229,19 +238,20 @@
                         <div class="card-body">
                             <div class="row">
                                 <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
-                                <div class="col-md-6">
+                               <div class="col-md-6">
                                     <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
-                                    <div class="form-group">
-                                        <label>1- Nom:</label>
-                                        <input type="text" name="avant_entreprise_1" class="form-control">
+                                    <div id="nom-container">
+                                        <div class="form-group nom-group">
+                                            <label>1- Nom:</label>
+                                            <div class="d-flex">
+                                                <input type="text" name="avant_entreprise[]" class="form-control me-2">
+                                                <!-- Remove button hidden for first input -->
+                                                <button type="button" class="btn btn-danger btn-sm remove-nom d-none">Remove</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>2- Nom:</label>
-                                        <input type="text" name="avant_entreprise_2" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>3- Nom:</label>
-                                        <input type="text" name="avant_entreprise_3" class="form-control">
+                                    <div class="form-group mt-2">
+                                        <button type="button" id="add-nom" class="btn btn-outline-dark btn-sm">Add More</button>
                                     </div>
                                 </div>
                                 <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
@@ -298,21 +308,23 @@
 
                             <div class="row">
                                 <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
-                                <div class="col-md-6">
+                               <div class="col-md-6">
                                     <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
-                                    <div class="form-group">
-                                        <label>1. Nom:</label>
-                                        <input type="text" name="apres_entreprise_1_nom" class="form-control">
-                                        <label>Date:</label>
-                                        <input type="date" name="apres_entreprise_1_date" class="form-control">
+                                    <div id="apres-container">
+                                        <div class="form-group apres-group">
+                                            <label>1. Nom:</label>
+                                            <input type="text" name="apres_entreprise_nom[]" class="form-control">
+                                            <label>Date:</label>
+                                            <input type="date" name="apres_entreprise_date[]" class="form-control">
+                                            <!-- Remove button hidden in first group -->
+                                            <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres d-none">Remove</button>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>2. Nom:</label>
-                                        <input type="text" name="apres_entreprise_2_nom" class="form-control">
-                                        <label>Date:</label>
-                                        <input type="date" name="apres_entreprise_2_date" class="form-control">
+                                    <div class="form-group mt-2">
+                                        <button type="button" id="add-apres" class="btn btn-outline-dark btn-sm">Add More</button>
                                     </div>
                                 </div>
+
                                 <!-- RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT) -->
                                 <div class="col-md-6">
                                     <h6>RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT)</h6>
@@ -342,4 +354,72 @@
             </div>
         </div>
     </div>
+     <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let companyIndex = 1;
+
+        $('#add-company-name').on('click', function () {
+            let newRow = `
+                <tr>
+                    <td><input type="text" name="external_company[${companyIndex}]"></td>
+                    <td><input type="text" name="main_company[${companyIndex}]"></td>
+                    <td><input type="text" name="subcontractor[${companyIndex}]"></td>
+                    <td><input type="text" name="intervenant[${companyIndex}]"></td>
+                    <td><button type="button" class="btn btn-danger btn-sm remove-company">Remove</button></td>
+                </tr>
+            `;
+            $('#company-body').append(newRow);
+            companyIndex++;
+        });
+
+        // Remove Row
+        $(document).on('click', '.remove-company', function () {
+            $(this).closest('tr').remove();
+        });
+
+
+        let nomIndex = 2;
+
+        $('#add-nom').on('click', function () {
+            let newInput = `
+                <div class="form-group nom-group mt-2">
+                    <label>${nomIndex}- Nom:</label>
+                    <div class="d-flex">
+                        <input type="text" name="avant_entreprise[]" class="form-control me-2">
+                        <button type="button" class="btn btn-danger btn-sm remove-nom">Remove</button>
+                    </div>
+                </div>
+            `;
+            $('#nom-container').append(newInput);
+            nomIndex++;
+        });
+
+        // Remove handler
+        $(document).on('click', '.remove-nom', function () {
+            $(this).closest('.nom-group').remove();
+        });
+
+        let apresIndex = 2;
+
+        $('#add-apres').on('click', function () {
+            let newGroup = `
+                <div class="form-group apres-group mt-3">
+                    <label>${apresIndex}. Nom:</label>
+                    <input type="text" name="apres_entreprise_nom[]" class="form-control">
+                    <label>Date:</label>
+                    <input type="date" name="apres_entreprise_date[]" class="form-control">
+                    <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres">Remove</button>
+                </div>
+            `;
+            $('#apres-container').append(newGroup);
+            apresIndex++;
+        });
+
+        $(document).on('click', '.remove-apres', function () {
+            $(this).closest('.apres-group').remove();
+        });
+
+
+    </script>
 </x-app-layout>

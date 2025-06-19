@@ -38,20 +38,41 @@
                                 <th>Nom de l'intervenant</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="text" name="external_company_1" value="{{ old('external_company_1', $plan->external_company_1) }}"></td>
-                                <td><input type="text" name="main_company_1" value="{{ old('main_company_1', $plan->main_company_1) }}"></td>
-                                <td><input type="text" name="subcontractor_1" value="{{ old('subcontractor_1', $plan->subcontractor_1) }}"></td>
-                                <td><input type="text" name="intervenant_1" value="{{ old('intervenant_1', $plan->intervenant_1) }}"></td>
-                            </tr>
-                            <tr>
-                                <td><input type="text" name="external_company_2" value="{{ old('external_company_2', $plan->external_company_2) }}"></td>
-                                <td><input type="text" name="main_company_2" value="{{ old('main_company_2', $plan->main_company_2) }}"></td>
-                                <td><input type="text" name="subcontractor_2" value="{{ old('subcontractor_2', $plan->subcontractor_2) }}"></td>
-                                <td><input type="text" name="intervenant_2" value="{{ old('intervenant_2', $plan->intervenant_2) }}"></td>
-                            </tr>
+                        <tbody id="company-body">
+                            @php $i = 0; @endphp
+                            @foreach (json_decode($plan->company_name_detail, true) as $index => $company)
+                                <tr>
+                                    <td><input type="text" name="external_company[{{ $i }}]" class="form-control" value="{{ $company['external_company'] }}"></td>
+                                    <td><input type="text" name="main_company[{{ $i }}]" class="form-control" value="{{ $company['main_company'] }}"></td>
+                                    <td><input type="text" name="subcontractor[{{ $i }}]" class="form-control" value="{{ $company['subcontractor'] }}"></td>
+                                    <td><input type="text" name="intervenant[{{ $i }}]" class="form-control" value="{{ $company['intervenant'] }}"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm remove-company" {{ $i == 0 ? 'disabled' : '' }}>Remove</button>
+                                    </td>
+                                </tr>
+                                @php $i++; @endphp
+                            @endforeach
+
+                            @if (empty($plan->company_name_detail))
+                                <tr>
+                                    <td><input type="text" name="external_company[0]" class="form-control"></td>
+                                    <td><input type="text" name="main_company[0]" class="form-control"></td>
+                                    <td><input type="text" name="subcontractor[0]" class="form-control"></td>
+                                    <td><input type="text" name="intervenant[0]" class="form-control"></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm remove-company" disabled>Remove</button></td>
+                                </tr>
+                                @php $i = 1; @endphp
+                            @endif
                         </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <button type="button" id="add-company-name" class="btn btn-outline-dark btn-sm">Add More</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+
                     </table>
                 </div>
 
@@ -232,19 +253,34 @@
                             <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
                             <div class="col-md-6">
                                 <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
-                                <div class="form-group">
-                                    <label>1- Nom:</label>
-                                    <input type="text" name="before_company_1" class="form-control" value="{{ old('before_company_1', $plan->before_company_1) }}">
+                                <div id="nom-container">
+                                    @php $index = 1; @endphp
+                                    @forelse(json_decode($plan->avant_entreprise, true) as $entreprise)
+                                 
+                                        <div class="form-group nom-group mt-2">
+                                            <label>{{ $index }}- Nom:</label>
+                                            <div class="d-flex">
+                                                <input type="text" name="avant_entreprise[]" class="form-control me-2" value="{{ $entreprise['name'] }}">
+                                                <button type="button" class="btn btn-danger btn-sm remove-nom {{ $index == 1 ? 'd-none' : '' }}">Remove</button>
+                                            </div>
+                                        </div>
+                                        @php $index++; @endphp
+                                    @empty
+                                        <div class="form-group nom-group mt-2">
+                                            <label>1- Nom:</label>
+                                            <div class="d-flex">
+                                                <input type="text" name="avant_entreprise[]" class="form-control me-2">
+                                                <button type="button" class="btn btn-danger btn-sm remove-nom d-none">Remove</button>
+                                            </div>
+                                        </div>
+                                    @endforelse
                                 </div>
-                                <div class="form-group">
-                                    <label>2- Nom:</label>
-                                    <input type="text" name="before_company_2" class="form-control" value="{{ old('before_company_2', $plan->before_company_2) }}">
-                                </div>
-                                <div class="form-group">
-                                    <label>3- Nom:</label>
-                                    <input type="text" name="before_company_3" class="form-control" value="{{ old('before_company_3', $plan->before_company_3) }}">
+
+                                <div class="form-group mt-2">
+                                    <button type="button" id="add-nom" class="btn btn-outline-dark btn-sm">Add More</button>
                                 </div>
                             </div>
+
                             <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
                             <div class="col-md-6">
                                 <h6>RESPONSABLE DE LA STATION OU SON REPRÉSENTANT</h6>
@@ -299,21 +335,33 @@
 
                         <div class="row">
                             <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
-                            <div class="col-md-6">
-                                <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
-                                <div class="form-group">
-                                    <label>1. Nom:</label>
-                                    <input type="text" name="after_company_1_name" class="form-control" value="{{ old('after_company_1_name', $plan->after_company_1_name) }}">
-                                    <label>Date:</label>
-                                    <input type="date" name="after_company_1_date" class="form-control" value="{{ old('after_company_1_date', $plan->after_company_1_date ? $plan->after_company_1_date->format('Y-m-d') : '') }}">
-                                </div>
-                                <div class="form-group">
-                                    <label>2. Nom:</label>
-                                    <input type="text" name="after_company_2_name" class="form-control" value="{{ old('after_company_2_name', $plan->after_company_2_name) }}">
-                                    <label>Date:</label>
-                                    <input type="date" name="after_company_2_date" class="form-control" value="{{ old('after_company_2_date', $plan->after_company_2_date ? $plan->after_company_2_date->format('Y-m-d') : '') }}">
-                                </div>
+                        <div class="col-md-6">
+                            <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
+                            <div id="apres-container">
+                                @foreach (json_decode($plan->company_nom_date, true) as $index => $entreprise)
+                                    <div class="form-group apres-group mt-2">
+                                        <label>{{ $index + 1 }}. Nom:</label>
+                                        <input type="text" name="apres_entreprise_nom[]" class="form-control"
+                                            value="{{ $entreprise['name'] ?? '' }}">
+
+                                        <label>Date:</label>
+                                        <input type="date" name="apres_entreprise_date[]" class="form-control"
+                                            value="{{ $entreprise['date'] ?? '' }}">
+
+                                        @if($index > 0)
+                                            <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres">Remove</button>
+                                        @else
+                                            <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres d-none">Remove</button>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
+
+                            <div class="form-group mt-2">
+                                <button type="button" id="add-apres" class="btn btn-outline-dark btn-sm">Add More</button>
+                            </div>
+                        </div>
+
                             <!-- RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT) -->
                             <div class="col-md-6">
                                 <h6>RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT)</h6>
@@ -343,4 +391,67 @@
         </div>
     </div>
 </div>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let nomIndex = {{ isset($index) ? $index : 2 }};
+
+$('#add-nom').on('click', function () {
+    let newInput = `
+        <div class="form-group nom-group mt-2">
+            <label>${nomIndex}- Nom:</label>
+            <div class="d-flex">
+                <input type="text" name="avant_entreprise[]" class="form-control me-2">
+                <button type="button" class="btn btn-danger btn-sm remove-nom">Remove</button>
+            </div>
+        </div>
+    `;
+    $('#nom-container').append(newInput);
+    nomIndex++;
+});
+
+$(document).on('click', '.remove-nom', function () {
+    $(this).closest('.nom-group').remove();
+});
+    let apresIndex = {{ count(json_decode($plan->company_nom_date, true)) + 1 }};
+
+    $('#add-apres').on('click', function () {
+        let newInput = `
+            <div class="form-group apres-group mt-2">
+                <label>${apresIndex}. Nom:</label>
+                <input type="text" name="apres_entreprise_nom[]" class="form-control">
+                <label>Date:</label>
+                <input type="date" name="apres_entreprise_date[]" class="form-control">
+                <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres">Remove</button>
+            </div>
+        `;
+        $('#apres-container').append(newInput);
+        apresIndex++;
+    });
+
+    $(document).on('click', '.remove-apres', function () {
+        $(this).closest('.apres-group').remove();
+    });
+
+    let companyIndex = {{ $i ?? 1 }};
+
+    $('#add-company-name').on('click', function () {
+        let newRow = `
+            <tr>
+                <td><input type="text" name="external_company[${companyIndex}]" class="form-control"></td>
+                <td><input type="text" name="main_company[${companyIndex}]" class="form-control"></td>
+                <td><input type="text" name="subcontractor[${companyIndex}]" class="form-control"></td>
+                <td><input type="text" name="intervenant[${companyIndex}]" class="form-control"></td>
+                <td><button type="button" class="btn btn-danger btn-sm remove-company">Remove</button></td>
+            </tr>
+        `;
+        $('#company-body').append(newRow);
+        companyIndex++;
+    });
+
+    $(document).on('click', '.remove-company', function () {
+        $(this).closest('tr').remove();
+    });
+
+</script>
 </x-app-layout>

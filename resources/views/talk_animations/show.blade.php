@@ -38,8 +38,8 @@
                                     <thead class="bg-indigo-100 text-indigo-800">
                                         <tr>
                                             <th class="px-4 py-2 border border-gray-300 text-left">#</th>
-                                            <th class="px-4 py-2 border border-gray-300 text-left">Name</th>
-                                            <th class="px-4 py-2 border border-gray-300 text-left">Signature</th>
+                                            <th class="px-4 py-2 border border-gray-300 text-left">Nom</th>
+                                            <th class="px-4 py-2 border border-gray-300 text-left">Prénom</th>
                                         </tr>
                                     </thead>
                                     <tbody>

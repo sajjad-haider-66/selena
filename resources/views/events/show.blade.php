@@ -37,8 +37,8 @@
         }
 
         .category-title {
-            background-color: #007bff;
-            color: white;
+            background-color: #dcdcdc;
+            color: black;
             padding: 8px;
             border-radius: 4px;
             margin-bottom: 5px;
