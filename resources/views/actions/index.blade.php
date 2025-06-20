@@ -120,11 +120,11 @@
                             <div class="progress-bar">
                                 <div class="progress-fill" style="width: {{ $progress }}%">{{ $progress }}%</div>
                             </div>
-                          <div class="mt-2">
+                        <div class="mt-2">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Rechercher action, source, pilote...">
+                                <input type="text" id="customSearch" class="form-control" placeholder="Rechercher action, source, pilote...">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">Filtrer/Rechercher</button>
+                                    <button class="btn btn-primary" type="button" id="filterBtn">Filtrer/Rechercher</button>
                                 </div>
                             </div>
                         </div>
@@ -212,10 +212,27 @@
     <script>
         $(document).ready(function() {
             // Initialize DataTable
-            $('#actionsTable').DataTable({
+           let table = $('#actionsTable').DataTable({
                 responsive: true,
                 "lengthChange": false,
                 scrollX: true,
+            });
+
+            // Search on button click
+            $('#filterBtn').on('click', function () {
+                let query = $('#customSearch').val();
+                table.search(query).draw();
+            });
+
+            // Optional: search on "Enter" key
+            $('#customSearch').on('keyup', function (e) {
+                if (e.key === 'Enter') {
+                    $('#filterBtn').click();
+                }
+                // Optional: Live clear as you type
+                if ($(this).val() === '') {
+                    table.search('').draw(); // clear filter and show all
+                }
             });
 
             $('.save-actions-btn').on('click', function () {
