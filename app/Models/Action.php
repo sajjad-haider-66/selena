@@ -82,7 +82,7 @@ class Action extends Model
         $this->progress_rate = min($progress, 100);
 
         // Calculate efficiency
-        $this->efficiency = ($this->progress_rate >= 80) ? 'O (Effective)' : 'N (Not effective)';
+        $this->efficiency = ($this->progress_rate >= 80) ? 'O' : 'N';
 
         $this->save();
     }

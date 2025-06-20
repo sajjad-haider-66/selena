@@ -244,6 +244,7 @@
                                 position: 'top-right',
                                 duration: 3000,
                             });
+                            location.reload();
                         }
                     },
                     error: function(xhr) {

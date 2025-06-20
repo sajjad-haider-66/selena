@@ -133,7 +133,6 @@
                     <div class="card shadow-sm border-0 mt-4">
                         <div class="card-header text-black d-flex justify-content-between align-items-center head-read">
                             <h4 class="mb-0">{{ $category ?: 'Uncategorized' }} Checklist</h4>
-                            <span class="badge bg-light text-dark">Total Energies</span>
                         </div>
                         <div class="card-body">
                             <div id="success-message-{{ \Illuminate\Support\Str::slug($category) }}" class="alert alert-success"></div>
