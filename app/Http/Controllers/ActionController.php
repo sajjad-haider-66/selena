@@ -155,6 +155,10 @@ class ActionController extends Controller
             'checked_on' => $request->checked_on,
             'comments' => $request->comments,
         ]); 
+
+        // Calculate and save progress rate
+        $action->calculateProgressRate();
+        
         // Return a success response
         return $this->success('Action updated successfully', ['success' => true, 'data' => null]);
     }
