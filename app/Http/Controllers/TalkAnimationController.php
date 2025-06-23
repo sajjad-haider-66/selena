@@ -117,7 +117,7 @@ class TalkAnimationController extends Controller
                 'due_date' => now()->addDays(7),
                 'progress_rate' => 0,
                 'efficiency' => 'N',
-                'type' => 'Immediate',
+                'type' => $actions[0]['type'] ?? now()->addDays(7),
                 'comments' => 'Action generated from event',
             ]);
         } 
