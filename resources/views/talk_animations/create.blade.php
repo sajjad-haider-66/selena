@@ -203,18 +203,20 @@
                                 <th width="35%">Action(s) à mettre en place</th>
                                 <th width="20%">Responsable</th>
                                 <th width="20%">Délai</th>
-                                <th width="5%">I</th>
-                                <th width="5%">C</th>
-                                <th width="5%">P</th>
+                                <th width="15%">Type d'Action</th>
                                 {{-- <th width="5%">Remove</th> --}}
                             </tr>
                             <tr class="action-row">
-                                <td><input type="text" name="action[0]"></td>
-                                <td><input type="text" name="responsable[0]"></td>
-                                <td><input type="date" name="delai[0]"></td>
-                                <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="0"></td>
-                                <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="0"></td>
-                                <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="0"></td>
+                                <td><input type="text" name="actions[0][action]"></td>
+                                <td><input type="text" name="actions[0][responsable]"></td>
+                                <td><input type="date" name="actions[0][delai]"></td>
+                                <td>
+                                    <select name="actions[0][type]" class="form-select">
+                                        <option value="I">Imméd. (I)</option>
+                                        <option value="C">Corrective (C)</option>
+                                        <option value="P">Préventive (P)</option>
+                                    </select>
+                                </td>
                                 {{-- <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td> --}}
                             </tr>
                         </table>
@@ -264,12 +266,16 @@
                 actionCount++;
                 const newAction = `
                     <tr class="action-row">
-                        <td><input type="text" name="action[${actionCount}]"></td>
-                        <td><input type="text" name="responsable[${actionCount}]"></td>
-                        <td><input type="date" name="delai[${actionCount}]"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="${actionCount}"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="${actionCount}"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="${actionCount}"></td>
+                        <td><input type="text" name="actions[${actionCount}][action]"></td>
+                        <td><input type="text" name="actions[${actionCount}][responsable]"></td>
+                        <td><input type="date" name="actions[${actionCount}][delai]"></td>
+                        <td>
+                            <select name="actions[${actionCount}][type]" class="form-select">
+                                <option value="I">Imméd. (I)</option>
+                                <option value="C">Corrective (C)</option>
+                                <option value="P">Préventive (P)</option>
+                            </select>
+                        </td>
                         <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
                     </tr>
                 `;

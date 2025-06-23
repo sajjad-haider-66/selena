@@ -60,12 +60,8 @@ class TalkAnimationController extends Controller
             'points' => 'nullable|string',
             'participant_name' => 'nullable|array',
             'participant_signature' => 'nullable|array',
-            'action' => 'nullable|array',
+            'actions' => 'nullable|array',
             'responsable' => 'nullable|array',
-            'delai' => 'nullable|array',
-            'immediate' => 'nullable|array',
-            'corrective' => 'nullable|array',
-            'preventive' => 'nullable|array',
         ]);
 
         // Process participants
@@ -81,24 +77,9 @@ class TalkAnimationController extends Controller
             }
         }
 
-        // Process actions
-        $actions = [];
-        if ($request->has('action')) {
-            foreach ($request->input('action') as $index => $actionDescription) {
-                if (!empty($actionDescription)) {
-                    $type = [];
-                    if (in_array($index, $request->input('immediate', []))) $type[] = 'I';
-                    if (in_array($index, $request->input('corrective', []))) $type[] = 'C';
-                    if (in_array($index, $request->input('preventive', []))) $type[] = 'P';
-                    $actions[] = [
-                        'description' => $actionDescription,
-                        'responsable' => $request->input('responsable')[$index] ?? '',
-                        'delai' => $request->input('delai')[$index] ?? '',
-                        'type' => implode(',', $type),
-                    ];
-                }
-            }
-        }
+        // Process actions array
+        $actions = $data['actions'] ?? [];
+        
 
         // Handle attachments (assuming file upload via AJAX)
         if ($request->hasFile('corrosive_image')) {

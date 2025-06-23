@@ -114,7 +114,7 @@
                         {{ __('Create Action') }}
                     </a>
                         
-                        <div class="header-yellow mb-2 p-2">Plan d'Actions Global SSE</div>
+                        <div class="header-yellow mt-5 mb-2 p-2">Plan d'Actions Global SSE</div>
                         <div class="mb-4">
                             <label class="block">Taux d'avancement global des actions</label>
                             <div class="progress-bar">
