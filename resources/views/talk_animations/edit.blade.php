@@ -177,7 +177,7 @@
                                 <th colspan="2">Participants</th>
                             </tr>
                             <tr>
-                                <th width="50%">NOM</th>
+                                <th width="50%">Nom</th>
                                 <th width="50%">Prénom</th>
                             </tr>
                             @foreach (json_decode($talk->participants, true) as $participant)
@@ -211,15 +211,19 @@
                                 <th width="5%">Remove</th>
                             </tr>
                             @foreach (json_decode($talk->actions, true) as $index => $action)
-                            <tr class="action-row">
-                                <td><input type="text" name="action[{{ $index }}]" value="{{ $action['description'] }}"></td>
-                                <td><input type="text" name="responsable[{{ $index }}]" value="{{ $action['responsable'] }}"></td>
-                                <td><input type="date" name="delai[{{ $index }}]" value="{{ $action['delai'] }}"></td>
-                                <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="{{ $index }}" value="0" {{ strpos($action['type'], 'I') !== false ? 'checked' : '' }}></td>
-                                <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="{{ $index }}" value="0" {{ strpos($action['type'], 'C') !== false ? 'checked' : '' }}></td>
-                                <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="{{ $index }}" value="0" {{ strpos($action['type'], 'P') !== false ? 'checked' : '' }}></td>
-                                <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
-                            </tr>
+                                <tr class="action-row">
+                                    <td><textarea name="actions[{{ $index }}][description]" class="form-control" required>{{ $action['description'] }}</textarea></td>
+                                    <td><input type="text" name="actions[{{ $index }}][responsable]" class="form-control" value="{{ $action['responsable'] }}" required></td>
+                                    <td><input type="date" name="actions[{{ $index }}][delai]" class="form-control" value="{{ $action['delai'] }}" required></td>
+                                    <td>
+                                        <select name="actions[{{ $index }}][type]" class="form-select" required>
+                                            <option value="I" {{ $action['type'] == 'I' ? 'selected' : '' }}>Imméd. (I)</option>
+                                            <option value="C" {{ $action['type'] == 'C' ? 'selected' : '' }}>Corrective (C)</option>
+                                            <option value="P" {{ $action['type'] == 'P' ? 'selected' : '' }}>Préventive (P)</option>
+                                        </select>
+                                    </td>
+                                    <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>
+                                </tr>
                             @endforeach
                         </table>
                         <button type="button" id="add-action" class="btn btn-outline-dark btn-sm mt-2">Add Action</button>
@@ -247,12 +251,16 @@
                 actionCount++;
                 const newAction = `
                     <tr class="action-row">
-                        <td><input type="text" name="action[${actionCount}]"></td>
-                        <td><input type="text" name="responsable[${actionCount}]"></td>
-                        <td><input type="date" name="delai[${actionCount}]"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="immediate[]" value="${actionCount}"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="corrective[]" value="${actionCount}"></td>
-                        <td style="text-align:center;"><input type="checkbox" name="preventive[]" value="${actionCount}"></td>
+                        <td><input type="text" name="actions[${actionCount}][action]"></td>
+                        <td><input type="text" name="actions[${actionCount}][responsable]"></td>
+                        <td><input type="date" name="actions[${actionCount}][delai]"></td>
+                        <td>
+                            <select name="actions[${actionCount}][type]" class="form-select">
+                                <option value="I">Imméd. (I)</option>
+                                <option value="C">Corrective (C)</option>
+                                <option value="P">Préventive (P)</option>
+                            </select>
+                        </td>
                         <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
                     </tr>
                 `;
@@ -264,9 +272,8 @@
                 $(this).closest('tr').remove();
             });
 
-
             let animCount = 0;
-
+            
             // Add anim Dynamically
             $('#add-animateur').on('click', function () {
                 animCount++;
