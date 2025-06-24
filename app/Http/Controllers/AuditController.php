@@ -59,43 +59,44 @@ class AuditController extends Controller
             'auditeur' => 'required|string',
             'intervenant' => 'required|string',
             'responses' => 'nullable|array',
-            // 'culture_sse' => 'required|in:++,+,-=/,-,--',
+            'culture_sse_level_hidden' => 'nullable|string',
+            'culture_sse_hidden' => 'nullable|string',
             'actions' => 'nullable|array',
         ]);
 
         // Calculate score based on responses
-        $totalScore = 0;
-        if ($request->has('responses')) {
-            foreach ($request->input('responses') as $response) {
-                $note = $response['note'] ?? '';
-                switch ($note) {
-                    case 'TS':
-                        $totalScore += 2;
-                        break;
-                    case 'S':
-                        $totalScore += 1;
-                        break;
-                    case 'IS':
-                        $totalScore -= 1;
-                        break;
-                    case 'SO':
-                        $totalScore += 0;
-                        break;
-                }
-            }
-        }
+        // $totalScore = 0;
+        // if ($request->has('responses')) {
+        //     foreach ($request->input('responses') as $response) {
+        //         $note = $response['note'] ?? '';
+        //         switch ($note) {
+        //             case 'TS':
+        //                 $totalScore += 2;
+        //                 break;
+        //             case 'S':
+        //                 $totalScore += 1;
+        //                 break;
+        //             case 'IS':
+        //                 $totalScore -= 1;
+        //                 break;
+        //             case 'SO':
+        //                 $totalScore += 0;
+        //                 break;
+        //         }
+        //     }
+        // }
 
         // Calculate QSER score based on range
-        $qserScore = $totalScore;
-        if ($qserScore >= 12) {
-            $cultureQser = '++';
-        } elseif ($qserScore >= 0) {
-            $cultureQser = '+';
-        } elseif ($qserScore >= -12) {
-            $cultureQser = '-';
-        } else {
-            $cultureQser = '--';
-        }
+        // $qserScore = $totalScore;
+        // if ($qserScore >= 12) {
+        //     $cultureQser = '++';
+        // } elseif ($qserScore >= 0) {
+        //     $cultureQser = '+';
+        // } elseif ($qserScore >= -12) {
+        //     $cultureQser = '-';
+        // } else {
+        //     $cultureQser = '--';
+        // }
 
         // Process responses array
         $responses = [];
@@ -120,8 +121,8 @@ class AuditController extends Controller
             'auditeur' => $data['auditeur'],
             'intervenant' => $data['intervenant'],
             'responses' => json_encode($responses),
-            'culture_sse' => $cultureQser, // Updated with calculated QSER
-            'qser_score' => $qserScore,   // Added QSER score
+            'culture_sse' => $data['culture_sse_level_hidden'], // Updated with calculated QSER
+            'qser_score' => $data['culture_sse_hidden'],   // Added QSER score
             'actions' => json_encode($actions),
         ]);
 
@@ -191,7 +192,8 @@ class AuditController extends Controller
             'auditeur' => 'required|string',
             'intervenant' => 'required|string',
             'responses' => 'nullable|array',
-            // 'culture_sse' => 'required|in:++,+,-=/,-,--',
+            'culture_sse_level_hidden' => 'nullable|string',
+            'culture_sse_hidden' => 'nullable|string',
             'actions' => 'nullable|array',
         ]);
 
@@ -256,8 +258,8 @@ class AuditController extends Controller
             'auditeur' => $data['auditeur'],
             'intervenant' => $data['intervenant'],
             'responses' => $responses, // Laravel will JSON encode due to $casts
-            'culture_sse' => $cultureQser, // Updated with calculated QSER
-            'qser_score' => $qserScore,   // Updated QSER score
+            'culture_sse' => $data['culture_sse_level_hidden'], // Updated with calculated QSER
+            'qser_score' => $data['culture_sse_hidden'],   // Added QSER score
             'actions' => $actions,        // Laravel will JSON encode due to $casts
         ]);
 

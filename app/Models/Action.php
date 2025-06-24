@@ -53,37 +53,45 @@ class Action extends Model
     }
 
     public function calculateProgressRate()
-    {
-        $progress = 0;
+        {
+            $progress = 0;
 
-        // Base progress rates
-        if ($this->start_date) $progress += 25; // Action Started On -> 25%
-        if ($this->end_date) $progress += 25;   // Action Completed On -> 25%
-        if ($this->checked_on) $progress += 20; // Action Verified On -> 20%
+            // Base progress rates
+            if ($this->start_date) $progress += 25; // Action Started On -> 25%
+            if ($this->end_date) $progress += 25;   // Action Completed On -> 25%
+            if ($this->checked_on) $progress += 20; // Action Verified On -> 20%
 
-        // Emission Date + Deadline logic
-        $emissionDate = Carbon::parse($this->start_date);
-        $deadlineDate = Carbon::parse($this->due_date);
-        $completionDate = $this->end_date ? Carbon::parse($this->end_date) : null;
+            // Emission Date + Deadline logic
+            $emissionDate = Carbon::parse($this->start_date);
+            $dueDate = Carbon::parse($this->due_date);
+            $completionDate = $this->end_date ? Carbon::parse($this->end_date) : null;
+            $checkedDate = $this->checked_on ? Carbon::parse($this->checked_on) : null;
 
-        if ($completionDate) {
-            $deadlineEnd = $emissionDate->copy()->addDays($deadlineDate->diffInDays($emissionDate));
-            
-            if ($completionDate->lte($deadlineEnd) && $this->checked_on) {
-                $progress = 100; // Progress = 100% if completed on time and verified
-            } elseif ($completionDate->lte($deadlineEnd) && !$this->checked_on) {
-                $progress = 80;  // Progress = 80% if completed on time but not verified
-            } elseif ($completionDate->gt($deadlineEnd) && $this->checked_on) {
-                $progress = 70;  // Progress = 70% if completed late but verified
+            // Calculate deadline end (emission date + due date duration)
+            $deadlineEnd = $emissionDate->copy()->addDays($dueDate->diffInDays($emissionDate));
+
+            if ($completionDate && $checkedDate) {
+                if ($completionDate->lte($deadlineEnd) && $checkedDate) {
+                    $progress = 100; // Completed on time and verified
+                } elseif ($completionDate->lte($deadlineEnd) && !$checkedDate) {
+                    $progress = 80;  // Completed on time but not verified
+                } elseif ($completionDate->gt($deadlineEnd) && $checkedDate) {
+                    $progress = 70;  // Completed late but verified
+                } elseif ($completionDate->gt($deadlineEnd) && !$checkedDate) {
+                    $progress = 70;  // Completed late but not verified (assuming 70% as per rules)
+                }
+            } elseif (!$completionDate && !$checkedDate && $this->start_date) {
+                $progress = 25; // Only started
+            } elseif ($completionDate && !$checkedDate) {
+                $progress = 50; // Completed but not verified (25% + 25%)
             }
+
+            // Ensure progress doesn't exceed 100
+            $this->progress_rate = min($progress, 100);
+
+            // Calculate efficiency
+            $this->efficiency = ($this->progress_rate >= 80) ? 'O' : 'N';
+
+            $this->save();
         }
-
-        // Ensure progress doesn't exceed 100
-        $this->progress_rate = min($progress, 100);
-
-        // Calculate efficiency
-        $this->efficiency = ($this->progress_rate >= 80) ? 'O' : 'N';
-
-        $this->save();
     }
-}

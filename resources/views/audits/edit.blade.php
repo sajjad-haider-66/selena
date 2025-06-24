@@ -189,15 +189,16 @@
                         </div>
 
                         <h5>Culture SSE terrain</h5>
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             @foreach(['++', '+', '=/-', '-', '--'] as $val)
                                 <div class="form-check form-check-inline">
-                                    {{-- <input class="form-check-input" type="radio" name="culture_sse" value="{{ $val }}" id="culture_{{ $val }}" {{ $audit->culture_sse == $val ? 'checked' : '' }} required> --}}
                                     <label class="form-check-label" for="culture_{{ $val }}">{{ $val }}</label>
                                 </div>
                             @endforeach
-                        </div>
+                        </div> --}}
                         <p id="qser-display" class="mt-2"></p>
+                        <input type="hidden" name="culture_sse_hidden" value="{{$audit->qser_score ?? ''}}">
+                        <input type="hidden" name="culture_sse_level_hidden" value="{{$audit->culture_sse ?? ''}}">
 
                         <h5 class="mt-4">Actions à mettre en place</h5>
                         <div id="actions-container" class="table-responsive mb-3">
@@ -328,5 +329,64 @@
                 });
             });
         });
+    $(document).ready(function() {
+        // Initial display and hidden input population
+        let initialScore = parseFloat($('input[name="culture_sse_hidden"]').val()) || 0;
+        let initialLevel = $('input[name="culture_sse_level_hidden"]').val() || '--';
+        $('#qser-display').text(`Final Score: ${initialScore.toFixed(2)}% - Culture SSE Level: ${initialLevel}`);
+
+        $('input[type="radio"]').change(function() {
+            calculateScore();
+        });
+
+        function calculateScore() {
+            let totalWeightedScore = 0;
+            let totalMaxWeightedScore = 0;
+
+            $('tbody tr').each(function() {
+                let $row = $(this);
+                let selectedScore = $row.find('input[type="radio"]:checked').val();
+                let $sectionRow = $row.prevAll('tr.fw-bold:first');
+                let section = $sectionRow.length ? $sectionRow.find('td').text().trim() : '';
+
+                let score = 0;
+                if (selectedScore) {
+                    switch(selectedScore) {
+                        case 'TS': score = 100; break;
+                        case 'S': score = 75; break;
+                        case 'IS': score = 25; break;
+                        case 'SO': score = 0; break;
+                    }
+                }
+
+                let coefficient = 0;
+                switch(section) {
+                    case "L'intervenant et son métier": coefficient = 1; break;
+                    case "L'intervenant et ses moyens": coefficient = 3; break;
+                    case "L'intervenant et son environnement": coefficient = 3; break;
+                    case "L'intervenant et son relationnel": coefficient = 2; break;
+                }
+
+                let answeredQuestions = selectedScore ? 1 : 0;
+                totalWeightedScore += score * coefficient * answeredQuestions;
+                totalMaxWeightedScore += 100 * coefficient * answeredQuestions;
+            });
+
+            let finalScore = totalMaxWeightedScore > 0 ? (totalWeightedScore / totalMaxWeightedScore) * 100 : 0;
+            let cultureLevel = getCultureLevel(finalScore);
+
+            $('#qser-display').text(`Final Score: ${finalScore.toFixed(2)}% - Culture SSE Level: ${cultureLevel}`);
+            $('input[name="culture_sse_hidden"]').val(finalScore.toFixed(2));
+            $('input[name="culture_sse_level_hidden"]').val(cultureLevel);
+        }
+
+        function getCultureLevel(score) {
+            if (score >= 90) return '++';
+            if (score >= 75) return '+';
+            if (score >= 50) return '=/-';
+            if (score >= 25) return '-';
+            return '--';
+        }
+    });
     </script>
 </x-app-layout>
