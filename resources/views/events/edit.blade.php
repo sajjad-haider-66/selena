@@ -124,6 +124,7 @@
                         <div class="form-group">
                             <label class="form-label">Circonstances détaillées</label>
                             <input type="file" name="image" id="image" accept="image/*" class="form-control mb-2">
+                            <textarea name="circonstances" rows="3" class="form-control" placeholder="Enter image description...">{{ $event->circonstances ?? '' }}</textarea>
                         </div>
 
                         <div class="form-group">
@@ -274,6 +275,13 @@
                                     @endphp
                                     <textarea name="propositions[0]" class="form-control" rows="2">{{ $propositions[0] ?? '' }}</textarea>
                                 </div>
+                                <div class="form-group">
+                                       <!-- Risk Calculation Display -->
+                                    <div id="riskDisplay" class="mt-3">
+                                        Cotation du risque : <span id="riskValue"></span>
+                                        <div id="riskMessage"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -315,9 +323,9 @@
                                             <td><input type="date" name="actions[{{ $index }}][deadline]" class="form-control" value="{{ $action['deadline'] ?? '' }}"></td>
                                             <td>
                                                 <select name="actions[{{ $index }}][type]" class="form-select">
-                                                    <option value="I" {{ ($action['type'] ?? '') == 'I' ? 'selected' : '' }}>Immédiate (I)</option>
-                                                    <option value="C" {{ ($action['type'] ?? '') == 'C' ? 'selected' : '' }}>Corrective (C)</option>
-                                                    <option value="P" {{ ($action['type'] ?? '') == 'P' ? 'selected' : '' }}>Préventive (P)</option>
+                                                    <option value="Immediate" {{ ($action['type'] ?? '') == 'Immediate' ? 'selected' : '' }}>Immédiate (I)</option>
+                                                    <option value="Corrective" {{ ($action['type'] ?? '') == 'Corrective' ? 'selected' : '' }}>Corrective (C)</option>
+                                                    <option value="Preventive" {{ ($action['type'] ?? '') == 'Preventive' ? 'selected' : '' }}>Préventive (P)</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -326,7 +334,7 @@
                             </table>
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label class="form-label">Attachments (Photos/Videos)</label>
                             <input type="file" name="attachments[]" multiple class="form-control">
                             @if ($event->attachments)
@@ -339,7 +347,7 @@
                                     </div>
                                 @endforeach
                             @endif
-                        </div>
+                        </div> --}}
 
                        <div class="mt-6">
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">
@@ -347,11 +355,6 @@
                             </button>
                         </div>
                     </form>
-                    <!-- Risk Calculation Display -->
-                    <div id="riskDisplay" class="mt-3">
-                        Cotation du risque : <span id="riskValue"></span>
-                        <div id="riskMessage"></div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -383,9 +386,9 @@
                         <td><input type="date" name="actions[${actionCount}][delai]" class="form-control" id="deadline${actionCount}" required></td>
                         <td>
                             <select name="actions[${actionCount}][type]" class="form-select" required>
-                                <option value="I">Imméd. (I)</option>
-                                <option value="C">Corrective (C)</option>
-                                <option value="P">Préventive (P)</option>
+                                <option value="Immediate">Imméd. (I)</option>
+                                <option value="Corrective">Corrective (C)</option>
+                                <option value="Preventive">Préventive (P)</option>
                             </select>
                         </td>
                         <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>

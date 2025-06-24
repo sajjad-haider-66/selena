@@ -166,6 +166,8 @@
                                 <td colspan="4">
                                     <div>
                                          <input type="file" name="corrosive_image" accept="image/*" class="form-control mb-2">
+                                         <!-- Textarea for Description -->
+                                        <textarea name="commentaires" rows="3" class="form-control" placeholder="Enter image description...">{{ $talk->commentaires }}</textarea>
                                     </div>
                                 </td>
                             </tr>
@@ -205,21 +207,19 @@
                                 <th width="35%">Action(s) à mettre en place</th>
                                 <th width="20%">Responsable</th>
                                 <th width="20%">Délai</th>
-                                <th width="5%">I</th>
-                                <th width="5%">C</th>
-                                <th width="5%">P</th>
+                                <th width="15%">Type d'Action</th>
                                 <th width="5%">Remove</th>
                             </tr>
                             @foreach (json_decode($talk->actions, true) as $index => $action)
                                 <tr class="action-row">
-                                    <td><textarea name="actions[{{ $index }}][description]" class="form-control" required>{{ $action['description'] }}</textarea></td>
+                                    <td><textarea name="actions[{{ $index }}][action]" class="form-control" required>{{ $action['action'] }}</textarea></td>
                                     <td><input type="text" name="actions[{{ $index }}][responsable]" class="form-control" value="{{ $action['responsable'] }}" required></td>
                                     <td><input type="date" name="actions[{{ $index }}][delai]" class="form-control" value="{{ $action['delai'] }}" required></td>
                                     <td>
                                         <select name="actions[{{ $index }}][type]" class="form-select" required>
-                                            <option value="I" {{ $action['type'] == 'I' ? 'selected' : '' }}>Imméd. (I)</option>
-                                            <option value="C" {{ $action['type'] == 'C' ? 'selected' : '' }}>Corrective (C)</option>
-                                            <option value="P" {{ $action['type'] == 'P' ? 'selected' : '' }}>Préventive (P)</option>
+                                            <option value="Immediate" {{ $action['type'] == 'Immediate' ? 'selected' : '' }}>Imméd. (I)</option>
+                                            <option value="Corrective" {{ $action['type'] == 'Corrective' ? 'selected' : '' }}>Corrective (C)</option>
+                                            <option value="Preventive" {{ $action['type'] == 'Preventive' ? 'selected' : '' }}>Préventive (P)</option>
                                         </select>
                                     </td>
                                     <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>
@@ -256,9 +256,9 @@
                         <td><input type="date" name="actions[${actionCount}][delai]"></td>
                         <td>
                             <select name="actions[${actionCount}][type]" class="form-select">
-                                <option value="I">Imméd. (I)</option>
-                                <option value="C">Corrective (C)</option>
-                                <option value="P">Préventive (P)</option>
+                                <option value="Immediate">Imméd. (I)</option>
+                                <option value="Corrective">Corrective (C)</option>
+                                <option value="Preventive">Préventive (P)</option>
                             </select>
                         </td>
                         <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>

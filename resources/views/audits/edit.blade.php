@@ -219,9 +219,9 @@
                                             <td><input type="date" name="actions[{{ $key }}][delai]" class="form-control" value="{{ $action['delai'] }}" required></td>
                                             <td>
                                                 <select name="actions[{{ $key }}][type]" class="form-select" required>
-                                                    <option value="I" {{ $action['type'] == 'I' ? 'selected' : '' }}>Imméd. (I)</option>
-                                                    <option value="C" {{ $action['type'] == 'C' ? 'selected' : '' }}>Corrective (C)</option>
-                                                    <option value="P" {{ $action['type'] == 'P' ? 'selected' : '' }}>Préventive (P)</option>
+                                                    <option value="Immediate" {{ $action['type'] == 'Immediate' ? 'selected' : '' }}>Imméd. (I)</option>
+                                                    <option value="Corrective" {{ $action['type'] == 'Corrective' ? 'selected' : '' }}>Corrective (C)</option>
+                                                    <option value="Preventive" {{ $action['type'] == 'Preventive' ? 'selected' : '' }}>Préventive (P)</option>
                                                 </select>
                                             </td>
                                             <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>
@@ -261,9 +261,9 @@
                         <td><input type="date" name="actions[${actionCount}][delai]" class="form-control" required></td>
                         <td>
                             <select name="actions[${actionCount}][type]" class="form-select" required>
-                                <option value="I">Imméd. (I)</option>
-                                <option value="C">Corrective (C)</option>
-                                <option value="P">Préventive (P)</option>
+                                <option value="Immediate">Imméd. (I)</option>
+                                <option value="Corrective">Corrective (C)</option>
+                                <option value="Preventive">Préventive (P)</option>
                             </select>
                         </td>
                         <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>

@@ -174,8 +174,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (!empty($audit->actions) && is_array($audit->actions))
-                                    @foreach ($audit->actions as $action)
+                                 @php
+                                    $actions = json_decode($audit->actions, true) ?? [];
+                                @endphp
+                                @if (!empty($actions))
+                                    @foreach ($actions as $action)
                                         <tr class="action-row">
                                             <td>{{ $action['description'] ?? '' }}</td>
                                             <td>{{ $action['responsable'] ?? '' }}</td>

@@ -158,10 +158,15 @@
                             <tr>
                                 <td colspan="4">
                                     <div>
+                                        <!-- Image Upload -->
                                         <input type="file" name="corrosive_image" accept="image/*" class="form-control mb-2">
+
+                                        <!-- Textarea for Description -->
+                                        <textarea name="commentaires" rows="3" class="form-control" placeholder="Enter image description..."></textarea>
                                     </div>
                                 </td>
                             </tr>
+
                         </table>
                         
                         <!-- Participants Table -->
@@ -212,9 +217,9 @@
                                 <td><input type="date" name="actions[0][delai]"></td>
                                 <td>
                                     <select name="actions[0][type]" class="form-select">
-                                        <option value="I">Imméd. (I)</option>
-                                        <option value="C">Corrective (C)</option>
-                                        <option value="P">Préventive (P)</option>
+                                        <option value="Immediate">Imméd. (I)</option>
+                                        <option value="Corrective">Corrective (C)</option>
+                                        <option value="Preventive">Préventive (P)</option>
                                     </select>
                                 </td>
                                 {{-- <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td> --}}
@@ -271,9 +276,9 @@
                         <td><input type="date" name="actions[${actionCount}][delai]"></td>
                         <td>
                             <select name="actions[${actionCount}][type]" class="form-select">
-                                <option value="I">Imméd. (I)</option>
-                                <option value="C">Corrective (C)</option>
-                                <option value="P">Préventive (P)</option>
+                                <option value="Immediate">Imméd. (I)</option>
+                                <option value="Corrective">Corrective (C)</option>
+                                <option value="Preventive">Préventive (P)</option>
                             </select>
                         </td>
                         <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>

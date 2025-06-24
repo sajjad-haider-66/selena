@@ -55,6 +55,7 @@ class EventController extends Controller
             'lieu' => 'required|string',
             'type' => 'required',
             'emetteur' => 'nullable|string',
+            'circonstances' => 'nullable|string',
             'autre' => 'nullable|string',
             'autre_checkbox' => 'nullable|string',
             'risques' => 'nullable|string',
@@ -64,7 +65,7 @@ class EventController extends Controller
             'propositions' => 'nullable|array',
             'mesures' => 'nullable|array',
             'actions' => 'nullable|array',
-            'attachments' => 'nullable|array',
+            // 'attachments' => 'nullable|array',
         ]);
 
         // Calculate cotation
@@ -98,13 +99,13 @@ class EventController extends Controller
         }
 
         // Handle attachments (assuming file upload via AJAX)
-        $attachments = [];
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $path = $file->store('events', 'public');
-                $attachments[] = $path;
-            }
-        }
+        // $attachments = [];
+        // if ($request->hasFile('attachments')) {
+        //     foreach ($request->file('attachments') as $file) {
+        //         $path = $file->store('events', 'public');
+        //         $attachments[] = $path;
+        //     }
+        // }
 
          // Handle single image
         if ($request->hasFile('image')) {
@@ -124,6 +125,7 @@ class EventController extends Controller
             'risques' => $data['risques'],
             'autre' => $data['autre'],
             'autre_checkbox' => $data['autre_checkbox'],
+            'circonstances' => $data['circonstances'],
             'analyse' => json_encode($data['analyse'] ?? []),
             'cotation' => $cotation,
             'frequence' => $frequence,
@@ -132,7 +134,7 @@ class EventController extends Controller
             'propositions' => json_encode($data['propositions'] ?? []),
             'mesures' => json_encode($data['mesures'] ?? []),
             'actions' => json_encode($actions),
-            'attachments' => json_encode($attachments),
+            // 'attachments' => json_encode($attachments),
         ]);
 
         // Auto-generate Action
@@ -141,13 +143,12 @@ class EventController extends Controller
             'origin' => 'Evenement',
             'origin_view_id' => $event->id,
             'action_origin' => 'event',
-            'description' => 'Address ' . $data['risques'],
+            'description' =>  $actions[0]['description'] ?? 'Address ' . $data['risques'],
             'issued_date' => now(),
-            // 'type' => $actions[0]['type'] ?? 'Preventive',
+            'type' => $actions[0]['type'] ?? 'Preventive',
             'pilot_id' => $this->assignResponsible($event->type, $cotation),
-            'deadline' => $actions[0]['deadline'] ?? now()->addDays(7),
+            'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
             'json_data' => json_encode(['event_id' => $event->id, 'progress' => 0]),
-            'due_date' => now()->addDays(7),
             'progress_rate' => 0,
             'efficiency' => 'N',
             'comments' => 'Action generated from event',
@@ -217,8 +218,8 @@ class EventController extends Controller
             'propositions' => 'nullable|array',
             'mesures' => 'nullable|array',
             'actions' => 'nullable|array',
-            'attachments' => 'nullable|array',
-            'attachments.*' => 'file|mimes:jpg,jpeg,png,mp4,mov|max:20480', // 20MB max
+            // 'attachments' => 'nullable|array',
+            // 'attachments.*' => 'file|mimes:jpg,jpeg,png,mp4,mov|max:20480',
         ]);
 
         // Calculate cotation
@@ -252,15 +253,15 @@ class EventController extends Controller
         }
 
         // Handle attachments
-        $existingAttachments = json_decode($event->attachments, true) ?? [];
-        $newAttachments = [];
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $path = $file->store('events', 'public');
-                $newAttachments[] = $path;
-            }
-        }
-        $attachments = array_merge($existingAttachments, $newAttachments);
+        // $existingAttachments = json_decode($event->attachments, true) ?? [];
+        // $newAttachments = [];
+        // if ($request->hasFile('attachments')) {
+        //     foreach ($request->file('attachments') as $file) {
+        //         $path = $file->store('events', 'public');
+        //         $newAttachments[] = $path;
+        //     }
+        // }
+        // $attachments = array_merge($existingAttachments, $newAttachments);
 
         // Update event
         $event->update([
@@ -281,7 +282,7 @@ class EventController extends Controller
             'propositions' => json_encode($data['propositions'] ?? []),
             'mesures' => json_encode($data['mesures'] ?? []),
             'actions' => json_encode($actions),
-            'attachments' => json_encode($attachments),
+            // 'attachments' => json_encode($attachments),
         ]);
 
         // Update or create associated action

@@ -128,16 +128,17 @@ class AuditController extends Controller
         if ($actions) {
             Action::create([
                 'origin' => 'Audit',
+                'origin_view_id' => $audit->id,
+                'action_origin' => 'audit',
                 'action_number' => $this->random_number(),
-                'description' => 'audit description',
+                'description' => $actions[0]['description'] ??'audit description',
                 'issued_date' => now(),
                 'pilot_id' => auth()->user()->id ?? 0,
-                'deadline' => $actions[0]['delai'] ?? now()->addDays(7),
+                'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
                 'json_data' => json_encode(['audit_id' => $audit->id, 'progress' => 0]),
-                'due_date' => now()->addDays(7),
                 'progress_rate' => 0,
                 'efficiency' => 'N',
-                'type' => 'Immediate',
+                'type' => $actions[0]['type'] ?? now()->addDays(7),
                 'comments' => 'Action generated from audit',
             ]);
         } 

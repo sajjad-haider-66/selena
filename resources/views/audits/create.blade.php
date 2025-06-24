@@ -216,9 +216,9 @@
                                         <td><input type="date" name="actions[0][delai]" class="form-control"></td>
                                         <td>
                                             <select name="actions[0][type]" class="form-select">
-                                                <option value="I">Imméd. (I)</option>
-                                                <option value="C">Corrective (C)</option>
-                                                <option value="P">Préventive (P)</option>
+                                                <option value="Immediate">Imméd. (I)</option>
+                                                <option value="Corrective">Corrective (C)</option>
+                                                <option value="Preventive">Préventive (P)</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -256,9 +256,9 @@
                         <td><input type="date" name="actions[${actionCount}][delai]" class="form-control" required></td>
                         <td>
                             <select name="actions[${actionCount}][type]" class="form-select" required>
-                                <option value="I">Imméd. (I)</option>
-                                <option value="C">Corrective (C)</option>
-                                <option value="P">Préventive (P)</option>
+                                <option value="Immediate">Imméd. (I)</option>
+                                <option value="Corrective">Corrective (C)</option>
+                                <option value="Preventive">Préventive (P)</option>
                             </select>
                         </td>
                         <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>
@@ -322,6 +322,55 @@
                     }
                 });
             });
+        });
+        $(document).ready(function() {
+            $('input[type="radio"]').change(function() {
+                calculateScore();
+            });
+
+            function calculateScore() {
+                let totalWeightedScore = 0;
+                let totalMaxWeightedScore = 0;
+
+                $('tbody tr').each(function() {
+                    let $row = $(this);
+                    let selectedScore = $row.find('input[type="radio"]:checked').val();
+                    let section = $row.closest('tr.fw-bold').find('td').text();
+
+                    let score = 0;
+                    switch(selectedScore) {
+                        case 'TS': score = 100; break;
+                        case 'S': score = 75; break;
+                        case 'IS': score = 25; break;
+                        case 'SO': score = 0; break;
+                    }
+
+                    let coefficient = 0;
+                    switch(section) {
+                        case "L'intervenant et son métier": coefficient = 1; break;
+                        case "L'intervenant et ses moyens": coefficient = 3; break;
+                        case "L'intervenant et son environnement": coefficient = 3; break;
+                        case "L'intervenant et son relationnel": coefficient = 2; break;
+                    }
+
+                    let answeredQuestions = $row.find('input[type="radio"]:checked').length > 0 ? 1 : 0;
+                    totalWeightedScore += score * coefficient * answeredQuestions;
+                    totalMaxWeightedScore += 100 * coefficient * answeredQuestions;
+                });
+
+                let finalScore = totalMaxWeightedScore > 0 ? (totalWeightedScore / totalMaxWeightedScore) * 100 : 0;
+                let cultureLevel = getCultureLevel(finalScore);
+
+                $('#qser-display').text(`Final Score: ${finalScore.toFixed(2)}% - Culture SSE Level: ${cultureLevel}`);
+            }
+
+            function getCultureLevel(score) {
+                if (score >= 90) return '++';
+                if (score >= 75) return '+';
+                if (score >= 50) return '=/-';
+                if (score >= 25) return '-';
+                return '--';
+            }
         });
     </script>
 </x-app-layout>
