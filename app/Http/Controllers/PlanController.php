@@ -63,21 +63,9 @@ class PlanController extends Controller
             'travail.*' => 'string', // Each item in travail array is a string
             'work_nature_other' => 'nullable|string',
             'risques' => 'nullable|array',
-            'risques.*' => 'string',
             'risk_nature_other' => 'nullable|string',
-            'formations' => 'nullable|array',
-            'formations.*' => 'string',
-            'training_certifications_other' => 'nullable|string',
-            'before_date' => 'nullable|date',
-            'before_time' => 'nullable|date_format:H:i',
-            'before_responsible_name' => 'nullable|string|max:255',
-            'apres_travail_non_termine' => 'nullable|string', // 'on' or null
-            'new_authorization_date' => 'nullable|date',
             'company_nom_date' => 'nullable|array',
             'avant_entreprise' => 'nullable|array',
-            'after_responsible_date' => 'nullable|date',
-            'after_responsible_time' => 'nullable|date_format:H:i',
-            'after_responsible_name' => 'nullable|string|max:255',
         ];
 
         // Validate the request
@@ -151,19 +139,19 @@ class PlanController extends Controller
         
         // Map 'avant' fields
         $plan->avant_entreprise = $avantEntreprises ? json_encode($avantEntreprises) : null;
-        $plan->before_date = $request->input('before_date');
-        $plan->before_time = $request->input('before_time');
-        $plan->before_responsible_name = $request->input('before_responsible_name');
+        $plan->before_date = $request->input('avant_date');
+        $plan->before_time = $request->input('avant_heure');
+        $plan->before_responsible_name = $request->input('avant_responsable_nom');
         
         // Handle boolean for work_not_completed
-        $plan->work_not_completed = $request->input('apres_travail_non_termine') === 'on';
+        $plan->work_not_completed = $request->input('apres_travail_termine') === 'on';
         
         // Map 'apres' fields
-        $plan->new_authorization_date = $request->input('new_authorization_date');
+        $plan->new_authorization_date = $request->input('apres_nouvelle_autorisation');
         $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : null;
-        $plan->after_responsible_date = $request->input('after_responsible_date');
-        $plan->after_responsible_time = $request->input('after_responsible_time');
-        $plan->after_responsible_name = $request->input('after_responsible_name');
+        $plan->after_responsible_date = $request->input('apres_responsable_date');
+        $plan->after_responsible_time = $request->input('apres_responsable_heure');
+        $plan->after_responsible_name = $request->input('apres_responsable_nom');
 
         // Map boolean fields from travail array (if present)
         $travail = $request->input('travail', []);
@@ -209,7 +197,7 @@ class PlanController extends Controller
      // Update the plan
     public function update(Request $request, Plan $plan)
     {
-        
+
               // Define validation rules
         $rules = [
             // 'plan_number' => 'required|string|plan_number',

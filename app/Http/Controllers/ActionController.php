@@ -75,6 +75,7 @@ class ActionController extends Controller
             'comments' =>  $request->comment,
             'progress_rate' =>  $request->progress_percentage,
             'efficiency' =>  $request->effectiveness,
+            'emission' => now(),
         ]);
 
         return $this->success('Action Created Successfully', ['success' => true, 'data' => null]);

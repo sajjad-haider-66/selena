@@ -59,6 +59,9 @@ class Plan extends Model
         'fire_permit',
         'specific_permit',
         'other_permit',
+        'avant_date',
+        'avant_heure',
+        'avant_responsable_nom',
     ];
 
     protected $casts = [

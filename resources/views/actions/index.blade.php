@@ -164,7 +164,7 @@
                                             <td>{{ $action['id'] }}</td>
                                             <td>{{ $action['origin'] }}</td>
                                             <td>{{ $action['comments'] }}</td>
-                                            <td>{{ $action['start_date'] }}</td>
+                                            <td>{{ $action['emission'] }}</td>
                                             <td>{{ $action['description'] }}</td>
                                             <td>{{ $action['type'] }}</td>
                                             <td>{{ $action['pilot_id'] }}</td>

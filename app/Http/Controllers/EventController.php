@@ -145,6 +145,7 @@ class EventController extends Controller
             'action_origin' => 'event',
             'description' =>  $actions[0]['description'] ?? 'Address ' . $data['risques'],
             'issued_date' => now(),
+            'emission' => now(),
             'type' => $actions[0]['type'] ?? 'Preventive',
             'pilot_id' => $this->assignResponsible($event->type, $cotation),
             'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
@@ -333,6 +334,12 @@ class EventController extends Controller
     {
         $event = Event::FindOrFail($id);
         $event->delete();
+        // Check if related action exists
+        $delAction = Action::where('origin_view_id', $id)->first();
+
+        if ($delAction) {
+            $delAction->delete();
+        }
         return $this->success('Event Delete Successfully', ['success' => true, 'data' => null]);
     }
 }

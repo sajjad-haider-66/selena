@@ -134,6 +134,7 @@ class AuditController extends Controller
                 'action_number' => $this->random_number(),
                 'description' => $actions[0]['description'] ??'audit description',
                 'issued_date' => now(),
+                'emission' => now(),
                 'pilot_id' => auth()->user()->id ?? 0,
                 'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
                 'json_data' => json_encode(['audit_id' => $audit->id, 'progress' => 0]),
@@ -277,6 +278,12 @@ class AuditController extends Controller
     {
         $audit = Audit::FindOrFail($id);
         $audit->delete();
+        // Check if related action exists
+        $delAction = Action::where('origin_view_id', $id)->first();
+
+        if ($delAction) {
+            $delAction->delete();
+        }
         return $this->success('Audit Delete Successfully', ['success' => true, 'data' => null]);
     }
 
