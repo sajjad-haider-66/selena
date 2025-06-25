@@ -15,13 +15,10 @@
                             <td>{{ $plans->plan_number }}</td>
                         </tr>
                     </table>
+                    <h4>Nom de l'Entreprise</h4>
                     <table class="table table-bordered">
                         <thead>
-                            <tr>
-                                <th>Nom de l'Entreprise</th>
-                                <th>Entreprise principale</th>
-                                <th>Entreprise sous-traitante</th>
-                            </tr>
+                            
                         </thead>
                      @if($plans->company_name_detail)
                         @php
@@ -31,10 +28,10 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>External Company</th>
-                                    <th>Main Company</th>
-                                    <th>Subcontractor</th>
-                                    <th>Intervenant</th>
+                                    <th>Extérieure</th>
+                                    <th>Entreprise principale</th>
+                                    <th>Entreprise sous-traitante</th>
+                                    <th>Nom de l'intervenant</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,7 +63,7 @@
                         </tr>
                         <tr>
                             <td><strong>Description :</strong></td>
-                            <td colspan="3">{{ $plans->operation_description }}</td>
+                            <td colspan="3">{{ $plans->description }}</td>
                         </tr>
                         <tr>
                             <td><strong>N° mode opératoire :</strong></td>
@@ -81,7 +78,16 @@
                     <h4>RISQUES D'INTERFÉRENCE AVEC L'OPÉRATION</h4>
                     <table class="table table-bordered">
                         <tr>
-                            <td>{{ $plans->interference_risks }}</td>
+                            <td>Dépotage prévu à :</td>
+                            <td>{{ old('depotage_time', $plans->depotage_time ? $plans->depotage_time->format('H:i') : '') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Présence dans la zone de Travail de :</td>
+                            <td>{{ old('presence_zone', $plans->presence_zone) }}</td>
+                        </tr>
+                        <tr>
+                            <td>Autres travaux prévus ce jour :</td>
+                            <td>{{ old('other_works', $plans->other_works) }}</td>
                         </tr>
                     </table>
                 </div>
@@ -210,42 +216,83 @@
                     </table>
                 </div>
 
-                <div class="form-section">
-                    <h4>PERMIS ET DOCUMENTS</h4>
-                    <table class="table table-bordered">
-                        <tr>
-                            <td><strong>PIR/PIRL :</strong> {{ $plans->pir_pirl ? 'Yes' : 'No' }}</td>
-                            <td><strong>Document Technique Amiante :</strong>
-                                {{ $plans->technical_document ? 'Yes' : 'No' }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Grue :</strong> {{ $plans->crane ? 'Yes' : 'No' }}</td>
-                            <td><strong>Déclaration d'intention de Commencement de Travaux :</strong>
-                                {{ $plans->work_start_declaration ? 'Yes' : 'No' }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Échafaudage :</strong> {{ $plans->scaffolding ? 'Yes' : 'No' }}</td>
-                            <td><strong>Plans de Réseaux :</strong> {{ $plans->network_plans ? 'Yes' : 'No' }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Certificat de dégazage :</strong>
-                                {{ $plans->degassing_certificate ? 'Yes' : 'No' }}</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Permis de feu :</strong></td>
-                            <td>{{ $plans->fire_permit }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Permis spécifique :</strong></td>
-                            <td>{{ $plans->specific_permit }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Autres (préciser) :</strong></td>
-                            <td>{{ $plans->other_permit }}</td>
-                        </tr>
-                    </table>
-                </div>
+           <!-- VALIDATION AVANT LES TRAVAUX -->
+<div class="card mb-4">
+    <div class="text-center card-header font-weight-bold">
+        VALIDATION AVANT LES TRAVAUX
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
+            <div class="col-md-6">
+                <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
+                @php $index = 1; @endphp
+                @forelse(json_decode($plans->avant_entreprise, true) as $entreprise)
+                    <p class="mb-2"><strong>{{ $index }}- Nom:</strong> {{ $entreprise['name'] }}</p>
+                    @php $index++; @endphp
+                @empty
+                    <p>Aucune entreprise spécifiée.</p>
+                @endforelse
+            </div>
+
+            <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
+            <div class="col-md-6">
+                <h6>RESPONSABLE DE LA STATION OU SON REPRÉSENTANT</h6>
+                <p><strong>Date:</strong> {{ $plans->before_date ? $plans->before_date->format('d/m/Y') : '—' }}</p>
+                <p><strong>Heure:</strong> {{ $plans->before_time ? $plans->before_time->format('H:i') : '—' }}</p>
+                <p><strong>Nom:</strong> {{ $plans->before_responsible_name ?? '—' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VALIDATION APRÈS LES TRAVAUX -->
+<div class="card mb-4">
+    <div class="text-center card-header font-weight-bold">
+        VALIDATION APRÈS LES TRAVAUX
+    </div>
+    <div class="card-body">
+        <ul class="mb-3">
+            @if($plans->work_completed)
+                <li>✔️ Le travail est terminé</li>
+            @endif
+            @if($plans->work_not_completed)
+                <li>❌ Le travail n'est pas terminé</li>
+            @endif
+            @if($plans->station_normal)
+                <li>✅ La station est rendue à une exploitation normale</li>
+            @endif
+            @if($plans->site_clean_safe)
+                <li>🧹 Le chantier a été propre et en sécurité.</li>
+                <li><strong>Nouvelle autorisation prévue le:</strong> {{ $plans->new_authorization_date ? \Carbon\Carbon::parse($plans->new_authorization_date)->format('d/m/Y') : '—' }}</li>
+            @endif
+        </ul>
+
+        <div class="row">
+            <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
+            <div class="col-md-6">
+                <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
+                @php $i = 1; @endphp
+                @foreach (json_decode($plans->company_nom_date, true) as $entreprise)
+                    <div class="mb-3">
+                        <p><strong>{{ $i }}. Nom:</strong> {{ $entreprise['name'] ?? '—' }}</p>
+                        <p><strong>Date:</strong> {{ $entreprise['date'] ?? '—' }}</p>
+                    </div>
+                    @php $i++; @endphp
+                @endforeach
+            </div>
+
+            <!-- RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT) -->
+            <div class="col-md-6">
+                <h6>RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT)</h6>
+                <p><strong>Date:</strong> {{ $plans->after_responsible_date ? $plans->after_responsible_date->format('d/m/Y') : '—' }}</p>
+                <p><strong>Heure:</strong> {{ $plans->after_responsible_time ? $plans->after_responsible_time->format('H:i') : '—' }}</p>
+                <p><strong>Nom:</strong> {{ $plans->after_responsible_name ?? '—' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 
                 <a href="{{ route('plan.index') }}" class="btn btn-primary">Back to List</a>
             </div>
