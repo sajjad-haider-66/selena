@@ -224,6 +224,50 @@
                                             <label><input type="checkbox" name="formations[]" value="- Permis delevage">- Permis delevage </label>
                                             <label><input type="checkbox" name="formations[]" value="- Permis de fouille">- Permis de fouille </label>
                                             <label><input type="checkbox" name="formations[]" value="Autres"> Autres <input type="text" name="formations_autre"></label>
+                                            <div class="mt-3">
+                                                <div class="font-weight-bold">
+                                                    <u><b>MESURES PRÉVENTIVES</b></u>
+                                                </div>
+                                                <!-- Section 1: À la charge de la station-service -->
+                                                <h1 class="font-weight-bold">À la charge de la station-service</h1>
+                                                <label>
+                                                    <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : partiel">
+                                                    Arrêt de la distribution : partiel
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : total">
+                                                    Arrêt de la distribution : total
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="mesures_preventives[]" value="Fermeture de la station">
+                                                    Fermeture de la station
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="mesures_preventives[]" value="Arrêt d'une autre activité">
+                                                    Arrêt d'une autre activité
+                                                    <input type="text" name="mesures_preventives_autre" placeholder="Précisez ici...">
+                                                </label>
+                                                <hr>
+                                                <!-- Section 2: À la charge de la / des entreprise(s) extérieure(s) -->
+                                                <h1 class="font-weight-bold">À la charge de la / des entreprise(s) extérieure(s)</h1>
+                                                <label>
+                                                    <input type="checkbox" name="mesures_preventives[]" value="Arrêt des travaux pendant le dépotage">
+                                                    Arrêt des travaux pendant le dépotage
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="mesures_preventives[]" value="Repérage physique préalable des réseaux enterrés">
+                                                    Repérage physique préalable des réseaux enterrés
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="mesures_preventives[]" value="Mise à la terre des équipements et test">
+                                                    Mise à la terre des équipements et test
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="mesures_preventives[]" value="Surveillance permanente par un 2ème intervenant">
+                                                    Surveillance permanente par un 2ème intervenant
+                                                </label>
+                                            </div>
+
                                         </div>
                                     </td>
                                 </tr>
