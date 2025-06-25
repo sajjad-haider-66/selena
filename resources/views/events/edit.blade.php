@@ -302,16 +302,17 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Actions à mettre en place</label>
-                            <table class="action-table">
-                                <thead>
-                                    <tr>
-                                        <th>Action</th>
-                                        <th>Responsable</th>
-                                        <th>Délai</th>
-                                        <th>Type</th>
-                                    </tr>
-                                </thead>
+                        <table class="action-table">
+                            <tr>
+                                <th colspan="7" class="blue-header">Action(s) à mettre en place</th>
+                            </tr>
+                                 <tr>
+                                <th width="35%">Action(s) à mettre en place</th>
+                                <th width="20%">Responsable</th>
+                                <th width="20%">Délai</th>
+                                <th width="15%">Type d'Action</th>
+                                <th width="5%">Remove</th>
+                            </tr>
                                 <tbody>
                                     @php
                                         $actions = json_decode($event->actions, true) ?? [];
@@ -319,8 +320,8 @@
                                     @foreach ($actions as $index => $action)
                                         <tr>
                                             <td><input type="text" name="actions[{{ $index }}][description]" class="form-control" value="{{ $action['description'] ?? '' }}"></td>
-                                            <td><input type="text" name="actions[{{ $index }}][responsible]" class="form-control" value="{{ $action['responsible'] ?? '' }}"></td>
-                                            <td><input type="date" name="actions[{{ $index }}][deadline]" class="form-control" value="{{ $action['deadline'] ?? '' }}"></td>
+                                            <td><input type="text" name="actions[{{ $index }}][responsable]" class="form-control" value="{{ $action['responsable'] ?? '' }}"></td>
+                                            <td><input type="date" name="actions[{{ $index }}][delai]" class="form-control" value="{{ $action['delai'] ?? '' }}"></td>
                                             <td>
                                                 <select name="actions[{{ $index }}][type]" class="form-select">
                                                     <option value="Immediate" {{ ($action['type'] ?? '') == 'Immediate' ? 'selected' : '' }}>Immédiate (I)</option>
@@ -328,26 +329,12 @@
                                                     <option value="Preventive" {{ ($action['type'] ?? '') == 'Preventive' ? 'selected' : '' }}>Préventive (P)</option>
                                                 </select>
                                             </td>
+                                            <td><button type="button" class="btn btn-danger remove-action" {{ $index == 0 ? 'disabled' : '' }}>Remove</button></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
-
-                        {{-- <div class="form-group">
-                            <label class="form-label">Attachments (Photos/Videos)</label>
-                            <input type="file" name="attachments[]" multiple class="form-control">
-                            @if ($event->attachments)
-                                @php
-                                    $existingAttachments = json_decode($event->attachments, true) ?? [];
-                                @endphp
-                                @foreach ($existingAttachments as $attachment)
-                                    <div>
-                                        <a href="{{ Storage::url($attachment) }}" target="_blank">View Attachment</a>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div> --}}
 
                        <div class="mt-6">
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">

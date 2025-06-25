@@ -78,23 +78,23 @@ class EventController extends Controller
         if ($cotation > 10) {
             $actions[] = [
                 'description' => 'Urgent action required',
-                'responsible' => 'RQSE Team',
-                'deadline' => now()->addHours(24)->toDateString(),
-                'type' => 'I',
+                'responsable' => 'RQSE Team',
+                'delai' => now()->addHours(24)->toDateString(),
+                'type' => 'Immediate',
             ];
         } elseif ($cotation > 6) {
             $actions[] = [
                 'description' => 'Action within 48h',
-                'responsible' => 'RQSE Team',
-                'deadline' => now()->addDays(2)->toDateString(),
-                'type' => 'C',
+                'responsable' => 'RQSE Team',
+                'delai' => now()->addDays(2)->toDateString(),
+                'type' => 'Corrective',
             ];
         } elseif ($cotation > 1) {
             $actions[] = [
                 'description' => 'Action within 1 week',
-                'responsible' => 'RQSE Team',
-                'deadline' => now()->addDays(7)->toDateString(),
-                'type' => 'P',
+                'responsable' => 'RQSE Team',
+                'delai' => now()->addDays(7)->toDateString(),
+                'type' => 'Preventive',
             ];
         }
 
@@ -232,23 +232,23 @@ class EventController extends Controller
         if ($cotation > 10) {
             $actions[] = [
                 'description' => 'Urgent action required',
-                'responsible' => 'RQSE Team',
-                'deadline' => now()->addHours(24)->toDateString(),
-                'type' => 'I',
+                'responsable' => 'RQSE Team',
+                'delai' => now()->addHours(24)->toDateString(),
+                'type' => 'Immediate',
             ];
         } elseif ($cotation > 6) {
             $actions[] = [
                 'description' => 'Action within 48h',
-                'responsible' => 'RQSE Team',
-                'deadline' => now()->addDays(2)->toDateString(),
-                'type' => 'C',
+                'responsable' => 'RQSE Team',
+                'delai' => now()->addDays(2)->toDateString(),
+                'type' => 'Corrective',
             ];
         } elseif ($cotation > 1) {
             $actions[] = [
                 'description' => 'Action within 1 week',
-                'responsible' => 'RQSE Team',
-                'deadline' => now()->addDays(7)->toDateString(),
-                'type' => 'P',
+                'responsable' => 'RQSE Team',
+                'delai' => now()->addDays(7)->toDateString(),
+                'type' => 'Preventive',
             ];
         }
 

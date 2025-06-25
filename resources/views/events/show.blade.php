@@ -313,40 +313,37 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Actions à mettre en place</label>
-                        <table class="action-table">
-                            <thead>
-                                <tr>
-                                    <th>Action</th>
+                  <h5 class="mt-4">Actions à mettre en place</h5>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-secondary text-center">
+                                <tr class="table-primary">
+                                    <th>Action(s)</th>
                                     <th>Responsable</th>
                                     <th>Délai</th>
-                                    <th>Type</th>
+                                    <th>Type d'Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
                                     $actions = json_decode($event->actions, true) ?? [];
                                 @endphp
-                                @forelse ($actions as $action)
+                                @if (!empty($actions))
+                                    @foreach ($actions as $action)
+                                        <tr class="action-row">
+                                            <td>{{ $action['description'] ?? '' }}</td>
+                                            <td>{{ $action['responsable'] ?? '' }}</td>
+                                            <td>{{ $action['delai'] ?? '' }}</td>
+                                            <td>
+                                                {{ $action['type'] == 'Immediate' ? 'Imméd. (I)' : ($action['type'] == 'Corrective' ? 'Corrective (C)' : 'Préventive (P)') }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td>{{ $action['description'] ?? 'N/A' }}</td>
-                                        <td>{{ $action['responsible'] ?? 'N/A' }}</td>
-                                        <td>{{ $action['deadline'] ?? 'N/A' }}</td>
-                                        <td>
-                                            @switch($action['type'] ?? '')
-                                                @case('I') Immédiate @break
-                                                @case('C') Corrective @break
-                                                @case('P') Préventive @break
-                                                @default N/A
-                                            @endswitch
-                                        </td>
+                                        <td colspan="4" class="text-center">No actions defined.</td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4">Aucune action définie</td>
-                                    </tr>
-                                @endforelse
+                                @endif
                             </tbody>
                         </table>
                     </div>

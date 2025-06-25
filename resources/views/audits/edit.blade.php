@@ -225,7 +225,7 @@
                                                     <option value="Preventive" {{ $action['type'] == 'Preventive' ? 'selected' : '' }}>Préventive (P)</option>
                                                 </select>
                                             </td>
-                                            <td><button type="button" class="btn btn-danger remove-action">Remove</button></td>
+                                            <td><button type="button" class="btn btn-danger remove-action" {{ $key == 0 ? 'disabled' : '' }}>Remove</button></td>
                                         </tr>
                                     @endforeach
                                 </tbody>

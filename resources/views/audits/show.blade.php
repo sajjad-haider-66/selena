@@ -184,7 +184,7 @@
                                             <td>{{ $action['responsable'] ?? '' }}</td>
                                             <td>{{ $action['delai'] ?? '' }}</td>
                                             <td>
-                                                {{ $action['type'] == 'I' ? 'Imméd. (I)' : ($action['type'] == 'C' ? 'Corrective (C)' : 'Préventive (P)') }}
+                                                {{ $action['type'] == 'Immediate' ? 'Imméd. (I)' : ($action['type'] == 'Corrective' ? 'Corrective (C)' : 'Préventive (P)') }}
                                             </td>
                                         </tr>
                                     @endforeach
