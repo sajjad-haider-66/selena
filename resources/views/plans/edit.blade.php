@@ -236,6 +236,59 @@
                                         <label><input type="checkbox" name="formations[]" value="- Permis delevage" {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis delevage</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis de fouille" {{ in_array('- Permis de fouille', $formations) ? 'checked' : '' }}> - Permis de fouille</label>
                                         <label><input type="checkbox" name="formations[]" value="Autres" {{ in_array('Autres', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other" value="{{ old('training_certifications_other', $plan->training_certifications_other) }}"></label>
+                                           <div class="font-weight-bold">
+                                                    <u><b>MESURES PRÉVENTIVES</b></u>
+                                                </div>
+                                        <label>
+        <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : partiel"
+            {{ in_array('Arrêt de la distribution : partiel', $formations) ? 'checked' : '' }}>
+        Arrêt de la distribution : partiel
+    </label>
+
+    <label>
+        <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : total"
+            {{ in_array('Arrêt de la distribution : total', $formations) ? 'checked' : '' }}>
+        Arrêt de la distribution : total
+    </label>
+
+    <label>
+        <input type="checkbox" name="mesures_preventives[]" value="Fermeture de la station"
+            {{ in_array('Fermeture de la station', $formations) ? 'checked' : '' }}>
+        Fermeture de la station
+    </label>
+
+    <label>
+        <input type="checkbox" name="mesures_preventives[]" value="Arrêt d'une autre activité"
+            {{ in_array("Arrêt d'une autre activité", $formations) ? 'checked' : '' }}>
+        Arrêt d'une autre activité
+        <input type="text" name="mesures_preventives_autre" class="form-control mt-1" placeholder="Précisez ici...">
+    </label>
+
+    <hr>
+
+    <label>
+        <input type="checkbox" name="mesures_preventives[]" value="Arrêt des travaux pendant le dépotage"
+            {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}>
+        Arrêt des travaux pendant le dépotage
+    </label>
+
+    <label>
+        <input type="checkbox" name="mesures_preventives[]" value="Repérage physique préalable des réseaux enterrés"
+            {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}>
+        Repérage physique préalable des réseaux enterrés
+    </label>
+
+    <label>
+        <input type="checkbox" name="mesures_preventives[]" value="Mise à la terre des équipements et test"
+            {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}>
+        Mise à la terre des équipements et test
+    </label>
+
+    <label>
+        <input type="checkbox" name="mesures_preventives[]" value="Surveillance permanente par un 2ème intervenant"
+            {{ in_array('Surveillance permanente par un 2ème intervenant', $formations) ? 'checked' : '' }}>
+        Surveillance permanente par un 2ème intervenant
+    </label>
                                     </div>
                                 </td>
                             </tr>

@@ -235,7 +235,7 @@
                 }
             });
 
-            $('.save-actions-btn').on('click', function () {
+            $(document).on('click', '.save-actions-btn', function () {
 
                 let actionId = $(this).data('id');
                 // Collect data from the row
