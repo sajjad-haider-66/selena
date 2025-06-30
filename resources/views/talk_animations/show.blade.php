@@ -89,7 +89,37 @@
                                 </div>
                             </td>
                         </tr>
-
+                        <tr>
+                            <td colspan="4">
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item security">
+                                        <input type="checkbox" name="security" id="security"
+                                            {{ $talk['security'] == 1 ? 'checked' : '' }}>
+                                        <label for="security">Sécurité</label>
+                                    </div>
+                                    <div class="checkbox-item health">
+                                        <input type="checkbox" name="health" id="health"
+                                            {{ $talk['health'] == 1 ? 'checked' : '' }}>
+                                        <label for="health">Santé</label>
+                                    </div>
+                                    <div class="checkbox-item environment">
+                                        <input type="checkbox" name="environment" id="environment"
+                                            {{ $talk['environment'] == 1 ? 'checked' : '' }}>
+                                        <label for="environment">Environnement</label>
+                                    </div>
+                                    <div class="checkbox-item rse">
+                                        <input type="checkbox" name="rse" id="rse"
+                                            {{ $talk['rse'] == 1 ? 'checked' : '' }}>
+                                        <label for="rse">RSE</label>
+                                    </div>
+                                    <div class="checkbox-item Surete">
+                                        <input type="checkbox" name="Surete" id="Surete"
+                                            {{ $talk['Surete'] == 1 ? 'checked' : '' }}>
+                                        <label for="Surete">Surete</label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                         <div class="border-t pt-6">
                             <h3 class="text-lg font-semibold mb-4 text-indigo-700">👥 Participants</h3>
 
@@ -178,7 +208,8 @@
                                     <label for="notes" class="block font-medium">Notes (Optional)</label>
                                     <textarea name="notes" id="notes" rows="3" class="w-full border rounded px-3 py-2"></textarea>
                                 </div>
-                                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                                <button type="submit"
+                                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                                     style="background-color: rgb(9, 94, 173)">Archive</button>
                             </form>
                         </div>

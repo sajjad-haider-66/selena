@@ -168,6 +168,16 @@
                                          <input type="file" name="corrosive_image" accept="image/*" class="form-control mb-2">
                                          <!-- Textarea for Description -->
                                         <textarea name="commentaires" rows="3" class="form-control" placeholder="Enter image description...">{{ $talk->commentaires }}</textarea>
+                                        <div colspan="4">
+                                            <div class="mt-2" class="mb-2">
+                                                @if ($talk->path)
+                                                    <img src="{{ asset('storage/' . $talk->path) }}" alt="Uploaded Image"
+                                                        width="200" height="150" class="rounded shadow">
+                                                @else
+                                                    <p><em>Aucune image disponible</em></p>
+                                                @endif
+                                            </div>
+                                        </dive>
                                     </div>
                                 </td>
                             </tr>

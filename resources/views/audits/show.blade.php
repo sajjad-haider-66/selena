@@ -175,7 +175,7 @@
                             </thead>
                             <tbody>
                                  @php
-                                    $actions = json_decode($audit->actions, true) ?? [];
+                                    $actions = $audit->actions ?? [];
                                 @endphp
                                 @if (!empty($actions))
                                     @foreach ($actions as $action)

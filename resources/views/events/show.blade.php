@@ -257,6 +257,11 @@
                                 @endif
                             </div>
                         </div>
+                        </div>
+                            <div class="form-group">
+                            <label class="form-label">Autre</label>
+                            <p name="autre" id="autre" class="form-control" rows="2">{{ $event->autre ?? '' }}</textarea>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -346,22 +351,6 @@
                                 @endif
                             </tbody>
                         </table>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Attachments (Photos/Videos)</label>
-                        @php
-                            $attachments = json_decode($event->attachments, true) ?? [];
-                        @endphp
-                        @if (!empty($attachments))
-                            <div class="attachment-list">
-                                @foreach ($attachments as $attachment)
-                                    <a href="{{ Storage::url($attachment) }}" target="_blank">View Attachment</a>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="detail-value">Aucun attachment</div>
-                        @endif
                     </div>
 
                     <div class="form-group">
