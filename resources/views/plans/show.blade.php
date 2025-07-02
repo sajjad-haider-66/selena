@@ -107,7 +107,10 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    @php $travail = json_decode($plans->work_nature, true) ?? [] @endphp
+                                    @php 
+                                        $travail = json_decode($plans->work_nature, true) ?? [];
+                                        $work_nature_other = json_decode($plans->work_nature_other, true) ?? [];
+                                    @endphp
                                     <div class="checkbox-list">
                                         <label><input type="checkbox" disabled {{ in_array('Travaux sur appareil de distribution', $travail) ? 'checked' : '' }}> Travaux sur appareil de distribution</label>
                                         <label><input type="checkbox" disabled {{ in_array('Nettoyage de la piste', $travail) ? 'checked' : '' }}> Nettoyage de la piste</label>
@@ -126,13 +129,13 @@
                                         <label><input type="checkbox" disabled {{ in_array('Travaux d\'entretien des abords de la station', $travail) ? 'checked' : '' }}> Travaux d'entretien des abords de la station</label>
                                         <label><input type="checkbox" disabled {{ in_array('Travaux de démolition', $travail) ? 'checked' : '' }}> Travaux de démolition</label>
                                         <label><input type="checkbox" disabled {{ in_array('Intervention sur portique de lavage', $travail) ? 'checked' : '' }}> Intervention sur portique de lavage</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres', $travail) ? 'checked' : '' }}> Autres: {{ $plans->work_nature_other ?? '' }}</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Autres1', $travail) ? 'checked' : '' }}> Autres: {{ $work_nature_other['Autres1'] ?? '' }}</label>
                                         <hr><label class="mt-2"><strong><u>SITUATION PARTICULIÈRE</u></strong></label>
                                         <label><input type="checkbox" disabled {{ in_array('Présence de public', $travail) ? 'checked' : '' }}> Présence de public</label>
                                         <label><input type="checkbox" disabled {{ in_array('Espace confiné / fouille', $travail) ? 'checked' : '' }}> Espace confiné / fouille</label>
                                         <label><input type="checkbox" disabled {{ in_array('Travaux en hauteur', $travail) ? 'checked' : '' }}> Travaux en hauteur</label>
                                         <label><input type="checkbox" disabled {{ in_array('Volumes de sécurité', $travail) ? 'checked' : '' }}> Volumes de sécurité</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres', $travail) ? 'checked' : '' }}> Autres: {{ $plans->work_nature_other ?? '' }}</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Autres2', $travail) ? 'checked' : '' }}> Autres: {{ $work_nature_other['Autres2'] ?? '' }}</label>
                                         <hr><label class="mt-2"><strong><u>MOYENS / OUTILS</u></strong></label>
                                         <label><input type="checkbox" disabled {{ in_array('Manuel', $travail) ? 'checked' : '' }}> Manuel</label>
                                         <label><input type="checkbox" disabled {{ in_array('Matériel électrique', $travail) ? 'checked' : '' }}> Matériel électrique</label>
@@ -141,11 +144,14 @@
                                         <label><input type="checkbox" disabled {{ in_array('PIR / PIRL', $travail) ? 'checked' : '' }}> PIR / PIRL</label>
                                         <label><input type="checkbox" disabled {{ in_array('Grue', $travail) ? 'checked' : '' }}> Grue</label>
                                         <label><input type="checkbox" disabled {{ in_array('Echafaudage', $travail) ? 'checked' : '' }}> Echafaudage</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres', $travail) ? 'checked' : '' }}> Autres: {{ $plans->work_nature_other ?? '' }}</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Autres3', $travail) ? 'checked' : '' }}> Autres: {{ $work_nature_other['Autres3'] ?? '' }}</label>
                                     </div>
                                 </td>
                                 <td>
-                                    @php $risques = json_decode($plans->risk_nature, true) ?? [] @endphp
+                                    @php
+                                         $risques = json_decode($plans->risk_nature, true) ?? [];
+                                         $risk_nature_other = json_decode($plans->risk_nature_other, true) ?? [];
+                                    @endphp
                                     <div class="checkbox-list">
                                         <label><input type="checkbox" disabled {{ in_array('Circulation routière', $risques) ? 'checked' : '' }}> Circulation routière</label>
                                         <label><input type="checkbox" disabled {{ in_array('Incendie', $risques) ? 'checked' : '' }}> Incendie</label>
@@ -171,18 +177,21 @@
                                         <label><input type="checkbox" disabled {{ in_array('- Pollution air', $risques) ? 'checked' : '' }}> - Pollution air</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Pollution sol', $risques) ? 'checked' : '' }}> - Pollution sol</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Pollution eau', $risques) ? 'checked' : '' }}> - Pollution eau</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres', $risques) ? 'checked' : '' }}> Autres: {{ $plans->risk_nature_other ?? '' }}</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Autres1', $risques) ? 'checked' : '' }}> Autres: {{ $risk_nature_other['Autres1'] ?? '' }}</label>
                                         <hr><label class="mt-2"><strong><u>DOCUMENTS DISPONIBLES</u></strong></label>
                                         <label><input type="checkbox" disabled {{ in_array('Fiche de Données Sécurité', $risques) ? 'checked' : '' }}> Fiche de Données Sécurité</label>
                                         <label><input type="checkbox" disabled {{ in_array('Document Technique', $risques) ? 'checked' : '' }}> Amiante</label>
                                         <label><input type="checkbox" disabled {{ in_array('Déclaration d’Intention de', $risques) ? 'checked' : '' }}> Commencement de Travaux</label>
                                         <label><input type="checkbox" disabled {{ in_array('Plans de réseaux', $risques) ? 'checked' : '' }}> Plans de réseaux</label>
                                         <label><input type="checkbox" disabled {{ in_array('Certificat de dégazage', $risques) ? 'checked' : '' }}> Certificat de dégazage</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres', $risques) ? 'checked' : '' }}> Autres: {{ $plans->risk_nature_other ?? '' }}</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Autres2', $risques) ? 'checked' : '' }}> Autres: {{ $risk_nature_other['Autres2'] ?? '' }}</label>
                                     </div>
                                 </td>
                                 <td>
-                                    @php $formations = json_decode($plans->training_certifications, true) ?? [] @endphp
+                                    @php 
+                                        $formations = json_decode($plans->training_certifications, true) ?? [];
+                                        $training_certifications_other = json_decode($plans->training_certifications_other, true) ?? [];
+                                    @endphp
                                     <div class="checkbox-list">
                                         <label><input type="checkbox" disabled {{ in_array('Autorisation de conduite d\'un engin de chantier', $formations) ? 'checked' : '' }}> Autorisation de conduite d'un engin de chantier</label>
                                         <label><input type="checkbox" disabled {{ in_array('Habilitation électrique', $formations) ? 'checked' : '' }}> Habilitation électrique</label>
@@ -199,18 +208,71 @@
                                         <label><input type="checkbox" disabled {{ in_array('Consignation des réseaux électriques / hydrauliques', $formations) ? 'checked' : '' }}> Consignation des réseaux électriques / hydrauliques</label>
                                         <label><input type="checkbox" disabled {{ in_array('Outillage / matériel ATEX', $formations) ? 'checked' : '' }}> Outillage / matériel ATEX</label>
                                         <label><input type="checkbox" disabled {{ in_array('Balisage de la zone, aide à la', $formations) ? 'checked' : '' }}> Balisage de la zone, aide à la circulation</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres', $formations) ? 'checked' : '' }}> Autres: {{ $plans->training_certifications_other ?? '' }}</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Autres1', $formations) ? 'checked' : '' }}> Autres: {{ $training_certifications_other['Autres1'] ?? '' }}</label>
                                         <label><input type="checkbox" disabled {{ in_array('Port d’EPI et autres équipements spécifiques :', $formations) ? 'checked' : '' }}> Port d’EPI et autres équipements spécifiques :</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Appareil respiratoire, ventilation forcée', $formations) ? 'checked' : '' }}> - Appareil respiratoire, ventilation forcée</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Harnais, baudrier, filet de sécurité,sangle de retenue', $formations) ? 'checked' : '' }}> - Harnais, baudrier, filet de sécurité, sangle de retenue</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Mise à disposition casqueanti-bruit', $formations) ? 'checked' : '' }}> - Mise à disposition casque anti-bruit</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Aide à la manutention', $formations) ? 'checked' : '' }}> - Aide à la manutention</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres', $formations) ? 'checked' : '' }}> Autres: {{ $plans->training_certifications_other ?? '' }}</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Autres2', $formations) ? 'checked' : '' }}> Autres: {{ $training_certifications_other['Autres2'] ?? '' }}</label>
                                         <label><input type="checkbox" disabled {{ in_array('Permis spécifique :', $formations) ? 'checked' : '' }}> Permis spécifique :</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Permis de feu', $formations) ? 'checked' : '' }}> - Permis de feu</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis de levage</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Permis de fouille', $formations) ? 'checked' : '' }}> - Permis de fouille</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres', $formations) ? 'checked' : '' }}> Autres: {{ $plans->training_certifications_other ?? '' }}</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Autres3', $formations) ? 'checked' : '' }}> Autres: {{ $training_certifications_other['Autres3'] ?? '' }}</label>
+                                         <div class="font-weight-bold">
+                                            <u><b>MESURES PRÉVENTIVES</b></u>
+                                        </div>
+                                        <label>
+                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Arrêt de la distribution : partiel"
+                                                {{ in_array('Arrêt de la distribution : partiel', $formations) ? 'checked' : '' }}>
+                                            Arrêt de la distribution : partiel
+                                        </label>
+
+                                        <label>
+                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Arrêt de la distribution : total"
+                                                {{ in_array('Arrêt de la distribution : total', $formations) ? 'checked' : '' }}>
+                                            Arrêt de la distribution : total
+                                        </label>
+
+                                        <label>
+                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Fermeture de la station"
+                                                {{ in_array('Fermeture de la station', $formations) ? 'checked' : '' }}>
+                                            Fermeture de la station
+                                        </label>
+
+                                        <label>
+                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Arrêt d'une autre activité"
+                                                {{ in_array("Arrêt d'une autre activité", $formations) ? 'checked' : '' }}>
+                                            Arrêt d'une autre activité
+                                            <input type="text" name="mesures_preventives_autre" class="form-control mt-1" placeholder="Précisez ici...">
+                                        </label>
+
+                                        <hr>
+
+                                        <label>
+                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Arrêt des travaux pendant le dépotage"
+                                                {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}>
+                                            Arrêt des travaux pendant le dépotage
+                                        </label>
+
+                                        <label>
+                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Repérage physique préalable des réseaux enterrés"
+                                                {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}>
+                                            Repérage physique préalable des réseaux enterrés
+                                        </label>
+
+                                        <label>
+                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Mise à la terre des équipements et test"
+                                                {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}>
+                                            Mise à la terre des équipements et test
+                                        </label>
+
+                                        <label>
+                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Surveillance permanente par un 2ème intervenant"
+                                                {{ in_array('Surveillance permanente par un 2ème intervenant', $formations) ? 'checked' : '' }}>
+                                            Surveillance permanente par un 2ème intervenant
+                                        </label>
                                     </div>
                                 </td>
                             </tr>
@@ -218,83 +280,111 @@
                     </table>
                 </div>
 
-           <!-- VALIDATION AVANT LES TRAVAUX -->
-<div class="card mb-4">
-    <div class="text-center card-header font-weight-bold">
-        VALIDATION AVANT LES TRAVAUX
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
-            <div class="col-md-6">
-                <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
-                @php $index = 1; @endphp
-                @forelse(json_decode($plans->avant_entreprise, true) as $entreprise)
-                    <p class="mb-2"><strong>{{ $index }}- Nom:</strong> {{ $entreprise['name'] }}</p>
-                    @php $index++; @endphp
-                @empty
-                    <p>Aucune entreprise spécifiée.</p>
-                @endforelse
-            </div>
-
-            <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
-            <div class="col-md-6">
-                <h6>RESPONSABLE DE LA STATION OU SON REPRÉSENTANT</h6>
-                <p><strong>Date:</strong> {{ $plans->before_date ? $plans->before_date->format('d/m/Y') : '—' }}</p>
-                <p><strong>Heure:</strong> {{ $plans->before_time ? $plans->before_time->format('H:i') : '—' }}</p>
-                <p><strong>Nom:</strong> {{ $plans->before_responsible_name ?? '—' }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- VALIDATION APRÈS LES TRAVAUX -->
-<div class="card mb-4">
-    <div class="text-center card-header font-weight-bold">
-        VALIDATION APRÈS LES TRAVAUX
-    </div>
-    <div class="card-body">
-        <ul class="mb-3">
-            @if($plans->work_completed)
-                <li>✔️ Le travail est terminé</li>
-            @endif
-            @if($plans->work_not_completed)
-                <li>❌ Le travail n'est pas terminé</li>
-            @endif
-            @if($plans->station_normal)
-                <li>✅ La station est rendue à une exploitation normale</li>
-            @endif
-            @if($plans->site_clean_safe)
-                <li>🧹 Le chantier a été propre et en sécurité.</li>
-                <li><strong>Nouvelle autorisation prévue le:</strong> {{ $plans->new_authorization_date ? \Carbon\Carbon::parse($plans->new_authorization_date)->format('d/m/Y') : '—' }}</li>
-            @endif
-        </ul>
-
-        <div class="row">
-            <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
-            <div class="col-md-6">
-                <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
-                @php $i = 1; @endphp
-                @foreach (json_decode($plans->company_nom_date, true) as $entreprise)
-                    <div class="mb-3">
-                        <p><strong>{{ $i }}. Nom:</strong> {{ $entreprise['name'] ?? '—' }}</p>
-                        <p><strong>Date:</strong> {{ $entreprise['date'] ?? '—' }}</p>
+                <!-- VALIDATION AVANT LES TRAVAUX -->
+                <div class="card mb-4">
+                    <div class="text-center card-header font-weight-bold">
+                        VALIDATION AVANT LES TRAVAUX
                     </div>
-                    @php $i++; @endphp
-                @endforeach
-            </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
+                            <div class="col-md-6">
+                                <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
+                                @php $index = 1; @endphp
+                                @forelse(json_decode($plans->avant_entreprise, true) as $entreprise)
+                                    <p class="mb-2"><strong>{{ $index }}- Nom:</strong> {{ $entreprise['name'] }}</p>
+                                    @php $index++; @endphp
+                                @empty
+                                    <p>Aucune entreprise spécifiée.</p>
+                                @endforelse
+                            </div>
 
-            <!-- RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT) -->
-            <div class="col-md-6">
-                <h6>RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT)</h6>
-                <p><strong>Date:</strong> {{ $plans->after_responsible_date ? $plans->after_responsible_date->format('d/m/Y') : '—' }}</p>
-                <p><strong>Heure:</strong> {{ $plans->after_responsible_time ? $plans->after_responsible_time->format('H:i') : '—' }}</p>
-                <p><strong>Nom:</strong> {{ $plans->after_responsible_name ?? '—' }}</p>
-            </div>
-        </div>
-    </div>
-</div>
+                            <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
+                            <div class="col-md-6">
+                                <h6>RESPONSABLE DE LA STATION OU SON REPRÉSENTANT</h6>
+                                <p><strong>Date:</strong> {{ $plans->before_date ? $plans->before_date->format('d/m/Y') : '—' }}</p>
+                                <p><strong>Heure:</strong> {{ $plans->before_time ? $plans->before_time->format('H:i') : '—' }}</p>
+                                <p><strong>Nom:</strong> {{ $plans->before_responsible_name ?? '—' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- VALIDATION APRÈS LES TRAVAUX -->
+                <div class="card mb-4">
+                    <div class="text-center card-header font-weight-bold">
+                        VALIDATION APRÈS LES TRAVAUX
+                    </div>
+                    <div class="card-body">
+                        {{-- <ul class="mb-3">
+                            @if($plans->work_completed)
+                                <li>✔️ Le travail est terminé</li>
+                            @endif
+                            @if($plans->work_not_completed)
+                                <li>❌ Le travail n'est pas terminé</li>
+                            @endif
+                            @if($plans->station_normal)
+                                <li>✅ La station est rendue à une exploitation normale</li>
+                            @endif
+                            @if($plans->site_clean_safe)
+                                <li>🧹 Le chantier a été propre et en sécurité.</li>
+                                <li><strong>Nouvelle autorisation prévue le:</strong> {{ $plans->new_authorization_date ? \Carbon\Carbon::parse($plans->new_authorization_date)->format('d/m/Y') : '—' }}</li>
+                            @endif
+                        </ul> --}}
+
+                          <div class="form-check">
+                            <label class="form-check-label" for="apres_travail_termine">
+                            <input class="form-check-input" type="checkbox" disabled name="apres_travail_termine" id="apres_travail_termine" {{ old('apres_travail_termine', $plans->work_completed) ? 'checked' : '' }}>
+                                Le travail est terminé
+                            </label>
+                        </div>
+                        <div class="form-check">
+                             <label class="form-check-label" for="apres_travail_non_termine">
+                            <input class="form-check-input" type="checkbox" disabled name="apres_travail_non_termine" id="apres_travail_non_termine" {{ old('apres_travail_non_termine', $plans->work_not_completed) ? 'checked' : '' }}>
+                           
+                                Le travail n'est pas terminé
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label" for="apres_station_normale">
+                            <input class="form-check-input" type="checkbox" disabled name="apres_station_normale" id="apres_station_normale" {{ old('apres_station_normale', $plans->station_normal) ? 'checked' : '' }}>
+                            
+                                La station est rendue à une exploitation normale
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <label class="form-check-label" for="apres_chantier_propre">
+                            <input class="form-check-input" type="checkbox" disabled name="apres_chantier_propre" id="apres_chantier_propre" {{ old('apres_chantier_propre', $plans->site_clean_safe) ? 'checked' : '' }}>
+                            
+                                Le chantier a été propre et en sécurité, la reprise du travail fera l’objet d’une nouvelle autorisation de travail prévue le :
+                            </label>
+                            <input type="date" name="new_authorization_date" class="form-control mt-2" style="width:auto;" value="{{ old('new_authorization_date', $plans->new_authorization_date ? $plans->new_authorization_date->format('Y-m-d') : '') }}">
+                        </div>
+
+                        <div class="row">
+                            <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
+                            <div class="col-md-6">
+                                <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
+                                @php $i = 1; @endphp
+                                @foreach (json_decode($plans->company_nom_date, true) as $entreprise)
+                                    <div class="mb-3">
+                                        <p><strong>{{ $i }}. Nom:</strong> {{ $entreprise['name'] ?? '—' }}</p>
+                                        <p><strong>Date:</strong> {{ $entreprise['date'] ?? '—' }}</p>
+                                    </div>
+                                    @php $i++; @endphp
+                                @endforeach
+                            </div>
+
+                            <!-- RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT) -->
+                            <div class="col-md-6">
+                                <h6>RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT)</h6>
+                                <p><strong>Date:</strong> {{ $plans->after_responsible_date ? $plans->after_responsible_date->format('d/m/Y') : '—' }}</p>
+                                <p><strong>Heure:</strong> {{ $plans->after_responsible_time ? $plans->after_responsible_time->format('H:i') : '—' }}</p>
+                                <p><strong>Nom:</strong> {{ $plans->after_responsible_name ?? '—' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <a href="{{ route('plan.index') }}" class="btn btn-primary">Back to List</a>
             </div>

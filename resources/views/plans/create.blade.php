@@ -202,8 +202,8 @@
                                             <label><input type="checkbox" name="travail[]"
                                                     value="Intervention sur portique de lavage"> Intervention sur
                                                 portique de lavage</label>
-                                            <label><input type="checkbox" name="travail[]" value="Autres"> Autres
-                                                <input type="text" name="travail_autre"></label>
+                                            <label><input type="checkbox" name="travail[]" value="Autres1"> Autres
+                                                <input type="text" name="work_nature_other1"></label>
                                             <hr><label class="mt-2"><strong><u>SITUATION
                                                         PARTICULIÈRE</u></strong></label>
                                             <label><input type="checkbox" name="travail[]"
@@ -214,8 +214,8 @@
                                                     value="Travaux en hauteur"> Travaux en hauteur</label>
                                             <label><input type="checkbox" name="travail[]"
                                                     value="Volumes de sécurité"> Volumes de sécurité</label>
-                                            <label><input type="checkbox" name="travail[]" value="Autres"> Autres
-                                                (précisez) : <input type="text" name="travail_autre"></label>
+                                            <label><input type="checkbox" name="travail[]" value="Autres2"> Autres
+                                                (précisez) : <input type="text" name="work_nature_other2"></label>
                                             <hr><label class="mt-2"><strong><u>MOYENS / OUTILS </u></strong></label>
                                             <label><input type="checkbox" name="travail[]" value="Manuel "> Manuel
                                             </label>
@@ -231,8 +231,8 @@
                                                 Grue</label>
                                             <label><input type="checkbox" name="travail[]" value="Echafaudage">
                                                 Echafaudage</label>
-                                            <label><input type="checkbox" name="travail[]" value="Autres"> Autres
-                                                (précisez) : <input type="text" name="travail_autre"></label>
+                                            <label><input type="checkbox" name="travail[]" value="Autres3"> Autres
+                                                (précisez) : <input type="text" name="work_nature_other3"></label>
                                         </div>
                                     </td>
                                     <td>
@@ -289,8 +289,8 @@
                                                 Pollution sol</label>
                                             <label><input type="checkbox" name="risques[]" value="- Pollution eau"> -
                                                 Pollution eau</label>
-                                            <label><input type="checkbox" name="risques[]" value="Autres"> Autres
-                                                <input type="text" name="risques_autre"></label>
+                                            <label><input type="checkbox" name="risques[]" value="Autres1"> Autres
+                                                <input type="text" name="risk_nature_other1"></label>
                                             <hr><label class="mt-2"><strong><u>DOCUMENTS DISPONIBLES
                                                     </u></strong></label>
                                             <label><input type="checkbox" name="risques[]"
@@ -304,8 +304,8 @@
                                                 Plans de réseaux</label>
                                             <label><input type="checkbox" name="risques[]"
                                                     value="Certificat de dégazage "> Certificat de dégazage </label>
-                                            <label><input type="checkbox" name="risques[]" value="Autres"> Autres
-                                                <input type="text" name="risques_autre"></label>
+                                            <label><input type="checkbox" name="risques[]" value="Autres2"> Autres
+                                                <input type="text" name="risk_nature_other2"></label>
                                         </div>
                                     </td>
                                     <td>
@@ -325,18 +325,18 @@
                                             <label><input type="checkbox" name="formations[]" value="Consignation des réseaux électriques / hydrauliques"> Consignation des réseaux électriques / hydrauliques</label>
                                             <label><input type="checkbox" name="formations[]" value="Outillage / matériel ATEX"> Outillage / matériel ATEX</label>
                                             <label><input type="checkbox" name="formations[]" value="Balisage de la zone, aide à la"> circulation</label>
-                                            <label><input type="checkbox" name="formations[]" value="Autres"> Autres <input type="text" name="formations_autre"></label>
+                                            <label><input type="checkbox" name="formations[]" value="Autres1"> Autres <input type="text" name="training_certifications_other1"></label>
                                             <label><input type="checkbox" name="formations[]" value="Port d’EPI et autres équipements spécifiques :"> Port d’EPI et autres équipements spécifiques :</label>
                                             <label><input type="checkbox" name="formations[]" value="- Appareil respiratoire, ventilation forcée"> - Appareil respiratoire, ventilation forcée</label>
                                             <label><input type="checkbox" name="formations[]" value="- Harnais, baudrier, filet de sécurité,sangle de retenue">- Harnais, baudrier, filet de sécurité,sangle de retenue </label>
                                             <label><input type="checkbox" name="formations[]" value="- Mise à disposition casqueanti-bruit">- Mise à disposition casqueanti-bruit</label>
                                             <label><input type="checkbox" name="formations[]" value="- Aide à la manutention">- Aide à la manutention </label>
-                                            <label><input type="checkbox" name="formations[]" value="Autres"> Autres <input type="text" name="formations_autre"></label>
+                                            <label><input type="checkbox" name="formations[]" value="Autres2"> Autres <input type="text" name="training_certifications_other2"></label>
                                             <label><input type="checkbox" name="formations[]" value="Permis spécifique :">Permis spécifique : </label>
                                             <label><input type="checkbox" name="formations[]" value="- Permis de feu"> - Permis de feu</label>
                                             <label><input type="checkbox" name="formations[]" value="- Permis delevage">- Permis delevage </label>
                                             <label><input type="checkbox" name="formations[]" value="- Permis de fouille">- Permis de fouille </label>
-                                            <label><input type="checkbox" name="formations[]" value="Autres"> Autres <input type="text" name="formations_autre"></label>
+                                            <label><input type="checkbox" name="formations[]" value="Autres3"> Autres <input type="text" name="training_certifications_other3"></label>
                                             <div class="mt-3">
                                                 <div class="font-weight-bold">
                                                     <u><b>MESURES PRÉVENTIVES</b></u>

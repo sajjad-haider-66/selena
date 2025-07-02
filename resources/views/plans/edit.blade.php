@@ -132,7 +132,10 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    @php $travail = old('travail', json_decode($plan->work_nature, true) ?? []) @endphp
+                                    @php 
+                                        $travail = old('travail', json_decode($plan->work_nature, true) ?? []);
+                                        $work_nature_other = old('work_nature_other', json_decode($plan->work_nature_other, true) ?? []);
+                                    @endphp
                                     <div class="checkbox-list">
                                         <label><input type="checkbox" name="travail[]" value="Travaux sur appareil de distribution" {{ in_array('Travaux sur appareil de distribution', $travail) ? 'checked' : '' }}> Travaux sur appareil de distribution</label>
                                         <label><input type="checkbox" name="travail[]" value="Nettoyage de la piste" {{ in_array('Nettoyage de la piste', $travail) ? 'checked' : '' }}> Nettoyage de la piste</label>
@@ -151,13 +154,13 @@
                                         <label><input type="checkbox" name="travail[]" value="Travaux d'entretien des abords de la station" {{ in_array('Travaux dentretien des abords de la station', $travail) ? 'checked' : '' }}> Travaux d'entretien des abords de la station</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux de démolition" {{ in_array('Travaux de démolition', $travail) ? 'checked' : '' }}> Travaux de démolition</label>
                                         <label><input type="checkbox" name="travail[]" value="Intervention sur portique de lavage" {{ in_array('Intervention sur portique de lavage', $travail) ? 'checked' : '' }}> Intervention sur portique de lavage</label>
-                                        <label><input type="checkbox" name="travail[]" value="Autres" {{ in_array('Autres', $travail) ? 'checked' : '' }}> Autres <input type="text" name="work_nature_other" value="{{ old('work_nature_other', $plan->work_nature_other) }}"></label>
+                                        <label><input type="checkbox" name="travail[]" value="Autres1" {{ in_array('Autres1', $travail) ? 'checked' : '' }}> Autres <input type="text" name="work_nature_other1" value="{{ old('work_nature_other1', $work_nature_other['Autres1']) }}"></label>
                                         <hr><label class="mt-2"><strong><u>SITUATION PARTICULIÈRE</u></strong></label>
                                         <label><input type="checkbox" name="travail[]" value="Présence de public" {{ in_array('Présence de public', $travail) ? 'checked' : '' }}> Présence de public</label>
                                         <label><input type="checkbox" name="travail[]" value="Espace confiné / fouille" {{ in_array('Espace confiné / fouille', $travail) ? 'checked' : '' }}> Espace confiné / fouille</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux en hauteur" {{ in_array('Travaux en hauteur', $travail) ? 'checked' : '' }}> Travaux en hauteur</label>
                                         <label><input type="checkbox" name="travail[]" value="Volumes de sécurité" {{ in_array('Volumes de sécurité', $travail) ? 'checked' : '' }}> Volumes de sécurité</label>
-                                        <label><input type="checkbox" name="travail[]" value="Autres" {{ in_array('Autres', $travail) ? 'checked' : '' }}> Autres (précisez) : <input type="text" name="work_nature_other" value="{{ old('work_nature_other', $plan->work_nature_other) }}"></label>
+                                        <label><input type="checkbox" name="travail[]" value="Autres2" {{ in_array('Autres2', $travail) ? 'checked' : '' }}> Autres (précisez) : <input type="text" name="work_nature_other2" value="{{ old('work_nature_other2', $work_nature_other['Autres2']) }}"></label>
                                         <hr><label class="mt-2"><strong><u>MOYENS / OUTILS</u></strong></label>
                                         <label><input type="checkbox" name="travail[]" value="Manuel" {{ in_array('Manuel', $travail) ? 'checked' : '' }}> Manuel</label>
                                         <label><input type="checkbox" name="travail[]" value="Matériel électrique" {{ in_array('Matériel électrique', $travail) ? 'checked' : '' }}> Matériel électrique</label>
@@ -166,11 +169,14 @@
                                         <label><input type="checkbox" name="travail[]" value="PIR / PIRL" {{ in_array('PIR / PIRL', $travail) ? 'checked' : '' }}> PIR / PIRL</label>
                                         <label><input type="checkbox" name="travail[]" value="Grue" {{ in_array('Grue', $travail) ? 'checked' : '' }}> Grue</label>
                                         <label><input type="checkbox" name="travail[]" value="Echafaudage" {{ in_array('Echafaudage', $travail) ? 'checked' : '' }}> Echafaudage</label>
-                                        <label><input type="checkbox" name="travail[]" value="Autres" {{ in_array('Autres', $travail) ? 'checked' : '' }}> Autres (précisez) : <input type="text" name="work_nature_other" value="{{ old('work_nature_other', $plan->work_nature_other) }}"></label>
+                                        <label><input type="checkbox" name="travail[]" value="Autres3" {{ in_array('Autres3', $travail) ? 'checked' : '' }}> Autres (précisez) : <input type="text" name="work_nature_other3" value="{{ old('work_nature_other3', $work_nature_other['Autres3']) }}"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    @php $risques = old('risques', json_decode($plan->risk_nature, true) ?? []) @endphp
+                                    @php
+                                         $risques = old('risques', json_decode($plan->risk_nature, true) ?? []);
+                                         $risk_nature_other = old('risk_nature_other', json_decode($plan->risk_nature_other, true) ?? []);
+                                    @endphp
                                     <div class="checkbox-list">
                                         <label><input type="checkbox" name="risques[]" value="Circulation routière" {{ in_array('Circulation routière', $risques) ? 'checked' : '' }}> Circulation routière</label>
                                         <label><input type="checkbox" name="risques[]" value="Incendie" {{ in_array('Incendie', $risques) ? 'checked' : '' }}> Incendie</label>
@@ -196,18 +202,21 @@
                                         <label><input type="checkbox" name="risques[]" value="- Pollution air" {{ in_array('- Pollution air', $risques) ? 'checked' : '' }}> - Pollution air</label>
                                         <label><input type="checkbox" name="risques[]" value="- Pollution sol" {{ in_array('- Pollution sol', $risques) ? 'checked' : '' }}> - Pollution sol</label>
                                         <label><input type="checkbox" name="risques[]" value="- Pollution eau" {{ in_array('- Pollution eau', $risques) ? 'checked' : '' }}> - Pollution eau</label>
-                                        <label><input type="checkbox" name="risques[]" value="Autres" {{ in_array('Autres', $risques) ? 'checked' : '' }}> Autres <input type="text" name="risk_nature_other" value="{{ old('risk_nature_other', $plan->risk_nature_other) }}"></label>
+                                        <label><input type="checkbox" name="risques[]" value="Autres1" {{ in_array('Autres1', $risques) ? 'checked' : '' }}> Autres <input type="text" name="risk_nature_other1" value="{{ old('risk_nature_other1', $risk_nature_other['Autres1']) }}"></label>
                                         <hr><label class="mt-2"><strong><u>DOCUMENTS DISPONIBLES</u></strong></label>
                                         <label><input type="checkbox" name="risques[]" value="Fiche de Données Sécurité" {{ in_array('Fiche de Données Sécurité', $risques) ? 'checked' : '' }}> Fiche de Données Sécurité</label>
                                         <label><input type="checkbox" name="risques[]" value="Document Technique" {{ in_array('Document Technique', $risques) ? 'checked' : '' }}> Amiante</label>
                                         <label><input type="checkbox" name="risques[]" value="Déclaration d’Intention de" {{ in_array('Déclaration d’Intention de', $risques) ? 'checked' : '' }}> Commencement de Travaux</label>
                                         <label><input type="checkbox" name="risques[]" value="Plans de réseaux" {{ in_array('Plans de réseaux', $risques) ? 'checked' : '' }}> Plans de réseaux</label>
                                         <label><input type="checkbox" name="risques[]" value="Certificat de dégazage" {{ in_array('Certificat de dégazage', $risques) ? 'checked' : '' }}> Certificat de dégazage</label>
-                                        <label><input type="checkbox" name="risques[]" value="Autres" {{ in_array('Autres', $risques) ? 'checked' : '' }}> Autres <input type="text" name="risk_nature_other" value="{{ old('risk_nature_other', $plan->risk_nature_other) }}"></label>
+                                        <label><input type="checkbox" name="risques[]" value="Autres2" {{ in_array('Autres2', $risques) ? 'checked' : '' }}> Autres <input type="text" name="risk_nature_other2" value="{{ old('risk_nature_other2', $risk_nature_other['Autres2']) }}"></label>
                                     </div>
                                 </td>
                                 <td>
-                                    @php $formations = old('formations', json_decode($plan->training_certifications, true) ?? []) @endphp
+                                    @php 
+                                        $formations = old('formations', json_decode($plan->training_certifications, true) ?? []);
+                                        $training_certifications_other = old('training_certifications_other', json_decode($plan->training_certifications_other, true) ?? []);
+                                    @endphp
                                     <div class="checkbox-list">
                                         <label><input type="checkbox" name="formations[]" value="Autorisation de conduite d'un engin de chantier" {{ in_array('Autorisation de conduite dun engin de chantier', $formations) ? 'checked' : '' }}> Autorisation de conduite d'un engin de chantier</label>
                                         <label><input type="checkbox" name="formations[]" value="Habilitation électrique" {{ in_array('Habilitation électrique', $formations) ? 'checked' : '' }}> Habilitation électrique</label>
@@ -224,71 +233,71 @@
                                         <label><input type="checkbox" name="formations[]" value="Consignation des réseaux électriques / hydrauliques" {{ in_array('Consignation des réseaux électriques / hydrauliques', $formations) ? 'checked' : '' }}> Consignation des réseaux électriques / hydrauliques</label>
                                         <label><input type="checkbox" name="formations[]" value="Outillage / matériel ATEX" {{ in_array('Outillage / matériel ATEX', $formations) ? 'checked' : '' }}> Outillage / matériel ATEX</label>
                                         <label><input type="checkbox" name="formations[]" value="Balisage de la zone, aide à la" {{ in_array('Balisage de la zone, aide à la', $formations) ? 'checked' : '' }}> circulation</label>
-                                        <label><input type="checkbox" name="formations[]" value="Autres" {{ in_array('Autres', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other" value="{{ old('training_certifications_other', $plan->training_certifications_other) }}"></label>
+                                        <label><input type="checkbox" name="formations[]" value="Autres1" {{ in_array('Autres1', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other1" value="{{ old('training_certifications_other1', $training_certifications_other['Autres1']) }}"></label>
                                         <label><input type="checkbox" name="formations[]" value="Port d’EPI et autres équipements spécifiques :" {{ in_array('Port d’EPI et autres équipements spécifiques :', $formations) ? 'checked' : '' }}> Port d’EPI et autres équipements spécifiques :</label>
                                         <label><input type="checkbox" name="formations[]" value="- Appareil respiratoire, ventilation forcée" {{ in_array('- Appareil respiratoire, ventilation forcée', $formations) ? 'checked' : '' }}> - Appareil respiratoire, ventilation forcée</label>
                                         <label><input type="checkbox" name="formations[]" value="- Harnais, baudrier, filet de sécurité,sangle de retenue" {{ in_array('- Harnais, baudrier, filet de sécurité,sangle de retenue', $formations) ? 'checked' : '' }}> - Harnais, baudrier, filet de sécurité,sangle de retenue</label>
                                         <label><input type="checkbox" name="formations[]" value="- Mise à disposition casqueanti-bruit" {{ in_array('- Mise à disposition casqueanti-bruit', $formations) ? 'checked' : '' }}> - Mise à disposition casqueanti-bruit</label>
                                         <label><input type="checkbox" name="formations[]" value="- Aide à la manutention" {{ in_array('- Aide à la manutention', $formations) ? 'checked' : '' }}> - Aide à la manutention</label>
-                                        <label><input type="checkbox" name="formations[]" value="Autres" {{ in_array('Autres', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other" value="{{ old('training_certifications_other', $plan->training_certifications_other) }}"></label>
+                                        <label><input type="checkbox" name="formations[]" value="Autres2" {{ in_array('Autres2', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other2" value="{{ old('training_certifications_other2', $training_certifications_other['Autres2']) }}"></label>
                                         <label><input type="checkbox" name="formations[]" value="Permis spécifique :" {{ in_array('Permis spécifique :', $formations) ? 'checked' : '' }}> Permis spécifique :</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis de feu" {{ in_array('- Permis de feu', $formations) ? 'checked' : '' }}> - Permis de feu</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis delevage" {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis delevage</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis de fouille" {{ in_array('- Permis de fouille', $formations) ? 'checked' : '' }}> - Permis de fouille</label>
-                                        <label><input type="checkbox" name="formations[]" value="Autres" {{ in_array('Autres', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other" value="{{ old('training_certifications_other', $plan->training_certifications_other) }}"></label>
-                                           <div class="font-weight-bold">
-                                                    <u><b>MESURES PRÉVENTIVES</b></u>
-                                                </div>
+                                        <label><input type="checkbox" name="formations[]" value="Autres3" {{ in_array('Autres3', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other3" value="{{ old('training_certifications_other3', $training_certifications_other['Autres3']) }}"></label>
+                                        <div class="font-weight-bold">
+                                            <u><b>MESURES PRÉVENTIVES</b></u>
+                                        </div>
                                         <label>
-        <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : partiel"
-            {{ in_array('Arrêt de la distribution : partiel', $formations) ? 'checked' : '' }}>
-        Arrêt de la distribution : partiel
-    </label>
+                                            <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : partiel"
+                                                {{ in_array('Arrêt de la distribution : partiel', $formations) ? 'checked' : '' }}>
+                                            Arrêt de la distribution : partiel
+                                        </label>
 
-    <label>
-        <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : total"
-            {{ in_array('Arrêt de la distribution : total', $formations) ? 'checked' : '' }}>
-        Arrêt de la distribution : total
-    </label>
+                                        <label>
+                                            <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : total"
+                                                {{ in_array('Arrêt de la distribution : total', $formations) ? 'checked' : '' }}>
+                                            Arrêt de la distribution : total
+                                        </label>
 
-    <label>
-        <input type="checkbox" name="mesures_preventives[]" value="Fermeture de la station"
-            {{ in_array('Fermeture de la station', $formations) ? 'checked' : '' }}>
-        Fermeture de la station
-    </label>
+                                        <label>
+                                            <input type="checkbox" name="mesures_preventives[]" value="Fermeture de la station"
+                                                {{ in_array('Fermeture de la station', $formations) ? 'checked' : '' }}>
+                                            Fermeture de la station
+                                        </label>
 
-    <label>
-        <input type="checkbox" name="mesures_preventives[]" value="Arrêt d'une autre activité"
-            {{ in_array("Arrêt d'une autre activité", $formations) ? 'checked' : '' }}>
-        Arrêt d'une autre activité
-        <input type="text" name="mesures_preventives_autre" class="form-control mt-1" placeholder="Précisez ici...">
-    </label>
+                                        <label>
+                                            <input type="checkbox" name="mesures_preventives[]" value="Arrêt d'une autre activité"
+                                                {{ in_array("Arrêt d'une autre activité", $formations) ? 'checked' : '' }}>
+                                            Arrêt d'une autre activité
+                                            <input type="text" name="mesures_preventives_autre" class="form-control mt-1" placeholder="Précisez ici...">
+                                        </label>
 
-    <hr>
+                                        <hr>
 
-    <label>
-        <input type="checkbox" name="mesures_preventives[]" value="Arrêt des travaux pendant le dépotage"
-            {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}>
-        Arrêt des travaux pendant le dépotage
-    </label>
+                                        <label>
+                                            <input type="checkbox" name="mesures_preventives[]" value="Arrêt des travaux pendant le dépotage"
+                                                {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}>
+                                            Arrêt des travaux pendant le dépotage
+                                        </label>
 
-    <label>
-        <input type="checkbox" name="mesures_preventives[]" value="Repérage physique préalable des réseaux enterrés"
-            {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}>
-        Repérage physique préalable des réseaux enterrés
-    </label>
+                                        <label>
+                                            <input type="checkbox" name="mesures_preventives[]" value="Repérage physique préalable des réseaux enterrés"
+                                                {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}>
+                                            Repérage physique préalable des réseaux enterrés
+                                        </label>
 
-    <label>
-        <input type="checkbox" name="mesures_preventives[]" value="Mise à la terre des équipements et test"
-            {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}>
-        Mise à la terre des équipements et test
-    </label>
+                                        <label>
+                                            <input type="checkbox" name="mesures_preventives[]" value="Mise à la terre des équipements et test"
+                                                {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}>
+                                            Mise à la terre des équipements et test
+                                        </label>
 
-    <label>
-        <input type="checkbox" name="mesures_preventives[]" value="Surveillance permanente par un 2ème intervenant"
-            {{ in_array('Surveillance permanente par un 2ème intervenant', $formations) ? 'checked' : '' }}>
-        Surveillance permanente par un 2ème intervenant
-    </label>
+                                        <label>
+                                            <input type="checkbox" name="mesures_preventives[]" value="Surveillance permanente par un 2ème intervenant"
+                                                {{ in_array('Surveillance permanente par un 2ème intervenant', $formations) ? 'checked' : '' }}>
+                                            Surveillance permanente par un 2ème intervenant
+                                        </label>
                                     </div>
                                 </td>
                             </tr>

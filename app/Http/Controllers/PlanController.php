@@ -61,9 +61,7 @@ class PlanController extends Controller
             'operative_mode_number' => 'nullable|string|max:255',
             'travail' => 'nullable|array',
             'travail.*' => 'string', // Each item in travail array is a string
-            'work_nature_other' => 'nullable|string',
             'risques' => 'nullable|array',
-            'risk_nature_other' => 'nullable|string',
             'company_nom_date' => 'nullable|array',
             'avant_entreprise' => 'nullable|array',
         ];
@@ -74,6 +72,8 @@ class PlanController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
+
 
         $nomList = $request->input('apres_entreprise_nom', []);
         $dateList = $request->input('apres_entreprise_date', []);
@@ -116,6 +116,23 @@ class PlanController extends Controller
         // Create a new Plan instance
         $plan = new Plan();
 
+        $plan->work_nature_other = json_encode([
+            'Autres1' => $request->input('work_nature_other1'),
+            'Autres2' => $request->input('work_nature_other2'),
+            'Autres3' => $request->input('work_nature_other3'),
+        ]) ?? null;
+
+        $plan->risk_nature_other = json_encode([
+            'Autres1' => $request->input('risk_nature_other1'),
+            'Autres2' => $request->input('risk_nature_other2'),
+        ]) ?? null;
+
+        $plan->training_certifications_other = json_encode([
+            'Autres1' => $request->input('training_certifications_other1'),
+            'Autres2' => $request->input('training_certifications_other2'),
+            'Autres3' => $request->input('training_certifications_other3'),
+        ]) ?? null;
+
         // Map form data to database fields
         $plan->plan_number = $request->input('plan_number');
         $plan->work_date = $request->input('work_date');
@@ -131,11 +148,8 @@ class PlanController extends Controller
         
         // Serialize array fields as JSON
         $plan->work_nature = $request->input('travail') ? json_encode($request->input('travail')) : null;
-        $plan->work_nature_other = $request->input('work_nature_other');
         $plan->risk_nature = $request->input('risques') ? json_encode($request->input('risques')) : null;
-        $plan->risk_nature_other = $request->input('risk_nature_other');
         $plan->training_certifications = $request->input('formations') ? json_encode($request->input('formations')) : null;
-        $plan->training_certifications_other = $request->input('training_certifications_other');
         
         // Map 'avant' fields
         $plan->avant_entreprise = $avantEntreprises ? json_encode($avantEntreprises) : null;
@@ -262,6 +276,23 @@ class PlanController extends Controller
             ];
         }
 
+        $plan->work_nature_other = json_encode([
+            'Autres1' => $request->input('work_nature_other1'),
+            'Autres2' => $request->input('work_nature_other2'),
+            'Autres3' => $request->input('work_nature_other3'),
+        ]) ?? null;
+
+        $plan->risk_nature_other = json_encode([
+            'Autres1' => $request->input('risk_nature_other1'),
+            'Autres2' => $request->input('risk_nature_other2'),
+        ]) ?? null;
+
+        $plan->training_certifications_other = json_encode([
+            'Autres1' => $request->input('training_certifications_other1'),
+            'Autres2' => $request->input('training_certifications_other2'),
+            'Autres3' => $request->input('training_certifications_other3'),
+        ]) ?? null;
+
         // Map form data to database fields
         $plan->plan_number = $request->input('plan_number');
         $plan->work_date = $request->input('work_date');
@@ -277,11 +308,8 @@ class PlanController extends Controller
         
         // Serialize array fields as JSON
         $plan->work_nature = $request->input('travail') ? json_encode($request->input('travail')) : null;
-        $plan->work_nature_other = $request->input('work_nature_other');
         $plan->risk_nature = $request->input('risques') ? json_encode($request->input('risques')) : null;
-        $plan->risk_nature_other = $request->input('risques_autre');
         $plan->training_certifications = $request->input('formations') ? json_encode($request->input('formations')) : null;
-        $plan->training_certifications_other = $request->input('training_certifications_other');
         
         // Map 'avant' fields
         $plan->avant_entreprise = $avantEntreprises ? json_encode($avantEntreprises) : null;
