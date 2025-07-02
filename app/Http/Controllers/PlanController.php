@@ -157,8 +157,11 @@ class PlanController extends Controller
         $plan->before_time = $request->input('avant_heure');
         $plan->before_responsible_name = $request->input('avant_responsable_nom');
         
-        // Handle boolean for work_not_completed
-        $plan->work_not_completed = $request->input('apres_travail_termine') === 'on';
+        // Handle boolean fields
+        $plan->work_completed = $request->input('apres_travail_termine') === 'on';
+        $plan->work_not_completed = $request->input('apres_travail_non_termine') === 'on';
+        $plan->station_normal = $request->input('apres_station_normale') === 'on';
+        $plan->site_clean_safe = $request->input('apres_chantier_propre') === 'on';
         
         // Map 'apres' fields
         $plan->new_authorization_date = $request->input('apres_nouvelle_autorisation');
