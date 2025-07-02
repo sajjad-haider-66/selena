@@ -75,28 +75,6 @@ class EventController extends Controller
 
         // Process actions
         $actions = $data['actions'] ?? [];
-        if ($cotation > 10) {
-            $actions[] = [
-                'description' => 'Urgent action required',
-                'responsable' => 'RQSE Team',
-                'delai' => now()->addHours(24)->toDateString(),
-                'type' => 'Immediate',
-            ];
-        } elseif ($cotation > 6) {
-            $actions[] = [
-                'description' => 'Action within 48h',
-                'responsable' => 'RQSE Team',
-                'delai' => now()->addDays(2)->toDateString(),
-                'type' => 'Corrective',
-            ];
-        } elseif ($cotation > 1) {
-            $actions[] = [
-                'description' => 'Action within 1 week',
-                'responsable' => 'RQSE Team',
-                'delai' => now()->addDays(7)->toDateString(),
-                'type' => 'Preventive',
-            ];
-        }
 
         // Handle attachments (assuming file upload via AJAX)
         // $attachments = [];
@@ -213,6 +191,7 @@ class EventController extends Controller
             'emetteur' => 'nullable|string',
             'circonstances' => 'nullable|string',
             'risques' => 'nullable|string',
+            'autre_checkbox' => 'nullable|string',
             'analyse' => 'nullable|array',
             'frequence' => 'nullable|in:1,2,3,4',
             'gravite' => 'nullable|in:1,2,3,4',
@@ -230,39 +209,7 @@ class EventController extends Controller
 
         // Process actions
         $actions = $data['actions'] ?? [];
-        if ($cotation > 10) {
-            $actions[] = [
-                'description' => 'Urgent action required',
-                'responsable' => 'RQSE Team',
-                'delai' => now()->addHours(24)->toDateString(),
-                'type' => 'Immediate',
-            ];
-        } elseif ($cotation > 6) {
-            $actions[] = [
-                'description' => 'Action within 48h',
-                'responsable' => 'RQSE Team',
-                'delai' => now()->addDays(2)->toDateString(),
-                'type' => 'Corrective',
-            ];
-        } elseif ($cotation > 1) {
-            $actions[] = [
-                'description' => 'Action within 1 week',
-                'responsable' => 'RQSE Team',
-                'delai' => now()->addDays(7)->toDateString(),
-                'type' => 'Preventive',
-            ];
-        }
 
-        // Handle attachments
-        // $existingAttachments = json_decode($event->attachments, true) ?? [];
-        // $newAttachments = [];
-        // if ($request->hasFile('attachments')) {
-        //     foreach ($request->file('attachments') as $file) {
-        //         $path = $file->store('events', 'public');
-        //         $newAttachments[] = $path;
-        //     }
-        // }
-        // $attachments = array_merge($existingAttachments, $newAttachments);
 
         // Update event
         $event->update([
@@ -270,6 +217,7 @@ class EventController extends Controller
             'lieu' => $data['lieu'],
             'type' => $data['type'],
             'emetteur' => $data['emetteur'],
+            'autre_checkbox' => $data['autre_checkbox'],
             'securite' => $request->has('securite'),
             'sante' => $request->has('sante'),
             'environnement' => $request->has('environnement'),

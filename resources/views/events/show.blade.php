@@ -126,6 +126,15 @@
                         <div class="detail-value">{{ $event->circonstances ?? 'N/A' }}</div>
                     </div>
 
+                    <div class="mb-2">
+                        @if ($event->path)
+                            <img src="{{ asset('storage/' . $event->path) }}" alt="Uploaded Image"
+                                width="200" height="150" class="rounded shadow">
+                        @else
+                            <p><em>Aucune image disponible</em></p>
+                        @endif
+                    </div>
+
                     <div class="form-group">
                         <label class="form-label">Risques encourus</label>
                         <div class="detail-value">{{ $event->risques ?? 'N/A' }}</div>
@@ -315,6 +324,10 @@
                                     <label>{{ $mesure == 'Equipement' ? 'Equipement de sécurité' : $mesure }}</label>
                                 </div>
                             @endforeach
+                        </div>
+                         <div class="form-group autre_input_show" style="{{ $event->autre_checkbox ? '' : 'display: none;' }}">
+                            <p class="mt-2">{{ $event->autre_checkbox ?? '' }}</p>
+                                {{-- <input type="text" name="autre_checkbox" id="autre_checkbox" value="{{ $event->autre_checkbox ?? '' }}" class="form-control " placeholder="Veuillez préciser"> --}}
                         </div>
                     </div>
 

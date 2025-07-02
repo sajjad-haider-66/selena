@@ -170,18 +170,18 @@
                                             <td>{{ $action['pilot_id'] }}</td>
                                             <td>{{ $action['due_date'] }}</td>
                                             <td>
-                                                <input type="date" name="start_on" id="start_on" 
+                                                <input type="date" name="start_on" class="start_on" id="start_on" 
                                                 value="{{ isset($action['start_date']) ? \Carbon\Carbon::parse($action['start_date'])->format('Y-m-d') : '' }}"></td>
 
-                                            <td><input type="date" id="finished_on" name="finished_on" value="{{ isset($action['end_date']) ? \Carbon\Carbon::parse($action['end_date'])->format('Y-m-d') : '' }}"></td>
-                                            <td><input type="text" id="auditor" name="auditor" value="{{ $action['auditor'] ?? '' }}"></td>
-                                            <td><input type="date" id="checked_on" name="checked_on" value="{{ isset($action['checked_on']) ? \Carbon\Carbon::parse($action['checked_on'])->format('Y-m-d') : '' }}"></td>
+                                            <td><input type="date" id="finished_on" class="finished_on" name="finished_on" value="{{ isset($action['end_date']) ? \Carbon\Carbon::parse($action['end_date'])->format('Y-m-d') : '' }}"></td>
+                                            <td><input type="text" id="auditor" class="auditor" name="auditor" value="{{ $action['auditor'] ?? '' }}"></td>
+                                            <td><input type="date" id="checked_on" class="checked_on" name="checked_on" value="{{ isset($action['checked_on']) ? \Carbon\Carbon::parse($action['checked_on'])->format('Y-m-d') : '' }}"></td>
                                             <td>
                                                 <progress value="{{ $action['progress_rate'] }}" max="100"></progress>
                                                 {{ $action['progress_rate'] }}%
                                             </td>
                                             <td>{{ $action['efficiency'] }}</td>
-                                            <td><textarea name="comments" id="comments"  rows="2">{{ $action['comments'] }}</textarea></td>
+                                            <td><textarea name="comments" class="comments" id="comments"  rows="2">{{ $action['comments'] }}</textarea></td>
                                             <td><button class="btn btn-success btn-sm save-actions-btn" data-id="{{ $action['id'] }}" id="save-actions-btn">Enregistrer</button></td>
                                             <td>
                                                 @if ($routeName && Route::has($routeName))
@@ -237,15 +237,16 @@
 
             $(document).on('click', '.save-actions-btn', function () {
 
-                let actionId = $(this).data('id');
                 // Collect data from the row
+                let actionId = $(this).data('id');
                 let row = $(this).closest('.action-row');
+
                 let data = {
-                    start_on: row.find('#start_on').val(),
-                    finished_on: row.find('#finished_on').val(),
-                    auditor: row.find('#auditor').val(),
-                    checked_on: row.find('#checked_on').val(),
-                    comments: row.find('#comments').val(),
+                    start_on: row.find('.start_on').val(),
+                    finished_on: row.find('.finished_on').val(),
+                    auditor: row.find('.auditor').val(),
+                    checked_on: row.find('.checked_on').val(),
+                    comments: row.find('.comments').val(),
                     _token: $('meta[name="csrf-token"]').attr('content'),
                     action_id: actionId
                 };

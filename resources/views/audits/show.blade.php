@@ -174,8 +174,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                 @php
-                                    $actions = $audit->actions ?? [];
+                                @php
+                                    $actions = is_array($audit->actions) ? $audit->actions : json_decode($audit->actions, true);
                                 @endphp
                                 @if (!empty($actions))
                                     @foreach ($actions as $action)

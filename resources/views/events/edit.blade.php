@@ -126,6 +126,15 @@
                             <input type="file" name="image" id="image" accept="image/*" class="form-control mb-2">
                             <textarea name="circonstances" rows="3" class="form-control" placeholder="Enter image description...">{{ $event->circonstances ?? '' }}</textarea>
                         </div>
+                        
+                        <div class="mb-2">
+                            @if ($event->path)
+                                <img src="{{ asset('storage/' . $event->path) }}" alt="Uploaded Image"
+                                    width="200" height="150" class="rounded shadow">
+                            @else
+                                <p><em>Aucune image disponible</em></p>
+                            @endif
+                        </div>
 
                         <div class="form-group">
                             <label class="form-label">Risques encourus</label>
@@ -239,10 +248,11 @@
                                     @endforeach
                                 </div>
                             </div>
-                              <div class="form-group">
+                            <div class="form-group">
                                 <label class="form-label">Autre</label>
                                 <textarea name="autre" id="autre" class="form-control" rows="2">{{ $event->autre ?? '' }}</textarea>
                             </div>
+                          
                         </div>
 
                         <div class="row">
@@ -293,11 +303,14 @@
                             <div class="checkbox-group">
                                 @foreach (['Information', 'Organisation', 'Equipement', 'Autre'] as $mesure)
                                     <div class="checkbox-item">
-                                        <input type="checkbox" name="mesures[]" value="{{ $mesure }}"
+                                        <input type="checkbox"  id="{{ $mesure == 'Autre' ? 'autre_input' : 'mesure_' . strtolower($mesure) }}" name="mesures[]" value="{{ $mesure }}"
                                             {{ in_array($mesure, $mesures) ? 'checked' : '' }}>
                                         <label>{{ $mesure == 'Equipement' ? 'Equipement de sécurité' : $mesure }}</label>
                                     </div>
                                 @endforeach
+                            </div>
+                           <div class="form-group autre_input_show" style="{{ $event->autre_checkbox ? '' : 'display: none;' }}">
+                                <input type="text" name="autre_checkbox" id="autre_checkbox" value="{{ $event->autre_checkbox ?? '' }}" class="form-control " placeholder="Veuillez préciser">
                             </div>
                         </div>
 
@@ -388,6 +401,15 @@
             // Remove Action
             $(document).on('click', '.remove-action', function () {
                 $(this).closest('tr').remove();
+            });
+
+            $('body').on('click', '#autre_input', function (e) {
+                if ($('#autre_input').is(":checked")) {
+                    $(".autre_input_show").slideDown("fast");
+                }
+                else {
+                    $(".autre_input_show").slideUp("fast");
+                }
             });
 
             // Calculate risk and update deadline

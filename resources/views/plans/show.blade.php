@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Show - Audit Details') }}
+            {{ __('Show - Prevention Plan Details') }}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -13,6 +13,8 @@
                         <tr>
                             <td><strong>N°</strong></td>
                             <td>{{ $plans->plan_number }}</td>
+                            <td><strong>Date</strong></td>
+                            <td>{{ $plans->work_date }}</td>
                         </tr>
                     </table>
                     <h4>Nom de l'Entreprise</h4>
