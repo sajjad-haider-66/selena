@@ -53,45 +53,54 @@ class Action extends Model
     }
 
     public function calculateProgressRate()
-        {
-            $progress = 0;
+    {
+        $progress = 0;
 
-            // Base progress rates
-            if ($this->start_date) $progress += 25; // Action Started On -> 25%
-            if ($this->end_date) $progress += 25;   // Action Completed On -> 25%
-            if ($this->checked_on) $progress += 20; // Action Verified On -> 20%
+        // Base progress rates
+        if ($this->start_date) $progress += 25; // Action Started On -> 25%
+        if ($this->end_date) $progress += 25;   // Action Completed On -> 25%
+        if ($this->checked_on) $progress += 20; // Action Verified On -> 20%
 
-            // Emission Date + Deadline logic
-            $emissionDate = Carbon::parse($this->start_date);
-            $dueDate = Carbon::parse($this->due_date);
-            $completionDate = $this->end_date ? Carbon::parse($this->end_date) : null;
-            $checkedDate = $this->checked_on ? Carbon::parse($this->checked_on) : null;
+        // Emission Date + Deadline logic
+        $emissionDate = Carbon::parse($this->start_date);
+        $dueDate = Carbon::parse($this->due_date);
+        $completionDate = $this->end_date ? Carbon::parse($this->end_date) : null;
+        $checkedDate = $this->checked_on ? Carbon::parse($this->checked_on) : null;
 
-            // Calculate deadline end (emission date + due date duration)
-            $deadlineEnd = $emissionDate->copy()->addDays($dueDate->diffInDays($emissionDate));
+        // Calculate deadline end (emission date + due date duration)
+        $deadlineEnd = $emissionDate->copy()->addDays($dueDate->diffInDays($emissionDate));
 
-            if ($completionDate && $checkedDate) {
-                if ($completionDate->lte($deadlineEnd) && $checkedDate) {
-                    $progress = 100; // Completed on time and verified
-                } elseif ($completionDate->lte($deadlineEnd) && !$checkedDate) {
-                    $progress = 80;  // Completed on time but not verified
-                } elseif ($completionDate->gt($deadlineEnd) && $checkedDate) {
-                    $progress = 70;  // Completed late but verified
-                } elseif ($completionDate->gt($deadlineEnd) && !$checkedDate) {
-                    $progress = 70;  // Completed late but not verified (assuming 70% as per rules)
-                }
-            } elseif (!$completionDate && !$checkedDate && $this->start_date) {
-                $progress = 25; // Only started
-            } elseif ($completionDate && !$checkedDate) {
-                $progress = 50; // Completed but not verified (25% + 25%)
+        if ($completionDate) {
+            if ($completionDate->lte($deadlineEnd)) {
+                $progress += 30; // +30% if completed on or before deadline
+            } else {
+                $progress += 0;  // +0% if completed after deadline
             }
 
-            // Ensure progress doesn't exceed 100
-            $this->progress_rate = min($progress, 100);
-
-            // Calculate efficiency
-            $this->efficiency = ($this->progress_rate >= 80) ? 'O' : 'N';
-
-            $this->save();
+            // Special cases
+            if ($checkedDate) {
+                if ($completionDate->lte($deadlineEnd)) {
+                    $progress = 100; // 100% if completed on time and verified
+                } else {
+                    $progress = 25 + 25 + 20; // 70% if completed late and verified
+                }
+            } else {
+                if ($completionDate->lte($deadlineEnd)) {
+                    $progress = 25 + 25 + 30; // 80% if completed on time but not verified
+                } else {
+                    $progress = 25 + 25; // 50% if completed late but not verified
+                }
+            }
+        } elseif (!$this->start_date && !$this->end_date && !$this->checked_on) {
+            $progress = 0; // 0% if no fields are filled
         }
+
+        // Ensure progress doesn't exceed 100
+        $this->progress_rate = min($progress, 100);
+
+        // Calculate efficiency
+        $this->efficiency = ($this->progress_rate >= 80) ? 'O' : 'N';
+
+        $this->save();
     }
+}
