@@ -55,8 +55,11 @@
                         <table class="table table-bordered">
                             <tr>
                                 <td style="width:20%"><label for="plan_number">N° A</label></td>
-                                <td style="width:30%"><input type="text" name="plan_number" id="plan_number"
-                                        required></td>
+                                <td style="width:30%"><input type="text" name="plan_number" id="plan_number" value="{{ old('plan_number') }}" required>
+
+@error('plan_number')
+    <span class="text-danger">{{ $message }}</span>
+@enderror</td>
                                 <td style="width:20%"><label for="work_date">DATE des travaux</label></td>
                                 <td style="width:30%"><input type="date" name="work_date" id="work_date" required>
                                 </td>
