@@ -129,8 +129,7 @@ class PlanController extends Controller
 
         $plan->training_certifications_other = json_encode([
             'Autres1' => $request->input('training_certifications_other1'),
-            'Autres2' => $request->input('training_certifications_other2'),
-            'Autres3' => $request->input('training_certifications_other3'),
+            'Autres2' => $request->input('formations_autre'),
         ]) ?? null;
 
         // Map form data to database fields
@@ -292,8 +291,7 @@ class PlanController extends Controller
 
         $plan->training_certifications_other = json_encode([
             'Autres1' => $request->input('training_certifications_other1'),
-            'Autres2' => $request->input('training_certifications_other2'),
-            'Autres3' => $request->input('training_certifications_other3'),
+            'Autres2' => $request->input('formations_autre'),
         ]) ?? null;
 
         // Map form data to database fields

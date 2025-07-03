@@ -195,81 +195,57 @@
                                     <div class="checkbox-list">
                                         <label><input type="checkbox" disabled {{ in_array('Autorisation de conduite d\'un engin de chantier', $formations) ? 'checked' : '' }}> Autorisation de conduite d'un engin de chantier</label>
                                         <label><input type="checkbox" disabled {{ in_array('Habilitation électrique', $formations) ? 'checked' : '' }}> Habilitation électrique</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Arrêt de la distribution', $formations) ? 'checked' : '' }}> Arrêt de la distribution</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Arrêt d’une autre activité', $formations) ? 'checked' : '' }}> Arrêt d’une autre activité</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}> Arrêt des travaux pendant le dépotage</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}> Repérage physique préalable des réseaux enterrés</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}> Mise à la terre des équipements et test</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Surveillance permanente par un 2éme intervenant', $formations) ? 'checked' : '' }}> Surveillance permanente par un 2éme intervenant</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Analyse d’atmosphère en continu', $formations) ? 'checked' : '' }}> Analyse d’atmosphère en continu</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Extincteurs adaptés', $formations) ? 'checked' : '' }}> Extincteurs adaptés</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Réception des échafaudages', $formations) ? 'checked' : '' }}> Réception des échafaudages</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Obturation des égouts / regards', $formations) ? 'checked' : '' }}> Obturation des égouts / regards</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Consignation des réseaux électriques / hydrauliques', $formations) ? 'checked' : '' }}> Consignation des réseaux électriques / hydrauliques</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Outillage / matériel ATEX', $formations) ? 'checked' : '' }}> Outillage / matériel ATEX</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Balisage de la zone, aide à la', $formations) ? 'checked' : '' }}> Balisage de la zone, aide à la circulation</label>
                                         <label><input type="checkbox" disabled {{ in_array('Autres1', $formations) ? 'checked' : '' }}> Autres: {{ $training_certifications_other['Autres1'] ?? '' }}</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Port d’EPI et autres équipements spécifiques :', $formations) ? 'checked' : '' }}> Port d’EPI et autres équipements spécifiques :</label>
-                                        <label><input type="checkbox" disabled {{ in_array('- Appareil respiratoire, ventilation forcée', $formations) ? 'checked' : '' }}> - Appareil respiratoire, ventilation forcée</label>
-                                        <label><input type="checkbox" disabled {{ in_array('- Harnais, baudrier, filet de sécurité,sangle de retenue', $formations) ? 'checked' : '' }}> - Harnais, baudrier, filet de sécurité, sangle de retenue</label>
-                                        <label><input type="checkbox" disabled {{ in_array('- Mise à disposition casqueanti-bruit', $formations) ? 'checked' : '' }}> - Mise à disposition casque anti-bruit</label>
-                                        <label><input type="checkbox" disabled {{ in_array('- Aide à la manutention', $formations) ? 'checked' : '' }}> - Aide à la manutention</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres2', $formations) ? 'checked' : '' }}> Autres: {{ $training_certifications_other['Autres2'] ?? '' }}</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Permis spécifique :', $formations) ? 'checked' : '' }}> Permis spécifique :</label>
-                                        <label><input type="checkbox" disabled {{ in_array('- Permis de feu', $formations) ? 'checked' : '' }}> - Permis de feu</label>
-                                        <label><input type="checkbox" disabled {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis de levage</label>
-                                        <label><input type="checkbox" disabled {{ in_array('- Permis de fouille', $formations) ? 'checked' : '' }}> - Permis de fouille</label>
-                                        <label><input type="checkbox" disabled {{ in_array('Autres3', $formations) ? 'checked' : '' }}> Autres: {{ $training_certifications_other['Autres3'] ?? '' }}</label>
                                          <div class="font-weight-bold">
                                             <u><b>MESURES PRÉVENTIVES</b></u>
                                         </div>
                                         <label>
-                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Arrêt de la distribution : partiel"
+                                            <input type="checkbox" disabled value="Arrêt de la distribution : partiel"
                                                 {{ in_array('Arrêt de la distribution : partiel', $formations) ? 'checked' : '' }}>
                                             Arrêt de la distribution : partiel
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Arrêt de la distribution : total"
+                                            <input type="checkbox" disabled value="Arrêt de la distribution : total"
                                                 {{ in_array('Arrêt de la distribution : total', $formations) ? 'checked' : '' }}>
                                             Arrêt de la distribution : total
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Fermeture de la station"
+                                            <input type="checkbox" disabled value="Fermeture de la station"
                                                 {{ in_array('Fermeture de la station', $formations) ? 'checked' : '' }}>
                                             Fermeture de la station
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Arrêt d'une autre activité"
+                                            <input type="checkbox" disabled value="Arrêt d'une autre activité"
                                                 {{ in_array("Arrêt d'une autre activité", $formations) ? 'checked' : '' }}>
                                             Arrêt d'une autre activité
-                                            <input type="text" name="mesures_preventives_autre" class="form-control mt-1" placeholder="Précisez ici...">
+                                            <input type="text" value="{{ $training_certifications_other['Autres2'] ?? '' }}" class="form-control mt-1" placeholder="Précisez ici..." disabled>
                                         </label>
 
                                         <hr>
 
                                         <label>
-                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Arrêt des travaux pendant le dépotage"
+                                            <input type="checkbox" disabled value="Arrêt des travaux pendant le dépotage"
                                                 {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}>
                                             Arrêt des travaux pendant le dépotage
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Repérage physique préalable des réseaux enterrés"
+                                            <input type="checkbox" disabled value="Repérage physique préalable des réseaux enterrés"
                                                 {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}>
                                             Repérage physique préalable des réseaux enterrés
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Mise à la terre des équipements et test"
+                                            <input type="checkbox" disabled value="Mise à la terre des équipements et test"
                                                 {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}>
                                             Mise à la terre des équipements et test
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" disabled name="mesures_preventives[]" value="Surveillance permanente par un 2ème intervenant"
+                                            <input type="checkbox" disabled value="Surveillance permanente par un 2ème intervenant"
                                                 {{ in_array('Surveillance permanente par un 2ème intervenant', $formations) ? 'checked' : '' }}>
                                             Surveillance permanente par un 2ème intervenant
                                         </label>

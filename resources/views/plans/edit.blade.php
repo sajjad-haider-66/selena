@@ -220,81 +220,57 @@
                                     <div class="checkbox-list">
                                         <label><input type="checkbox" name="formations[]" value="Autorisation de conduite d'un engin de chantier" {{ in_array('Autorisation de conduite dun engin de chantier', $formations) ? 'checked' : '' }}> Autorisation de conduite d'un engin de chantier</label>
                                         <label><input type="checkbox" name="formations[]" value="Habilitation électrique" {{ in_array('Habilitation électrique', $formations) ? 'checked' : '' }}> Habilitation électrique</label>
-                                        <label><input type="checkbox" name="formations[]" value="Arrêt de la distribution" {{ in_array('Arrêt de la distribution', $formations) ? 'checked' : '' }}> Arrêt de la distribution</label>
-                                        <label><input type="checkbox" name="formations[]" value="Arrêt d’une autre activité" {{ in_array('Arrêt d’une autre activité', $formations) ? 'checked' : '' }}> Arrêt d’une autre activité</label>
-                                        <label><input type="checkbox" name="formations[]" value="Arrêt des travaux pendant le dépotage" {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}> Arrêt des travaux pendant le dépotage</label>
-                                        <label><input type="checkbox" name="formations[]" value="Repérage physique préalable des réseaux enterrés" {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}> Repérage physique préalable des réseaux enterrés</label>
-                                        <label><input type="checkbox" name="formations[]" value="Mise à la terre des équipements et test" {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}> Mise à la terre des équipements et test</label>
-                                        <label><input type="checkbox" name="formations[]" value="Surveillance permanente par un 2éme intervenant" {{ in_array('Surveillance permanente par un 2éme intervenant', $formations) ? 'checked' : '' }}> Surveillance permanente par un 2éme intervenant</label>
-                                        <label><input type="checkbox" name="formations[]" value="Analyse d’atmosphère en continu" {{ in_array('Analyse d’atmosphère en continu', $formations) ? 'checked' : '' }}> Analyse d’atmosphère en continu</label>
-                                        <label><input type="checkbox" name="formations[]" value="Extincteurs adaptés" {{ in_array('Extincteurs adaptés', $formations) ? 'checked' : '' }}> Extincteurs adaptés</label>
-                                        <label><input type="checkbox" name="formations[]" value="Réception des échafaudages" {{ in_array('Réception des échafaudages', $formations) ? 'checked' : '' }}> Réception des échafaudages</label>
-                                        <label><input type="checkbox" name="formations[]" value="Obturation des égouts / regards" {{ in_array('Obturation des égouts / regards', $formations) ? 'checked' : '' }}> Obturation des égouts / regards</label>
-                                        <label><input type="checkbox" name="formations[]" value="Consignation des réseaux électriques / hydrauliques" {{ in_array('Consignation des réseaux électriques / hydrauliques', $formations) ? 'checked' : '' }}> Consignation des réseaux électriques / hydrauliques</label>
-                                        <label><input type="checkbox" name="formations[]" value="Outillage / matériel ATEX" {{ in_array('Outillage / matériel ATEX', $formations) ? 'checked' : '' }}> Outillage / matériel ATEX</label>
-                                        <label><input type="checkbox" name="formations[]" value="Balisage de la zone, aide à la" {{ in_array('Balisage de la zone, aide à la', $formations) ? 'checked' : '' }}> circulation</label>
-                                        <label><input type="checkbox" name="formations[]" value="Autres1" {{ in_array('Autres1', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other1" value="{{ old('training_certifications_other1', $training_certifications_other['Autres1']) }}"></label>
-                                        <label><input type="checkbox" name="formations[]" value="Port d’EPI et autres équipements spécifiques :" {{ in_array('Port d’EPI et autres équipements spécifiques :', $formations) ? 'checked' : '' }}> Port d’EPI et autres équipements spécifiques :</label>
-                                        <label><input type="checkbox" name="formations[]" value="- Appareil respiratoire, ventilation forcée" {{ in_array('- Appareil respiratoire, ventilation forcée', $formations) ? 'checked' : '' }}> - Appareil respiratoire, ventilation forcée</label>
-                                        <label><input type="checkbox" name="formations[]" value="- Harnais, baudrier, filet de sécurité,sangle de retenue" {{ in_array('- Harnais, baudrier, filet de sécurité,sangle de retenue', $formations) ? 'checked' : '' }}> - Harnais, baudrier, filet de sécurité,sangle de retenue</label>
-                                        <label><input type="checkbox" name="formations[]" value="- Mise à disposition casqueanti-bruit" {{ in_array('- Mise à disposition casqueanti-bruit', $formations) ? 'checked' : '' }}> - Mise à disposition casqueanti-bruit</label>
-                                        <label><input type="checkbox" name="formations[]" value="- Aide à la manutention" {{ in_array('- Aide à la manutention', $formations) ? 'checked' : '' }}> - Aide à la manutention</label>
-                                        <label><input type="checkbox" name="formations[]" value="Autres2" {{ in_array('Autres2', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other2" value="{{ old('training_certifications_other2', $training_certifications_other['Autres2']) }}"></label>
-                                        <label><input type="checkbox" name="formations[]" value="Permis spécifique :" {{ in_array('Permis spécifique :', $formations) ? 'checked' : '' }}> Permis spécifique :</label>
-                                        <label><input type="checkbox" name="formations[]" value="- Permis de feu" {{ in_array('- Permis de feu', $formations) ? 'checked' : '' }}> - Permis de feu</label>
-                                        <label><input type="checkbox" name="formations[]" value="- Permis delevage" {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis delevage</label>
-                                        <label><input type="checkbox" name="formations[]" value="- Permis de fouille" {{ in_array('- Permis de fouille', $formations) ? 'checked' : '' }}> - Permis de fouille</label>
-                                        <label><input type="checkbox" name="formations[]" value="Autres3" {{ in_array('Autres3', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other3" value="{{ old('training_certifications_other3', $training_certifications_other['Autres3']) }}"></label>
+                                        <label><input type="checkbox" name="formations[]" value="Autres3" {{ in_array('Autres1', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other1" value="{{ old('training_certifications_other3', $training_certifications_other['Autres3']) }}"></label>
                                         <div class="font-weight-bold">
                                             <u><b>MESURES PRÉVENTIVES</b></u>
                                         </div>
                                         <label>
-                                            <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : partiel"
+                                            <input type="checkbox" name="formations[]" value="Arrêt de la distribution : partiel"
                                                 {{ in_array('Arrêt de la distribution : partiel', $formations) ? 'checked' : '' }}>
                                             Arrêt de la distribution : partiel
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" name="mesures_preventives[]" value="Arrêt de la distribution : total"
+                                            <input type="checkbox" name="formations[]" value="Arrêt de la distribution : total"
                                                 {{ in_array('Arrêt de la distribution : total', $formations) ? 'checked' : '' }}>
                                             Arrêt de la distribution : total
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" name="mesures_preventives[]" value="Fermeture de la station"
+                                            <input type="checkbox" name="formations[]" value="Fermeture de la station"
                                                 {{ in_array('Fermeture de la station', $formations) ? 'checked' : '' }}>
                                             Fermeture de la station
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" name="mesures_preventives[]" value="Arrêt d'une autre activité"
+                                            <input type="checkbox" name="formations[]" value="Arrêt d'une autre activité"
                                                 {{ in_array("Arrêt d'une autre activité", $formations) ? 'checked' : '' }}>
                                             Arrêt d'une autre activité
-                                            <input type="text" name="mesures_preventives_autre" class="form-control mt-1" placeholder="Précisez ici...">
+                                            <input type="text" name="formations_autre" class="form-control mt-1" value="{{ $training_certifications_other['Autres2'] ?? '' }}" placeholder="Précisez ici...">
                                         </label>
 
                                         <hr>
 
                                         <label>
-                                            <input type="checkbox" name="mesures_preventives[]" value="Arrêt des travaux pendant le dépotage"
+                                            <input type="checkbox" name="formations[]" value="Arrêt des travaux pendant le dépotage"
                                                 {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}>
                                             Arrêt des travaux pendant le dépotage
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" name="mesures_preventives[]" value="Repérage physique préalable des réseaux enterrés"
+                                            <input type="checkbox" name="formations[]" value="Repérage physique préalable des réseaux enterrés"
                                                 {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}>
                                             Repérage physique préalable des réseaux enterrés
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" name="mesures_preventives[]" value="Mise à la terre des équipements et test"
+                                            <input type="checkbox" name="formations[]" value="Mise à la terre des équipements et test"
                                                 {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}>
                                             Mise à la terre des équipements et test
                                         </label>
 
                                         <label>
-                                            <input type="checkbox" name="mesures_preventives[]" value="Surveillance permanente par un 2ème intervenant"
+                                            <input type="checkbox" name="formations[]" value="Surveillance permanente par un 2ème intervenant"
                                                 {{ in_array('Surveillance permanente par un 2ème intervenant', $formations) ? 'checked' : '' }}>
                                             Surveillance permanente par un 2ème intervenant
                                         </label>
