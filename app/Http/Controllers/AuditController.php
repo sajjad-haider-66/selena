@@ -135,7 +135,7 @@ class AuditController extends Controller
                 'description' => $actions[0]['description'] ??'audit description',
                 'issued_date' => now(),
                 'emission' => now(),
-                'pilot_id' => auth()->user()->id ?? 0,
+                'pilot_id' => "Nom de l'intervenant",
                 'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
                 'json_data' => json_encode(['audit_id' => $audit->id, 'progress' => 0]),
                 'progress_rate' => 0,

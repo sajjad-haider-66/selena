@@ -39,19 +39,6 @@ Route::get('/storage/talks/{filename}', function ($filename) {
     return response($file, 200)->header('Content-Type', $type);
 });
 
-Route::get('/storage/events/{filename}', function ($filename) {
-    $path = storage_path('app/public/events/' . $filename);
-
-    if (!File::exists($path)) {
-        abort(404);
-    }
-
-    $file = File::get($path);
-    $type = File::mimeType($path);
-
-    return response($file, 200)->header('Content-Type', $type);
-});
-
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created successfully';

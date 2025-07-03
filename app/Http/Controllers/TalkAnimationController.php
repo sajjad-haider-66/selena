@@ -116,7 +116,7 @@ class TalkAnimationController extends Controller
                 'description' => $actions[0]['action'] ?? 'talk description',
                 'issued_date' => now(),
                 'emission' => now(),
-                'pilot_id' => auth()->user()->id ?? 0,
+                'pilot_id' => "Animateur(s)",
                 'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
                 'json_data' => json_encode(['talk_id' => $talk->id, 'progress' => 0]),
                 'progress_rate' => 0,
