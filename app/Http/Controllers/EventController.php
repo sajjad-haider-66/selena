@@ -125,7 +125,7 @@ class EventController extends Controller
             'issued_date' => now(),
             'emission' => now(),
             'type' => $actions[0]['type'] ?? 'Preventive',
-            'pilot_id' => $this->assignResponsible($event->type, $cotation),
+            'pilot_id' => $data['emetteur'] ?? $this->assignResponsible($event->type, $cotation),
             'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
             'json_data' => json_encode(['event_id' => $event->id, 'progress' => 0]),
             'progress_rate' => 0,

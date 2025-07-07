@@ -64,40 +64,6 @@ class AuditController extends Controller
             'actions' => 'nullable|array',
         ]);
 
-        // Calculate score based on responses
-        // $totalScore = 0;
-        // if ($request->has('responses')) {
-        //     foreach ($request->input('responses') as $response) {
-        //         $note = $response['note'] ?? '';
-        //         switch ($note) {
-        //             case 'TS':
-        //                 $totalScore += 2;
-        //                 break;
-        //             case 'S':
-        //                 $totalScore += 1;
-        //                 break;
-        //             case 'IS':
-        //                 $totalScore -= 1;
-        //                 break;
-        //             case 'SO':
-        //                 $totalScore += 0;
-        //                 break;
-        //         }
-        //     }
-        // }
-
-        // Calculate QSER score based on range
-        // $qserScore = $totalScore;
-        // if ($qserScore >= 12) {
-        //     $cultureQser = '++';
-        // } elseif ($qserScore >= 0) {
-        //     $cultureQser = '+';
-        // } elseif ($qserScore >= -12) {
-        //     $cultureQser = '-';
-        // } else {
-        //     $cultureQser = '--';
-        // }
-
         // Process responses array
         $responses = [];
         if ($request->has('responses')) {
@@ -135,7 +101,7 @@ class AuditController extends Controller
                 'description' => $actions[0]['description'] ??'audit description',
                 'issued_date' => now(),
                 'emission' => now(),
-                'pilot_id' => auth()->user()->id ?? 0,
+                'pilot_id' => $data['intervenant'] ?? auth()->user()->id,
                 'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
                 'json_data' => json_encode(['audit_id' => $audit->id, 'progress' => 0]),
                 'progress_rate' => 0,
