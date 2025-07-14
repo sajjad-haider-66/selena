@@ -55,8 +55,11 @@
                         <table class="table table-bordered">
                             <tr>
                                 <td style="width:20%"><label for="plan_number">N° A</label></td>
-                                <td style="width:30%"><input type="text" name="plan_number" id="plan_number"
-                                        required></td>
+                                <td style="width:30%"><input type="text" name="plan_number" id="plan_number" value="{{ old('plan_number') }}" required>
+
+@error('plan_number')
+    <span class="text-danger">{{ $message }}</span>
+@enderror</td>
                                 <td style="width:20%"><label for="work_date">DATE des travaux</label></td>
                                 <td style="width:30%"><input type="date" name="work_date" id="work_date" required>
                                 </td>
@@ -339,22 +342,30 @@
                                                 <hr>
                                                 <!-- Section 2: À la charge de la / des entreprise(s) extérieure(s) -->
                                                 <h1 class="font-weight-bold">À la charge de la / des entreprise(s) extérieure(s)</h1>
-                                                <label>
-                                                    <input type="checkbox" name="formations[]" value="Arrêt des travaux pendant le dépotage">
-                                                    Arrêt des travaux pendant le dépotage
-                                                </label>
-                                                <label>
-                                                    <input type="checkbox" name="formations[]" value="Repérage physique préalable des réseaux enterrés">
-                                                    Repérage physique préalable des réseaux enterrés
-                                                </label>
-                                                <label>
-                                                    <input type="checkbox" name="formations[]" value="Mise à la terre des équipements et test">
-                                                    Mise à la terre des équipements et test
-                                                </label>
-                                                <label>
-                                                    <input type="checkbox" name="formations[]" value="Surveillance permanente par un 2ème intervenant">
-                                                    Surveillance permanente par un 2ème intervenant
-                                                </label>
+                                                <label><input type="checkbox" name="formations[]" value="Arrêt de la distribution"> Arrêt de la distribution</label>
+                                                <label><input type="checkbox" name="formations[]" value="Arrêt d’une autre activité"> Arrêt d’une autre activité</label>
+                                                <label><input type="checkbox" name="formations[]" value="Arrêt des travaux pendant le dépotage"> Arrêt des travaux pendant le dépotage</label>
+                                                <label><input type="checkbox" name="formations[]" value="Repérage physique préalable des réseaux enterrés"> Repérage physique préalable des réseaux enterrés</label>
+                                                <label><input type="checkbox" name="formations[]" value="Mise à la terre des équipements et test"> Mise à la terre des équipements et test</label>
+                                                <label><input type="checkbox" name="formations[]" value="Surveillance permanente par un 2éme intervenant"> Surveillance permanente par un 2éme intervenant</label>
+                                                <label><input type="checkbox" name="formations[]" value="Analyse d’atmosphère en continu"> Analyse d’atmosphère en continu</label>
+                                                <label><input type="checkbox" name="formations[]" value="Extincteurs adaptés"> Extincteurs adaptés</label>
+                                                <label><input type="checkbox" name="formations[]" value="Réception des échafaudages"> Réception des échafaudages</label>
+                                                <label><input type="checkbox" name="formations[]" value="Obturation des égouts / regards"> Obturation des égouts / regards</label>
+                                                <label><input type="checkbox" name="formations[]" value="Consignation des réseaux électriques / hydrauliques"> Consignation des réseaux électriques / hydrauliques</label>
+                                                <label><input type="checkbox" name="formations[]" value="Outillage / matériel ATEX"> Outillage / matériel ATEX</label>
+                                                <label><input type="checkbox" name="formations[]" value="Balisage de la zone, aide à la"> circulation</label>
+                                                <label><input type="checkbox" name="formations[]" value="Autres3"> Autres <input type="text" name="training_certifications_other3"></label>
+                                                <label><input type="checkbox" name="formations[]" value="Port d’EPI et autres équipements spécifiques :"> Port d’EPI et autres équipements spécifiques :</label>
+                                                <label><input type="checkbox" name="formations[]" value="- Appareil respiratoire, ventilation forcée"> - Appareil respiratoire, ventilation forcée</label>
+                                                <label><input type="checkbox" name="formations[]" value="- Harnais, baudrier, filet de sécurité,sangle de retenue">- Harnais, baudrier, filet de sécurité,sangle de retenue </label>
+                                                <label><input type="checkbox" name="formations[]" value="- Mise à disposition casqueanti-bruit">- Mise à disposition casqueanti-bruit</label>
+                                                <label><input type="checkbox" name="formations[]" value="- Aide à la manutention">- Aide à la manutention </label>
+                                                <label><input type="checkbox" name="formations[]" value="Autres4"> Autres <input type="text" name="training_certifications_other4"></label>
+                                                <label><input type="checkbox" name="formations[]" value="Permis spécifique :">Permis spécifique : </label>
+                                                <label><input type="checkbox" name="formations[]" value="- Permis de feu"> - Permis de feu</label>
+                                                <label><input type="checkbox" name="formations[]" value="- Permis delevage">- Permis delevage </label>
+                                                <label><input type="checkbox" name="formations[]" value="- Permis de fouille">- Permis de fouille </label>
                                             </div>
 
                                         </div>

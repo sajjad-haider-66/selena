@@ -210,6 +210,12 @@ class EventController extends Controller
         // Process actions
         $actions = $data['actions'] ?? [];
 
+           // Handle single image
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $single_image = $file->store('events', 'public');
+        }
+
 
         // Update event
         $event->update([
@@ -228,6 +234,7 @@ class EventController extends Controller
             'cotation' => $cotation,
             'frequence' => $frequence,
             'gravite' => $gravite,
+            'path' => $single_image ?? $event->path, // Keep existing path if no new image
             'propositions' => json_encode($data['propositions'] ?? []),
             'mesures' => json_encode($data['mesures'] ?? []),
             'actions' => json_encode($actions),

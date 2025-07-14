@@ -31,8 +31,8 @@
                                     <td>{{ $talk->lieu }}</td>
                                     <td>{{ $talk->theme }}</td>
                                     <td>
-                                        <span class="badge {{ $talk->status == 'Green' ? 'bg-success' : 'bg-danger' }}">
-                                            {{ $talk->status }}
+                                        <span class="badge {{ $talk->date < now()->toDateString() ? 'bg-danger' : 'bg-success' }}">
+                                            {{ $talk->date < now()->toDateString() ? 'Closed' : 'Scheduled' }}
                                         </span>
                                     </td>
                                     <td>
