@@ -119,7 +119,7 @@
                                 <label>RSE</label>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" name="surete" id="surete" {{ $event->environnement ? 'checked' : '' }} disabled>
+                                <input type="checkbox" name="surete" id="surete" {{ $event->attachments ? 'checked' : '' }} disabled>
                                 <label for="surete">Surete</label>
                             </div>
                         </div>

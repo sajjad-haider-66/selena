@@ -112,7 +112,7 @@ class EventController extends Controller
             'propositions' => json_encode($data['propositions'] ?? []),
             'mesures' => json_encode($data['mesures'] ?? []),
             'actions' => json_encode($actions),
-            // 'attachments' => json_encode($attachments),
+            'attachments' => $request->has('surete'),
         ]);
 
         // Auto-generate Action
@@ -198,7 +198,7 @@ class EventController extends Controller
             'propositions' => 'nullable|array',
             'mesures' => 'nullable|array',
             'actions' => 'nullable|array',
-            // 'attachments' => 'nullable|array',
+           
             // 'attachments.*' => 'file|mimes:jpg,jpeg,png,mp4,mov|max:20480',
         ]);
 
@@ -238,7 +238,7 @@ class EventController extends Controller
             'propositions' => json_encode($data['propositions'] ?? []),
             'mesures' => json_encode($data['mesures'] ?? []),
             'actions' => json_encode($actions),
-            // 'attachments' => json_encode($attachments),
+            'attachments' => $request->has('surete'),
         ]);
 
         // Update or create associated action
