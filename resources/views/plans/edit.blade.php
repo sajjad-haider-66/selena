@@ -218,7 +218,7 @@
                                         $training_certifications_other = old('training_certifications_other', json_decode($plan->training_certifications_other, true) ?? []);
                                     @endphp
                                     <div class="checkbox-list">
-                                        <label><input type="checkbox" name="formations[]" value="Autorisation de conduite d'un engin de chantier" {{ in_array("Autorisation de conduite d'un engin de chantier", $formations) ? 'checked' : '' }}> Autorisation de conduite d'un engin de chantier</label>
+                                        <label><input type="checkbox" name="formations[]" value="Autorisation de conduite d'un engin de chantier" {{ in_array('Autorisation de conduite dun engin de chantier', $formations) ? 'checked' : '' }}> Autorisation de conduite d'un engin de chantier</label>
                                         <label><input type="checkbox" name="formations[]" value="Habilitation électrique" {{ in_array('Habilitation électrique', $formations) ? 'checked' : '' }}> Habilitation électrique</label>
                                         <label><input type="checkbox" name="formations[]" value="Autres1" {{ in_array('Autres1', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other1" value="{{ old('training_certifications_other1', $training_certifications_other['Autres1']) }}"></label>
                                         <div class="font-weight-bold">
