@@ -52,6 +52,9 @@
             border-radius: 4px;
             margin-bottom: 10px;
         }
+        .green-text { color: #28a745; }
+        .orange-text { color: #fd7e14; }
+        .red-text { color: #dc3545; }
     </style>
 
     <div class="py-12">
@@ -82,9 +85,11 @@
                                     <select name="type" class="form-control" required>
                                         <option value="">Sélectionner</option>
                                         <option value="Dangerous situation" {{ $event->type == 'Dangerous situation' ? 'selected' : '' }}>Situation Dangereuse</option>
+                                        <option value="Incident" {{ $event->type == 'Incident' ? 'selected' : '' }}>Incident</option>
                                         <option value="Near miss" {{ $event->type == 'Near miss' ? 'selected' : '' }}>Presque Accident</option>
                                         <option value="Work accident" {{ $event->type == 'Work accident' ? 'selected' : '' }}>Accident du Travail (AT)</option>
                                         <option value="Occupational illness" {{ $event->type == 'Occupational illness' ? 'selected' : '' }}>Maladie Professionnelle (MP)</option>
+                                        <option value="Impact environnemental" {{ $event->type == 'Impact environnemental' ? 'selected' : '' }}>Impact environnemental</option>
                                     </select>
                                 </div>
 
@@ -232,7 +237,7 @@
                             </div>
 
                             <!-- Formation sécurité / Habilitations -->
-                            <div class="category-title" onclick="toggleCategory('formation')">Formation sécurité / Habilitations</div>
+                            <div class="category-title" onclick="toggleCategory('formation')">Formation sécurité / Habilitations / Autorisations</div>
                             <div id="formation" class="category-content">
                                 <div class="checkbox-group">
                                     @foreach ([
@@ -260,8 +265,8 @@
                                 <div class="form-group">
                                     <label class="form-label">Fréquence d’exposition</label>
                                     <select name="frequence" class="form-control" required>
-                                        <option value="1" {{ $event->frequence == 1 ? 'selected' : '' }}>Faible (< 1 fois/an)</option>
-                                        <option value="2" {{ $event->frequence == 2 ? 'selected' : '' }}>Moyenne (< 1 fois/mois)</option>
+                                        <option value="1" {{ $event->frequence == 1 ? 'selected' : '' }}>Faible (= 1 fois/an)</option>
+                                        <option value="2" {{ $event->frequence == 2 ? 'selected' : '' }}>Moyenne (= 1 fois/mois)</option>
                                         <option value="3" {{ $event->frequence == 3 ? 'selected' : '' }}>Grande (> 1 fois/mois)</option>
                                         <option value="4" {{ $event->frequence == 4 ? 'selected' : '' }}>Grande (> 1 fois/semaine)</option>
                                     </select>
@@ -415,7 +420,7 @@
                 }
             });
 
-            // Calculate risk and update deadline
+           // Calculate risk and update deadline
             function calculateRisk() {
                 const frequence = parseInt($('select[name="frequence"]').val());
                 const gravite = parseInt($('select[name="gravite"]').val());
@@ -423,17 +428,21 @@
                 $('#riskValue').text(risk);
 
                 let message = '';
+                let colorClass = '';
                 if (risk <= 4) {
                     message = 'Action à entreprendre sous 1 semaine (Recueil des faits ci-dessus suffisant)';
                     updateAllDeadlines(7);
+                    colorClass = 'green-text';
                 } else if (risk <= 10) {
                     message = 'Action à entreprendre sous 48 h (Recueil des faits ci-dessus suffisant)';
                     updateAllDeadlines(2);
+                    colorClass = 'orange-text';
                 } else {
                     message = 'Action urgente à entreprendre immédiatement (Réalisation arbre des causes systématiquement)';
                     updateAllDeadlines(0);
+                    colorClass = 'red-text';
                 }
-                $('#riskMessage').html(`<strong>${message}</strong>`);
+                $('#riskMessage').html(`<strong class="${colorClass}">${message}</strong>`);
             }
 
             function updateDeadline(index) {

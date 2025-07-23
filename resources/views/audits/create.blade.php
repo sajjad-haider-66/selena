@@ -378,7 +378,7 @@
         function getCultureLevel(score) {
             if (score >= 90) return '++';
             if (score >= 75) return '+';
-            if (score >= 50) return '=/-';
+            if (score >= 50) return 'Moyen';
             if (score >= 25) return '-';
             return '--';
         }

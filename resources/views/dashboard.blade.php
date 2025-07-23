@@ -27,12 +27,12 @@
                                 <div class="card-body"> <!-- Filters Section -->
                     <h5 class="card-title mb-3">Filters</h5>
                     <div class="row g-3 mb-4">
-                        <div class="col-md-4"> <select class="form-select">
+                        {{-- <div class="col-md-4"> <select class="form-select">
                                 <option selected>Project</option> <!-- Dynamic options here -->
                             </select> </div>
                         <div class="col-md-4"> <select class="form-select">
                                 <option selected>Site</option> <!-- Dynamic options here -->
-                            </select> </div>
+                            </select> </div> --}}
                         <div class="col-md-4"> <select class="form-select">
                                 <option selected>Timeframe</option>
                                 <option>Last 7 Days</option>
@@ -71,9 +71,8 @@
                         <div class="col-md-3">
                             <div class="card text-white bg-danger h-100">
                                 <div class="card-body">
-                                    <h6 class="card-title">Upcoming Audits/Talks</h6>
+                                    <h6 class="card-title">Audits Completed</h6>
                                     <h3>{{ $upcomingAuditsCount }}</h3>
-                                    <p class="card-text">Next 7 days</p>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +100,7 @@
                         </div>
                         <!-- Upcoming Audits/Talks Chart -->
                         <div class="card bg-white dark:bg-gray-800 p-4">
-                            <h6 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-3">Upcoming Audits/Talks</h6>
+                            <h6 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-3">Upcoming Talks/Animation</h6>
                             <canvas id="upcomingAuditsChart"></canvas>
                         </div>
                         <!-- Events Status Chart -->
