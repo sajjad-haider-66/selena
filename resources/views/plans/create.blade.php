@@ -54,12 +54,14 @@
                     <div class="form-section">
                         <table class="table table-bordered">
                             <tr>
-                                <td style="width:20%"><label for="plan_number">N° A</label></td>
-                                <td style="width:30%"><input type="text" name="plan_number" id="plan_number" value="{{ old('plan_number') }}" required>
+                                <td style="width:20%"><label for="plan_number">N°</label></td>
+                                <td style="width:30%"><input type="text" name="plan_number" id="plan_number"
+                                        value="{{ old('plan_number') }}" required>
 
-                                @error('plan_number')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror</td>
+                                    @error('plan_number')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </td>
                                 <td style="width:20%"><label for="work_date">DATE des travaux</label></td>
                                 <td style="width:30%"><input type="date" name="work_date" id="work_date" required>
                                 </td>
@@ -73,8 +75,8 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Extérieure</th>
-                                    <th>Entreprise principale</th>
+                                    <th>Entreprise Extérieure</th>
+                                    <th>Entreprise Utilisatrice</th>
                                     <th>Entreprise sous-traitante</th>
                                     <th>Nom de l'intervenant</th>
                                     <th>Action</th>
@@ -109,7 +111,7 @@
                                 <td>Emplacement prévu :</td>
                                 <td><input type="text" name="location"></td>
                                 <td>Début d'intervention :</td>
-                                <td><input type="time" name="start_time"></td>
+                                <td><input type="date" name="start_time"></td>
                             </tr>
                             <tr>
                                 <td>Description :</td>
@@ -121,29 +123,7 @@
                                 <td>N° mode opératoire :</td>
                                 <td><input type="text" name="operative_mode_number"></td>
                                 <td>Fin d'intervention prévue :</td>
-                                <td><input type="time" name="end_time"></td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <!-- Risques d'interférence -->
-                    <div class="form-section">
-                        <h4>RISQUES D'INTERFÉRENCE AVEC L'OPÉRATION</h4>
-                        <table class="table table-bordered">
-                            <tr>
-                                <td>Dépotage prévu à :</td>
-                                <td><input type="time" name="depotage_time"></td>
-                            </tr>
-                            <tr>
-                                <td>Présence dans la zone de Travail de :</td>
-                                <td><input type="text" name="presence_zone" placeholder="bouteilles de gaz, fûts…">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Autres travaux prévus ce jour :</td>
-                                <td>
-                                    <textarea name="other_works"></textarea>
-                                </td>
+                                <td><input type="date" name="end_time"></td>
                             </tr>
                         </table>
                     </div>
@@ -164,11 +144,6 @@
                                     <td>
                                         <div class="checkbox-list">
                                             <label><input type="checkbox" name="travail[]"
-                                                    value="Travaux sur appareil de distribution"> Travaux sur appareil
-                                                de distribution</label>
-                                            <label><input type="checkbox" name="travail[]"
-                                                    value="Nettoyage de la piste"> Nettoyage de la piste</label>
-                                            <label><input type="checkbox" name="travail[]"
                                                     value="Travaux sur équipements électriques"> Travaux sur équipements
                                                 électriques</label>
                                             <label><input type="checkbox" name="travail[]" value="Travaux de plomberie">
@@ -182,14 +157,7 @@
                                                 Levage</label>
                                             <label><input type="checkbox" name="travail[]"
                                                     value="Travaux sur tuyauterie"> Travaux sur tuyauterie</label>
-                                            <label><input type="checkbox" name="travail[]"
-                                                    value="Vidange/dégazage/nettoyage cuve hydrocarbures">
-                                                Vidange/dégazage/nettoyage cuve hydrocarbures</label>
-                                            <label><input type="checkbox" name="travail[]"
-                                                    value="Vidange/dégazage/brûlage/nettoyage cuve GPLC">
-                                                Vidange/dégazage/brûlage/nettoyage cuve GPLC</label>
-                                            <label><input type="checkbox" name="travail[]" value="Ré-épreuve cuve">
-                                                Ré-épreuve cuve</label>
+
                                             <label><input type="checkbox" name="travail[]"
                                                     value="Fouille / terrassement"> Fouille / terrassement</label>
                                             <label><input type="checkbox" name="travail[]" value="Forage">
@@ -199,7 +167,7 @@
                                                 / audits / contrôles / études engineering</label>
                                             <label><input type="checkbox" name="travail[]"
                                                     value="Travaux d'entretien des abords de la station"> Travaux
-                                                d'entretien des abords de la station</label>
+                                                d'entretien</label>
                                             <label><input type="checkbox" name="travail[]"
                                                     value="Travaux de démolition"> Travaux de démolition</label>
                                             <label><input type="checkbox" name="travail[]"
@@ -271,8 +239,6 @@
                                             <label><input type="checkbox" name="risques[]" value="- Hydrocarbure "> -
                                                 Hydrocarbure </label>
                                             <label><input type="checkbox" name="risques[]"
-                                                    value="- GPLC / GNC / GNL "> - GPLC / GNC / GNL </label>
-                                            <label><input type="checkbox" name="risques[]"
                                                     value="- Autres produits "> - Autres produits </label>
                                             <label><input type="checkbox" name="risques[]" value="Risque biologique">
                                                 Risque biologique</label>
@@ -313,59 +279,42 @@
                                     </td>
                                     <td>
                                         <div class="checkbox-list">
-                                            <label><input type="checkbox" name="formations[]" value="Autorisation de conduite d'un engin de chantier"> Autorisation de conduite d'un engin de chantier</label>
-                                            <label><input type="checkbox" name="formations[]" value="Habilitation électrique"> Habilitation électrique</label>
-                                            <label><input type="checkbox" name="formations[]" value="Autres1"> Autres <input type="text" name="training_certifications_other1"></label>
+                                            <label><input type="checkbox" name="formations[]"
+                                                    value="Autorisation de conduite d'un engin de chantier">
+                                                Autorisation de conduite d'un engin de chantier</label>
+                                            <label><input type="checkbox" name="formations[]"
+                                                    value="Habilitation électrique"> Habilitation électrique</label>
+                                            <label><input type="checkbox" name="formations[]" value="Autres1"> Autres
+                                                <input type="text" name="training_certifications_other1"></label>
                                             <div class="mt-3">
-                                                <div class="font-weight-bold">
-                                                    <u><b>MESURES PRÉVENTIVES</b></u>
-                                                </div>
-                                                <!-- Section 1: À la charge de la station-service -->
-                                                <h1 class="font-weight-bold">À la charge de la station-service</h1>
-                                                <label>
-                                                    <input type="checkbox" name="formations[]" value="Arrêt de la distribution : partiel">
-                                                    Arrêt de la distribution : partiel
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="Port d’EPI et autres équipements spécifiques :"> Port
+                                                    d’EPI et autres équipements spécifiques :</label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="- Appareil respiratoire, ventilation forcée"> - Appareil
+                                                    respiratoire, ventilation forcée</label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="- Harnais, baudrier, filet de sécurité,sangle de retenue">-
+                                                    Harnais, baudrier, filet de sécurité,sangle de retenue </label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="- Mise à disposition casqueanti-bruit">- Mise à
+                                                    disposition casqueanti-bruit</label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="- Aide à la manutention">- Aide à la manutention
                                                 </label>
-                                                <label>
-                                                    <input type="checkbox" name="formations[]" value="Arrêt de la distribution : total">
-                                                    Arrêt de la distribution : total
-                                                </label>
-                                                <label>
-                                                    <input type="checkbox" name="formations[]" value="Fermeture de la station">
-                                                    Fermeture de la station
-                                                </label>
-                                                <label>
-                                                    <input type="checkbox" name="formations[]" value="Arrêt d'une autre activité">
-                                                    Arrêt d'une autre activité
-                                                    <input type="text" name="formations_autre" placeholder="Précisez ici...">
-                                                </label>
-                                                <hr>
-                                                <!-- Section 2: À la charge de la / des entreprise(s) extérieure(s) -->
-                                                <h1 class="font-weight-bold">À la charge de la / des entreprise(s) extérieure(s)</h1>
-                                                <label><input type="checkbox" name="formations[]" value="Arrêt de la distribution"> Arrêt de la distribution</label>
-                                                <label><input type="checkbox" name="formations[]" value="Arrêt d’une autre activité"> Arrêt d’une autre activité</label>
-                                                <label><input type="checkbox" name="formations[]" value="Arrêt des travaux pendant le dépotage"> Arrêt des travaux pendant le dépotage</label>
-                                                <label><input type="checkbox" name="formations[]" value="Repérage physique préalable des réseaux enterrés"> Repérage physique préalable des réseaux enterrés</label>
-                                                <label><input type="checkbox" name="formations[]" value="Mise à la terre des équipements et test"> Mise à la terre des équipements et test</label>
-                                                <label><input type="checkbox" name="formations[]" value="Surveillance permanente par un 2éme intervenant"> Surveillance permanente par un 2éme intervenant</label>
-                                                <label><input type="checkbox" name="formations[]" value="Analyse d’atmosphère en continu"> Analyse d’atmosphère en continu</label>
-                                                <label><input type="checkbox" name="formations[]" value="Extincteurs adaptés"> Extincteurs adaptés</label>
-                                                <label><input type="checkbox" name="formations[]" value="Réception des échafaudages"> Réception des échafaudages</label>
-                                                <label><input type="checkbox" name="formations[]" value="Obturation des égouts / regards"> Obturation des égouts / regards</label>
-                                                <label><input type="checkbox" name="formations[]" value="Consignation des réseaux électriques / hydrauliques"> Consignation des réseaux électriques / hydrauliques</label>
-                                                <label><input type="checkbox" name="formations[]" value="Outillage / matériel ATEX"> Outillage / matériel ATEX</label>
-                                                <label><input type="checkbox" name="formations[]" value="Balisage de la zone, aide à la"> circulation</label>
-                                                <label><input type="checkbox" name="formations[]" value="Autres3"> Autres <input type="text" name="training_certifications_other3"></label>
-                                                <label><input type="checkbox" name="formations[]" value="Port d’EPI et autres équipements spécifiques :"> Port d’EPI et autres équipements spécifiques :</label>
-                                                <label><input type="checkbox" name="formations[]" value="- Appareil respiratoire, ventilation forcée"> - Appareil respiratoire, ventilation forcée</label>
-                                                <label><input type="checkbox" name="formations[]" value="- Harnais, baudrier, filet de sécurité,sangle de retenue">- Harnais, baudrier, filet de sécurité,sangle de retenue </label>
-                                                <label><input type="checkbox" name="formations[]" value="- Mise à disposition casqueanti-bruit">- Mise à disposition casqueanti-bruit</label>
-                                                <label><input type="checkbox" name="formations[]" value="- Aide à la manutention">- Aide à la manutention </label>
-                                                <label><input type="checkbox" name="formations[]" value="Autres4"> Autres <input type="text" name="training_certifications_other4"></label>
-                                                <label><input type="checkbox" name="formations[]" value="Permis spécifique :">Permis spécifique : </label>
-                                                <label><input type="checkbox" name="formations[]" value="- Permis de feu"> - Permis de feu</label>
-                                                <label><input type="checkbox" name="formations[]" value="- Permis delevage">- Permis delevage </label>
-                                                <label><input type="checkbox" name="formations[]" value="- Permis de fouille">- Permis de fouille </label>
+                                                <label><input type="checkbox" name="formations[]" value="Autres4">
+                                                    Autres <input type="text"
+                                                        name="training_certifications_other4"></label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="Permis spécifique :">Permis spécifique : </label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="- Permis de feu"> - Permis de feu</label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="- Permis delevage">- Permis de levage </label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="- Permis de fouille">- Permis de fouille </label>
+                                                <label><input type="checkbox" name="formations[]"
+                                                        value="Permis de pénétrer">Permis de pénétrer</label>
                                             </div>
 
                                         </div>
@@ -377,7 +326,7 @@
                     <!-- VALIDATION AVANT LES TRAVAUX -->
                     <div class="card mb-4">
                         <div class="text-center card-header font-weight-bold">
-                            VALIDATION AVANT LES TRAVAUX
+                            VALIDATION
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -403,7 +352,7 @@
                                 </div>
                                 <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
                                 <div class="col-md-6">
-                                    <h6>RESPONSABLE DE LA STATION OU SON REPRÉSENTANT</h6>
+                                    <h6>Responsable de l'entreprise utilisatrice ou son représentant</h6>
                                     <div class="form-group">
                                         <label>Date :</label>
                                         <input type="date" name="avant_date" class="form-control">
@@ -420,82 +369,147 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- VALIDATION APRÈS LES TRAVAUX -->
+                    <!-- Retour d’expérience -->
                     <div class="card mb-4">
                         <div class="text-center card-header font-weight-bold">
-                            VALIDATION APRÈS LES TRAVAUX
+                            Retour d’expérience de fin de chantier
                         </div>
                         <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="apres_travail_termine"
-                                    id="apres_travail_termine">
-                                <label class="form-check-label" for="apres_travail_termine">
-                                    Le travail est terminé
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="apres_travail_non_termine"
-                                    id="apres_travail_non_termine">
-                                <label class="form-check-label" for="apres_travail_non_termine">
-                                    Le travail n'est pas terminé
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="apres_station_normale"
-                                    id="apres_station_normale">
-                                <label class="form-check-label" for="apres_station_normale">
-                                    La station est rendue à une exploitation normale
-                                </label>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" name="apres_chantier_propre"
-                                    id="apres_chantier_propre">
-                                <label class="form-check-label" for="apres_chantier_propre">
-                                    Le chantier a été propre et en sécurité, la reprise du travail fera l’objet d’une
-                                    nouvelle autorisation de travail prévue le :
-                                </label>
-                                <input type="date" name="apres_nouvelle_autorisation" class="form-control mt-2"
-                                    style="width:auto;">
-                            </div>
-
-                            <div class="row">
-                                <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
+                            <!-- Row 1 -->
+                            <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
-                                    <div id="apres-container">
-                                        <div class="form-group apres-group">
-                                            <label>1. Nom:</label>
-                                            <input type="text" name="apres_entreprise_nom[]" class="form-control">
-                                            <label>Date:</label>
-                                            <input type="date" name="apres_entreprise_date[]"
-                                                class="form-control">
-                                            <!-- Remove button hidden in first group -->
-                                            <button type="button"
-                                                class="btn btn-danger btn-sm mt-2 remove-apres d-none">Remove</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-group mt-2">
-                                        <button type="button" id="add-apres" class="btn btn-outline-dark btn-sm">Add
-                                            More</button>
-                                    </div>
+                                    <label>Quelles sont les remontées d'information identifiées lors de notre chantier
+                                        ?</label>
                                 </div>
-
-                                <!-- RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT) -->
                                 <div class="col-md-6">
-                                    <h6>RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT)</h6>
-                                    <div class="form-group">
-                                        <label>Date :</label>
-                                        <input type="date" name="apres_responsable_date" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Heure :</label>
-                                        <input type="time" name="apres_responsable_heure" class="form-control">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Nom :</label>
-                                        <input type="text" name="apres_responsable_nom" class="form-control">
-                                    </div>
+                                    <textarea class="form-control" rows="3" name="informations_identifiees"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 2 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Ya t il eu des situations dangereuses, presque accidents et accidents
+                                        ?</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="situations_dangereuses"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Les résultats des mesurages liés à la santé des travailleurs (Fiche
+                                        d’exposition à jour, avis d’aptitude médicale en cours de validité)</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="resultats_sante"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 4 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Quels sont les impacts sur l’environnement en cas de non respect du tri des
+                                        déchets ?</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="impacts_environnement"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 5 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des sous-traitants ou du personnel d’appoint ?<br>
+                                        Merci de confirmer le respect des règles de sécurité, port des EPI, connaissance
+                                        politique SSE, de nos objectifs tels que le 0 AT, la 0 MP, le 0 Atteinte à l'environnement.
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="sous_traitants"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 6 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des constats suite à un audit SSE, une visite, un contrôle 
+                                        (de notre référent SSE, de l'auditeur MASE, du client, de la carsat, de l'inspecteur du travail)
+                                         ? Si oui, quel en a ete le résultat ?
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="audit_constats"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 7 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des modifications des conditions opératoires ? Comment les avez-vous
+                                        gérées ?
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="modifications_conditions"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 8 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des points positifs, les points à améliorer ? Merci de les indiquer.
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="points_ameliorer"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 9 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Les analyses des risques ainsi que des modes opératoires ont-ils été efficaces
+                                        ?<br>
+                                        <small class="text-muted">(Merci d’expliquer en quelques mots comment ils ont été efficace)</small>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="analyses_risques"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 10 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des faits marquants ?<br>
+                                        <small class="text-muted">(merci de decrire en quelques mots les principaux faits,
+                                           marquants: visite positive du client, adaptation du mode operatoire suite à modificatio etc.)</small>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="faits_marquants"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 11 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya til eu des écarts entre la préparation (travail prescrit) et la réalisation (travail réel)
+                                        Quelle nalyse en fait vous? (merci de decrire l'impact potentiel sur la prestation)
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="travail_prescrit"></textarea>
                                 </div>
                             </div>
                         </div>

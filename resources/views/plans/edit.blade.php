@@ -18,7 +18,7 @@
                 <div class="form-section">
                     <table class="table table-bordered">
                         <tr>
-                            <td style="width:20%"><label for="plan_number">N° A</label></td>
+                            <td style="width:20%"><label for="plan_number">N°</label></td>
                             <td style="width:30%"><input type="text" name="plan_number" id="plan_number" value="{{ old('plan_number', $plan->plan_number) }}" required></td>
                             <td style="width:20%"><label for="work_date">DATE des travaux</label></td>
                             <td style="width:30%"><input type="date" name="work_date" id="work_date" value="{{ old('work_date', $plan->work_date ? $plan->work_date->format('Y-m-d') : '') }}" required></td>
@@ -32,8 +32,8 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Extérieure</th>
-                                <th>Entreprise principale</th>
+                                <th>Entreprise Extérieure</th>
+                                <th>Entreprise Utilisatrice</th>
                                 <th>Entreprise sous-traitante</th>
                                 <th>Nom de l'intervenant</th>
                             </tr>
@@ -84,7 +84,7 @@
                             <td>Emplacement prévu :</td>
                             <td><input type="text" name="location" value="{{ old('location', $plan->location) }}"></td>
                             <td>Début d'intervention :</td>
-                            <td><input type="time" name="start_time" value="{{ old('start_time', $plan->start_time ? $plan->start_time->format('H:i') : '') }}"></td>
+                            <td><input type="date" name="start_time" value="{{ old('start_time', $plan->start_time ? $plan->start_time->format('H:i') : '') }}"></td>
                         </tr>
                         <tr>
                             <td>Description :</td>
@@ -94,26 +94,7 @@
                             <td>N° mode opératoire :</td>
                             <td><input type="text" name="operative_mode_number" value="{{ old('operative_mode_number', $plan->operative_mode_number) }}"></td>
                             <td>Fin d'intervention prévue :</td>
-                            <td><input type="time" name="end_time" value="{{ old('end_time', $plan->end_time ? $plan->end_time->format('H:i') : '') }}"></td>
-                        </tr>
-                    </table>
-                </div>
-
-                <!-- Risques d'interférence -->
-                <div class="form-section">
-                    <h4>RISQUES D'INTERFÉRENCE AVEC L'OPÉRATION</h4>
-                    <table class="table table-bordered">
-                        <tr>
-                            <td>Dépotage prévu à :</td>
-                            <td><input type="time" name="depotage_time" value="{{ old('depotage_time', $plan->depotage_time ? $plan->depotage_time->format('H:i') : '') }}"></td>
-                        </tr>
-                        <tr>
-                            <td>Présence dans la zone de Travail de :</td>
-                            <td><input type="text" name="presence_zone" placeholder="bouteilles de gaz, fûts…" value="{{ old('presence_zone', $plan->presence_zone) }}"></td>
-                        </tr>
-                        <tr>
-                            <td>Autres travaux prévus ce jour :</td>
-                            <td><textarea name="other_works">{{ old('other_works', $plan->other_works) }}</textarea></td>
+                            <td><input type="date" name="end_time" value="{{ old('end_time', $plan->end_time ? $plan->end_time->format('H:i') : '') }}"></td>
                         </tr>
                     </table>
                 </div>
@@ -137,17 +118,12 @@
                                         $work_nature_other = old('work_nature_other', json_decode($plan->work_nature_other, true) ?? []);
                                     @endphp
                                     <div class="checkbox-list">
-                                        <label><input type="checkbox" name="travail[]" value="Travaux sur appareil de distribution" {{ in_array('Travaux sur appareil de distribution', $travail) ? 'checked' : '' }}> Travaux sur appareil de distribution</label>
-                                        <label><input type="checkbox" name="travail[]" value="Nettoyage de la piste" {{ in_array('Nettoyage de la piste', $travail) ? 'checked' : '' }}> Nettoyage de la piste</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux sur équipements électriques" {{ in_array('Travaux sur équipements électriques', $travail) ? 'checked' : '' }}> Travaux sur équipements électriques</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux de plomberie" {{ in_array('Travaux de plomberie', $travail) ? 'checked' : '' }}> Travaux de plomberie</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux de peinture" {{ in_array('Travaux de peinture', $travail) ? 'checked' : '' }}> Travaux de peinture</label>
                                         <label><input type="checkbox" name="travail[]" value="Perçage, meulage, découpage, soudage, décapage" {{ in_array('Perçage, meulage, découpage, soudage, décapage', $travail) ? 'checked' : '' }}> Perçage, meulage, découpage, soudage, décapage</label>
                                         <label><input type="checkbox" name="travail[]" value="Levage" {{ in_array('Levage', $travail) ? 'checked' : '' }}> Levage</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux sur tuyauterie" {{ in_array('Travaux sur tuyauterie', $travail) ? 'checked' : '' }}> Travaux sur tuyauterie</label>
-                                        <label><input type="checkbox" name="travail[]" value="Vidange/dégazage/nettoyage cuve hydrocarbures" {{ in_array('Vidange/dégazage/nettoyage cuve hydrocarbures', $travail) ? 'checked' : '' }}> Vidange/dégazage/nettoyage cuve hydrocarbures</label>
-                                        <label><input type="checkbox" name="travail[]" value="Vidange/dégazage/brûlage/nettoyage cuve GPLC" {{ in_array('Vidange/dégazage/brûlage/nettoyage cuve GPLC', $travail) ? 'checked' : '' }}> Vidange/dégazage/brûlage/nettoyage cuve GPLC</label>
-                                        <label><input type="checkbox" name="travail[]" value="Ré-épreuve cuve" {{ in_array('Ré-épreuve cuve', $travail) ? 'checked' : '' }}> Ré-épreuve cuve</label>
                                         <label><input type="checkbox" name="travail[]" value="Fouille / terrassement" {{ in_array('Fouille / terrassement', $travail) ? 'checked' : '' }}> Fouille / terrassement</label>
                                         <label><input type="checkbox" name="travail[]" value="Forage" {{ in_array('Forage', $travail) ? 'checked' : '' }}> Forage</label>
                                         <label><input type="checkbox" name="travail[]" value="Visites / audits / contrôles / études engineering" {{ in_array('Visites / audits / contrôles / études engineering', $travail) ? 'checked' : '' }}> Visites / audits / contrôles / études engineering</label>
