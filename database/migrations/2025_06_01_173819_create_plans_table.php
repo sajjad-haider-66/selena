@@ -17,8 +17,8 @@ return new class extends Migration
             $table->date('work_date')->nullable(); // Work date (e.g., 2003-10-28)
             $table->json('company_name_detail')->nullable(); // External company 1
             $table->string('location')->nullable(); // Emplacement prévu
-            $table->time('start_time')->nullable(); // Début d'intervention
-            $table->time('end_time')->nullable(); // Fin d'intervention prévue
+            $table->date('start_time')->nullable(); // Début d'intervention
+            $table->date('end_time')->nullable(); // Fin d'intervention prévue
             $table->time('depotage_time')->nullable(); // Depotage time (e.g., 00:22)
             $table->string('presence_zone')->nullable(); // Presence zone
             $table->text('other_works')->nullable(); // Other works
@@ -53,6 +53,17 @@ return new class extends Migration
             $table->boolean('work_completed')->default(false);
             $table->boolean('station_normal')->default(false); // Station normale
             $table->boolean('site_clean_safe')->default(false);
+            $table->text('informations_identifiees')->nullable();
+            $table->text('situations_dangereuses')->nullable();
+            $table->text('resultats_sante')->nullable();
+            $table->text('impacts_environnement')->nullable();
+            $table->text('sous_traitants')->nullable();
+            $table->text('audit_constats')->nullable();
+            $table->text('modifications_conditions')->nullable();
+            $table->text('points_ameliorer')->nullable();
+            $table->text('analyses_risques')->nullable();
+            $table->text('faits_marquants')->nullable();
+            $table->text('travail_prescrit')->nullable();
             $table->timestamps();
         });
     }

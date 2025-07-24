@@ -572,24 +572,5 @@
             $(this).closest('.nom-group').remove();
         });
 
-        let apresIndex = 2;
-
-        $('#add-apres').on('click', function() {
-            let newGroup = `
-                <div class="form-group apres-group mt-3">
-                    <label>${apresIndex}. Nom:</label>
-                    <input type="text" name="apres_entreprise_nom[]" class="form-control">
-                    <label>Date:</label>
-                    <input type="date" name="apres_entreprise_date[]" class="form-control">
-                    <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres">Remove</button>
-                </div>
-            `;
-            $('#apres-container').append(newGroup);
-            apresIndex++;
-        });
-
-        $(document).on('click', '.remove-apres', function() {
-            $(this).closest('.apres-group').remove();
-        });
     </script>
 </x-app-layout>

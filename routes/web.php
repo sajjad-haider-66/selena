@@ -62,6 +62,20 @@ Route::get('/cache-clear', function () {
     return 'Cache cleared successfully';
 })->middleware('auth'); //  Protect with auth or restrict to local environment
 
+Route::get('/rollback-migration', function () {
+    Artisan::call('migrate:rollback', [
+        '--step' => 1
+    ]);
+
+    return 'Migration rollback done (step 1)';
+})->middleware('auth');
+
+Route::get('/run-migration', function () {
+    Artisan::call('migrate');
+
+    return 'Migration done successfully';
+})->middleware('auth');
+
 
 Route::get('/', function () {
     return view('welcome');

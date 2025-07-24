@@ -101,8 +101,8 @@
                             @foreach ($plans as $plan)
                             <tr>
                                <td>{{ $plan->plan_number }}</td>
-                                <td>{{ $plan->work_date }}</td>
-                                <td>{{ $plan->start_time }}</td>
+                                <td>{{ $plan->work_date != null ? $plan->work_date->format('Y-m-d') : 'No Date' }}</td>
+                                <td>{{ $plan->start_time != null ? $plan->start_time->format('Y-m-d') : 'No Date' }}</td>
                                 <td>{{ $plan->location }}</td>
                                 <td>
                                     <a href="{{ route('plan.show', $plan->id) }}" class="btn btn-sm btn-info" title="View"><i class="fa fa-eye"></i></a>

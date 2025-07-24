@@ -84,7 +84,7 @@
                             <td>Emplacement prévu :</td>
                             <td><input type="text" name="location" value="{{ old('location', $plan->location) }}"></td>
                             <td>Début d'intervention :</td>
-                            <td><input type="date" name="start_time" value="{{ old('start_time', $plan->start_time ? $plan->start_time->format('H:i') : '') }}"></td>
+                            <td><input type="date" name="start_time" value="{{ old('start_time', $plan->start_time ? $plan->start_time->format('Y-m-d') : '') }}"></td>
                         </tr>
                         <tr>
                             <td>Description :</td>
@@ -94,7 +94,10 @@
                             <td>N° mode opératoire :</td>
                             <td><input type="text" name="operative_mode_number" value="{{ old('operative_mode_number', $plan->operative_mode_number) }}"></td>
                             <td>Fin d'intervention prévue :</td>
-                            <td><input type="date" name="end_time" value="{{ old('end_time', $plan->end_time ? $plan->end_time->format('H:i') : '') }}"></td>
+                            <td>
+                                <input type="date" name="end_time"
+                                    value="{{ old('end_time', $plan->end_time ? $plan->end_time->format('Y-m-d') : '') }}">
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -127,7 +130,7 @@
                                         <label><input type="checkbox" name="travail[]" value="Fouille / terrassement" {{ in_array('Fouille / terrassement', $travail) ? 'checked' : '' }}> Fouille / terrassement</label>
                                         <label><input type="checkbox" name="travail[]" value="Forage" {{ in_array('Forage', $travail) ? 'checked' : '' }}> Forage</label>
                                         <label><input type="checkbox" name="travail[]" value="Visites / audits / contrôles / études engineering" {{ in_array('Visites / audits / contrôles / études engineering', $travail) ? 'checked' : '' }}> Visites / audits / contrôles / études engineering</label>
-                                        <label><input type="checkbox" name="travail[]" value="Travaux d'entretien des abords de la station" {{ in_array('Travaux dentretien des abords de la station', $travail) ? 'checked' : '' }}> Travaux d'entretien des abords de la station</label>
+                                        <label><input type="checkbox" name="travail[]" value="Travaux d'entretien des abords de la station" {{ in_array('Travaux dentretien des abords de la station', $travail) ? 'checked' : '' }}> Travaux d'entretien</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux de démolition" {{ in_array('Travaux de démolition', $travail) ? 'checked' : '' }}> Travaux de démolition</label>
                                         <label><input type="checkbox" name="travail[]" value="Intervention sur portique de lavage" {{ in_array('Intervention sur portique de lavage', $travail) ? 'checked' : '' }}> Intervention sur portique de lavage</label>
                                         <label><input type="checkbox" name="travail[]" value="Autres1" {{ in_array('Autres1', $travail) ? 'checked' : '' }}> Autres <input type="text" name="work_nature_other1" value="{{ old('work_nature_other1', $work_nature_other['Autres1']) }}"></label>
@@ -168,7 +171,6 @@
                                         <label><input type="checkbox" name="risques[]" value="Bruit" {{ in_array('Bruit', $risques) ? 'checked' : '' }}> Bruit</label>
                                         <label><input type="checkbox" name="risques[]" value="Risques chimiques" {{ in_array('Risques chimiques', $risques) ? 'checked' : '' }}> Risques chimiques</label>
                                         <label><input type="checkbox" name="risques[]" value="- Hydrocarbure" {{ in_array('- Hydrocarbure', $risques) ? 'checked' : '' }}> - Hydrocarbure</label>
-                                        <label><input type="checkbox" name="risques[]" value="- GPLC / GNC / GNL" {{ in_array('- GPLC / GNC / GNL', $risques) ? 'checked' : '' }}> - GPLC / GNC / GNL</label>
                                         <label><input type="checkbox" name="risques[]" value="- Autres produits" {{ in_array('- Autres produits', $risques) ? 'checked' : '' }}> - Autres produits</label>
                                         <label><input type="checkbox" name="risques[]" value="Risque biologique" {{ in_array('Risque biologique', $risques) ? 'checked' : '' }}> Risque biologique</label>
                                         <label><input type="checkbox" name="risques[]" value="Risque" {{ in_array('Risque', $risques) ? 'checked' : '' }}> Risque</label>
@@ -197,59 +199,17 @@
                                         <label><input type="checkbox" name="formations[]" value="Autorisation de conduite d'un engin de chantier" {{ in_array('Autorisation de conduite dun engin de chantier', $formations) ? 'checked' : '' }}> Autorisation de conduite d'un engin de chantier</label>
                                         <label><input type="checkbox" name="formations[]" value="Habilitation électrique" {{ in_array('Habilitation électrique', $formations) ? 'checked' : '' }}> Habilitation électrique</label>
                                         <label><input type="checkbox" name="formations[]" value="Autres1" {{ in_array('Autres1', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other1" value="{{ old('training_certifications_other1', $training_certifications_other['Autres1']) }}"></label>
-                                        <div class="font-weight-bold">
-                                            <u><b>MESURES PRÉVENTIVES</b></u>
-                                        </div>
-                                        <label>
-                                            <input type="checkbox" name="formations[]" value="Arrêt de la distribution : partiel"
-                                                {{ in_array('Arrêt de la distribution : partiel', $formations) ? 'checked' : '' }}>
-                                            Arrêt de la distribution : partiel
-                                        </label>
-
-                                        <label>
-                                            <input type="checkbox" name="formations[]" value="Arrêt de la distribution : total"
-                                                {{ in_array('Arrêt de la distribution : total', $formations) ? 'checked' : '' }}>
-                                            Arrêt de la distribution : total
-                                        </label>
-
-                                        <label>
-                                            <input type="checkbox" name="formations[]" value="Fermeture de la station"
-                                                {{ in_array('Fermeture de la station', $formations) ? 'checked' : '' }}>
-                                            Fermeture de la station
-                                        </label>
-
-                                        <label>
-                                            <input type="checkbox" name="formations[]" value="Arrêt d'une autre activité"
-                                                {{ in_array("Arrêt d'une autre activité", $formations) ? 'checked' : '' }}>
-                                            Arrêt d'une autre activité
-                                            <input type="text" name="formations_autre" class="form-control mt-1" value="{{ $training_certifications_other['Autres2'] ?? '' }}" placeholder="Précisez ici...">
-                                        </label>
-
-                                        <hr>
-
-                                        <label><input type="checkbox" name="formations[]" value="Arrêt de la distribution" {{ in_array('Arrêt de la distribution', $formations) ? 'checked' : '' }}> Arrêt de la distribution</label>
-                                        <label><input type="checkbox" name="formations[]" value="Arrêt d’une autre activité" {{ in_array('Arrêt d’une autre activité', $formations) ? 'checked' : '' }}> Arrêt d’une autre activité</label>
-                                        <label><input type="checkbox" name="formations[]" value="Arrêt des travaux pendant le dépotage" {{ in_array('Arrêt des travaux pendant le dépotage', $formations) ? 'checked' : '' }}> Arrêt des travaux pendant le dépotage</label>
-                                        <label><input type="checkbox" name="formations[]" value="Repérage physique préalable des réseaux enterrés" {{ in_array('Repérage physique préalable des réseaux enterrés', $formations) ? 'checked' : '' }}> Repérage physique préalable des réseaux enterrés</label>
-                                        <label><input type="checkbox" name="formations[]" value="Mise à la terre des équipements et test" {{ in_array('Mise à la terre des équipements et test', $formations) ? 'checked' : '' }}> Mise à la terre des équipements et test</label>
-                                        <label><input type="checkbox" name="formations[]" value="Surveillance permanente par un 2éme intervenant" {{ in_array('Surveillance permanente par un 2éme intervenant', $formations) ? 'checked' : '' }}> Surveillance permanente par un 2éme intervenant</label>
-                                        <label><input type="checkbox" name="formations[]" value="Analyse d’atmosphère en continu" {{ in_array('Analyse d’atmosphère en continu', $formations) ? 'checked' : '' }}> Analyse d’atmosphère en continu</label>
-                                        <label><input type="checkbox" name="formations[]" value="Extincteurs adaptés" {{ in_array('Extincteurs adaptés', $formations) ? 'checked' : '' }}> Extincteurs adaptés</label>
-                                        <label><input type="checkbox" name="formations[]" value="Réception des échafaudages" {{ in_array('Réception des échafaudages', $formations) ? 'checked' : '' }}> Réception des échafaudages</label>
-                                        <label><input type="checkbox" name="formations[]" value="Obturation des égouts / regards" {{ in_array('Obturation des égouts / regards', $formations) ? 'checked' : '' }}> Obturation des égouts / regards</label>
-                                        <label><input type="checkbox" name="formations[]" value="Consignation des réseaux électriques / hydrauliques" {{ in_array('Consignation des réseaux électriques / hydrauliques', $formations) ? 'checked' : '' }}> Consignation des réseaux électriques / hydrauliques</label>
-                                        <label><input type="checkbox" name="formations[]" value="Outillage / matériel ATEX" {{ in_array('Outillage / matériel ATEX', $formations) ? 'checked' : '' }}> Outillage / matériel ATEX</label>
-                                        <label><input type="checkbox" name="formations[]" value="Balisage de la zone, aide à la" {{ in_array('Balisage de la zone, aide à la', $formations) ? 'checked' : '' }}> circulation</label>
                                         <label><input type="checkbox" name="formations[]" value="Port d’EPI et autres équipements spécifiques :" {{ in_array('Port d’EPI et autres équipements spécifiques :', $formations) ? 'checked' : '' }}> Port d’EPI et autres équipements spécifiques :</label>
                                         <label><input type="checkbox" name="formations[]" value="- Appareil respiratoire, ventilation forcée" {{ in_array('- Appareil respiratoire, ventilation forcée', $formations) ? 'checked' : '' }}> - Appareil respiratoire, ventilation forcée</label>
                                         <label><input type="checkbox" name="formations[]" value="- Harnais, baudrier, filet de sécurité,sangle de retenue" {{ in_array('- Harnais, baudrier, filet de sécurité,sangle de retenue', $formations) ? 'checked' : '' }}> - Harnais, baudrier, filet de sécurité,sangle de retenue</label>
                                         <label><input type="checkbox" name="formations[]" value="- Mise à disposition casqueanti-bruit" {{ in_array('- Mise à disposition casqueanti-bruit', $formations) ? 'checked' : '' }}> - Mise à disposition casqueanti-bruit</label>
                                         <label><input type="checkbox" name="formations[]" value="- Aide à la manutention" {{ in_array('- Aide à la manutention', $formations) ? 'checked' : '' }}> - Aide à la manutention</label>
-                                        <label><input type="checkbox" name="formations[]" value="Autres3" {{ in_array('Autres3', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other3" value="{{ old('training_certifications_other3', $training_certifications_other['Autres3']) }}"></label>
+                                        {{-- <label><input type="checkbox" name="formations[]" value="Autres3" {{ in_array('Autres3', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other3" value="{{ old('training_certifications_other3', $training_certifications_other['Autres3']) }}"></label> --}}
                                         <label><input type="checkbox" name="formations[]" value="Permis spécifique :" {{ in_array('Permis spécifique :', $formations) ? 'checked' : '' }}> Permis spécifique :</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis de feu" {{ in_array('- Permis de feu', $formations) ? 'checked' : '' }}> - Permis de feu</label>
-                                        <label><input type="checkbox" name="formations[]" value="- Permis delevage" {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis delevage</label>
+                                        <label><input type="checkbox" name="formations[]" value="- Permis delevage" {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis de levage</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis de fouille" {{ in_array('- Permis de fouille', $formations) ? 'checked' : '' }}> - Permis de fouille</label>
+                                        <label><input type="checkbox" name="formations[]" value="Permis de pénétrer" {{ in_array('Permis de pénétrer', $formations) ? 'checked' : '' }}>Permis de pénétrer</label>
                                         <label><input type="checkbox" name="formations[]" value="Autres4" {{ in_array('Autres4', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other4" value="{{ old('training_certifications_other4', $training_certifications_other['Autres4']) }}"></label>
                                     </div>
                                 </td>
@@ -258,10 +218,10 @@
                     </table>
                 </div>
 
-                <!-- VALIDATION AVANT LES TRAVAUX -->
+                <!-- VALIDATION  -->
                 <div class="card mb-4">
                     <div class="text-center card-header font-weight-bold">
-                        VALIDATION AVANT LES TRAVAUX
+                        VALIDATION
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -296,9 +256,9 @@
                                 </div>
                             </div>
 
-                            <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
+                            <!-- Responsable de l'entreprise utilisatrice ou son représentant -->
                             <div class="col-md-6">
-                                <h6>RESPONSABLE DE LA STATION OU SON REPRÉSENTANT</h6>
+                                <h6>Responsable de l'entreprise utilisatrice ou son représentant</h6>
                                 <div class="form-group">
                                     <label>Date :</label>
                                     <input type="date" name="before_date" class="form-control" value="{{ old('before_date', $plan->before_date ? $plan->before_date->format('Y-m-d') : '') }}">
@@ -316,86 +276,151 @@
                     </div>
                 </div>
 
-                <!-- VALIDATION APRÈS LES TRAVAUX -->
-                <div class="card mb-4">
-                    <div class="text-center card-header font-weight-bold">
-                        VALIDATION APRÈS LES TRAVAUX
+                    <!-- Retour d’expérience -->
+                    <div class="card mb-4">
+                        <div class="text-center card-header font-weight-bold">
+                            Retour d’expérience de fin de chantier
+                        </div>
+                        <div class="card-body">
+                            <!-- Row 1 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Quelles sont les remontées d'information identifiées lors de notre chantier
+                                        ?</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="informations_identifiees">{{ $plan->informations_identifiees ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 2 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Ya t il eu des situations dangereuses, presque accidents et accidents
+                                        ?</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="situations_dangereuses">{{ $plan->situations_dangereuses ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Les résultats des mesurages liés à la santé des travailleurs (Fiche
+                                        d’exposition à jour, avis d’aptitude médicale en cours de validité)</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="resultats_sante">{{ $plan->resultats_sante ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 4 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Quels sont les impacts sur l’environnement en cas de non respect du tri des
+                                        déchets ?</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="impacts_environnement">{{ $plan->impacts_environnement ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 5 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des sous-traitants ou du personnel d’appoint ?<br>
+                                        Merci de confirmer le respect des règles de sécurité, port des EPI, connaissance
+                                        politique SSE, de nos objectifs tels que le 0 AT, la 0 MP, le 0 Atteinte à l'environnement.
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="sous_traitants">{{ $plan->sous_traitants ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 6 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des constats suite à un audit SSE, une visite, un contrôle 
+                                        (de notre référent SSE, de l'auditeur MASE, du client, de la carsat, de l'inspecteur du travail)
+                                         ? Si oui, quel en a ete le résultat ?
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="audit_constats">{{ $plan->audit_constats ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 7 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des modifications des conditions opératoires ? Comment les avez-vous
+                                        gérées ?
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="modifications_conditions">{{ $plan->modifications_conditions ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 8 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des points positifs, les points à améliorer ? Merci de les indiquer.
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="points_ameliorer">{{ $plan->points_ameliorer ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 9 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Les analyses des risques ainsi que des modes opératoires ont-ils été efficaces
+                                        ?<br>
+                                        <small class="text-muted">(Merci d’expliquer en quelques mots comment ils ont été efficace)</small>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="analyses_risques">{{ $plan->analyses_risques ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 10 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des faits marquants ?<br>
+                                        <small class="text-muted">(merci de decrire en quelques mots les principaux faits,
+                                           marquants: visite positive du client, adaptation du mode operatoire suite à modificatio etc.)</small>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="faits_marquants">{{ $plan->faits_marquants ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 11 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya til eu des écarts entre la préparation (travail prescrit) et la réalisation (travail réel)
+                                        Quelle nalyse en fait vous? (merci de decrire l'impact potentiel sur la prestation)
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="travail_prescrit">{{ $plan->travail_prescrit ?? '' }}</textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="apres_travail_termine" id="apres_travail_termine" {{ old('apres_travail_termine', $plan->work_completed) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="apres_travail_termine">
-                                Le travail est terminé
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="apres_travail_non_termine" id="apres_travail_non_termine" {{ old('apres_travail_non_termine', $plan->work_not_completed) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="apres_travail_non_termine">
-                                Le travail n'est pas terminé
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="apres_station_normale" id="apres_station_normale" {{ old('apres_station_normale', $plan->station_normal) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="apres_station_normale">
-                                La station est rendue à une exploitation normale
-                            </label>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" name="apres_chantier_propre" id="apres_chantier_propre" {{ old('apres_chantier_propre', $plan->site_clean_safe) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="apres_chantier_propre">
-                                Le chantier a été propre et en sécurité, la reprise du travail fera l’objet d’une nouvelle autorisation de travail prévue le :
-                            </label>
-                            <input type="date" name="new_authorization_date" class="form-control mt-2" style="width:auto;" value="{{ old('new_authorization_date', $plan->new_authorization_date ? $plan->new_authorization_date->format('Y-m-d') : '') }}">
-                        </div>
-
-                        <div class="row">
-                            <!-- ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S) -->
-                        <div class="col-md-6">
-                            <h6>ENTREPRISE(S) EXTÉRIEURE(S) INTERVENANTE(S)</h6>
-                            <div id="apres-container">
-                                @foreach (json_decode($plan->company_nom_date, true) as $index => $entreprise)
-                                    <div class="form-group apres-group mt-2">
-                                        <label>{{ $index + 1 }}. Nom:</label>
-                                        <input type="text" name="apres_entreprise_nom[]" class="form-control"
-                                            value="{{ $entreprise['name'] ?? '' }}">
-
-                                        <label>Date:</label>
-                                        <input type="date" name="apres_entreprise_date[]" class="form-control"
-                                            value="{{ $entreprise['date'] ?? '' }}">
-
-                                        @if($index > 0)
-                                            <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres">Remove</button>
-                                        @else
-                                            <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres d-none">Remove</button>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <div class="form-group mt-2">
-                                <button type="button" id="add-apres" class="btn btn-outline-dark btn-sm">Add More</button>
-                            </div>
-                        </div>
-
-                            <!-- RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT) -->
-                            <div class="col-md-6">
-                                <h6>RESPONSABLE DE LA STATION (OU SON REPRÉSENTANT)</h6>
-                                <div class="form-group">
-                                    <label>Date :</label>
-                                    <input type="date" name="after_responsible_date" class="form-control" value="{{ old('after_responsible_date', $plan->after_responsible_date ? $plan->after_responsible_date->format('Y-m-d') : '') }}">
-                                </div>
-                                <div class="form-group">
-                                    <label>Heure :</label>
-                                    <input type="time" name="after_responsible_time" class="form-control" value="{{ old('after_responsible_time', $plan->after_responsible_time ? $plan->after_responsible_time->format('H:i') : '') }}">
-                                </div>
-                                <div class="form-group">
-                                    <label>Nom :</label>
-                                    <input type="text" name="after_responsible_name" class="form-control" value="{{ old('after_responsible_name', $plan->after_responsible_name) }}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="mt-6">
                     <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">
@@ -411,42 +436,24 @@
 <script>
     let nomIndex = {{ isset($index) ? $index : 2 }};
 
-$('#add-nom').on('click', function () {
-    let newInput = `
-        <div class="form-group nom-group mt-2">
-            <label>${nomIndex}- Nom:</label>
-            <div class="d-flex">
-                <input type="text" name="avant_entreprise[]" class="form-control me-2">
-                <button type="button" class="btn btn-danger btn-sm remove-nom">Remove</button>
-            </div>
-        </div>
-    `;
-    $('#nom-container').append(newInput);
-    nomIndex++;
-});
-
-$(document).on('click', '.remove-nom', function () {
-    $(this).closest('.nom-group').remove();
-});
-    let apresIndex = {{ count(json_decode($plan->company_nom_date, true)) + 1 }};
-
-    $('#add-apres').on('click', function () {
+    $('#add-nom').on('click', function () {
         let newInput = `
-            <div class="form-group apres-group mt-2">
-                <label>${apresIndex}. Nom:</label>
-                <input type="text" name="apres_entreprise_nom[]" class="form-control">
-                <label>Date:</label>
-                <input type="date" name="apres_entreprise_date[]" class="form-control">
-                <button type="button" class="btn btn-danger btn-sm mt-2 remove-apres">Remove</button>
+            <div class="form-group nom-group mt-2">
+                <label>${nomIndex}- Nom:</label>
+                <div class="d-flex">
+                    <input type="text" name="avant_entreprise[]" class="form-control me-2">
+                    <button type="button" class="btn btn-danger btn-sm remove-nom">Remove</button>
+                </div>
             </div>
         `;
-        $('#apres-container').append(newInput);
-        apresIndex++;
+        $('#nom-container').append(newInput);
+        nomIndex++;
     });
 
-    $(document).on('click', '.remove-apres', function () {
-        $(this).closest('.apres-group').remove();
+    $(document).on('click', '.remove-nom', function () {
+        $(this).closest('.nom-group').remove();
     });
+    
 
     let companyIndex = {{ $i ?? 1 }};
 

@@ -52,9 +52,9 @@ class PlanController extends Controller
             'work_date' => 'nullable|date',
             'company_name_detail' => 'nullable|array',
             'location' => 'nullable|string|max:255',
-            'start_time' => 'nullable|date_format:H:i',
-            'end_time' => 'nullable|date_format:H:i',
-            'depotage_time' => 'nullable|date_format:H:i',
+            'start_time' => 'nullable|date', 
+            'end_time' => 'nullable|date',
+            'depotage_time' => 'nullable|date',
             'presence_zone' => 'nullable|string|max:255',
             'other_works' => 'nullable|string',
             'description' => 'nullable|string',
@@ -129,8 +129,6 @@ class PlanController extends Controller
 
         $plan->training_certifications_other = json_encode([
             'Autres1' => $request->input('training_certifications_other1'),
-            'Autres2' => $request->input('formations_autre'),
-            'Autres3' => $request->input('training_certifications_other3'),
             'Autres4' => $request->input('training_certifications_other4'),
         ]) ?? null;
 
@@ -183,7 +181,18 @@ class PlanController extends Controller
         $formations = $request->input('formations', []);
         $plan->fire_permit = in_array('Permis de feu', $formations) ? 'Permis de feu' : $request->input('fire_permit');
         $plan->specific_permit = in_array('Permis spécifique :', $formations) ? 'Permis spécifique' : $request->input('specific_permit');
-        $plan->other_permit = $request->input('other_permit');
+        $plan->other_permit = $request->input('other_permit') ?? null;
+        $plan->informations_identifiees = $request->input('informations_identifiees') ?? null;
+        $plan->situations_dangereuses = $request->input('situations_dangereuses') ?? null;
+        $plan->resultats_sante = $request->input('resultats_sante') ?? null;
+        $plan->impacts_environnement = $request->input('impacts_environnement') ?? null;
+        $plan->sous_traitants = $request->input('sous_traitants') ?? null;
+        $plan->audit_constats = $request->input('audit_constats') ?? null;
+        $plan->modifications_conditions = $request->input('modifications_conditions') ?? null;
+        $plan->points_ameliorer = $request->input('points_ameliorer') ?? null;
+        $plan->analyses_risques = $request->input('analyses_risques') ?? null;
+        $plan->faits_marquants = $request->input('faits_marquants') ?? null;
+        $plan->travail_prescrit = $request->input('travail_prescrit') ?? null;
 
         // Save the plan to the database
         $plan->save();
@@ -222,9 +231,9 @@ class PlanController extends Controller
             'work_date' => 'nullable|date',
             'company_name_detail' => 'nullable|array',
             'location' => 'nullable|string|max:255',
-            'start_time' => 'nullable|date_format:H:i',
-            'end_time' => 'nullable|date_format:H:i',
-            'depotage_time' => 'nullable|date_format:H:i',
+            'start_time' => 'nullable|date',
+            'end_time' => 'nullable|date',
+            'depotage_time' => 'nullable|date',
             'presence_zone' => 'nullable|string|max:255',
             'other_works' => 'nullable|string',
             'description' => 'nullable|string',
@@ -301,7 +310,7 @@ class PlanController extends Controller
         // Map form data to database fields
         $plan->plan_number = $request->input('plan_number');
         $plan->work_date = $request->input('work_date');
-        $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : null;
+        $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : [];
         $plan->location = $request->input('location');
         $plan->start_time = $request->input('start_time');
         $plan->end_time = $request->input('end_time');
@@ -350,6 +359,17 @@ class PlanController extends Controller
         $plan->fire_permit = in_array('Permis de feu', $formations) ? 'Permis de feu' : $request->input('fire_permit');
         $plan->specific_permit = in_array('Permis spécifique :', $formations) ? 'Permis spécifique' : $request->input('specific_permit');
         $plan->other_permit = $request->input('other_permit');
+        $plan->informations_identifiees = $request->input('informations_identifiees') ?? null;
+        $plan->situations_dangereuses = $request->input('situations_dangereuses') ?? null;
+        $plan->resultats_sante = $request->input('resultats_sante') ?? null;
+        $plan->impacts_environnement = $request->input('impacts_environnement') ?? null;
+        $plan->sous_traitants = $request->input('sous_traitants') ?? null;
+        $plan->audit_constats = $request->input('audit_constats') ?? null;
+        $plan->modifications_conditions = $request->input('modifications_conditions') ?? null;
+        $plan->points_ameliorer = $request->input('points_ameliorer') ?? null;
+        $plan->analyses_risques = $request->input('analyses_risques') ?? null;
+        $plan->faits_marquants = $request->input('faits_marquants') ?? null;
+        $plan->travail_prescrit = $request->input('travail_prescrit') ?? null;
 
         // Save the updated plan
         $plan->save();
