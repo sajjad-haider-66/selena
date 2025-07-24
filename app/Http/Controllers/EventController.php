@@ -191,6 +191,7 @@ class EventController extends Controller
             'emetteur' => 'nullable|string',
             'circonstances' => 'nullable|string',
             'risques' => 'nullable|string',
+            'autre' => 'nullable|string',
             'autre_checkbox' => 'nullable|string',
             'analyse' => 'nullable|array',
             'frequence' => 'nullable|in:1,2,3,4',
@@ -223,6 +224,7 @@ class EventController extends Controller
             'lieu' => $data['lieu'],
             'type' => $data['type'],
             'emetteur' => $data['emetteur'],
+            'autre' => $data['autre'],
             'autre_checkbox' => $data['autre_checkbox'],
             'securite' => $request->has('securite'),
             'sante' => $request->has('sante'),
@@ -241,31 +243,7 @@ class EventController extends Controller
             'attachments' => $request->has('surete'),
         ]);
 
-        // Update or create associated action
-        // $action = Action::where('origin_id', $event->id)->where('origin', 'Event-' . $event->id)->first();
-        // if ($action) {
-        //     $action->update([
-        //         'description' => 'Address ' . $data['risques'],
-        //         'deadline' => $actions[0]['deadline'] ?? now()->addDays(7),
-        //         'json_data' => json_encode(['event_id' => $event->id, 'progress' => $action->progress_rate]),
-        //         'due_date' => now()->addDays(7),
-        //         'comments' => 'Action updated from event editing',
-        //     ]);
-        // } else {
-        //     Action::create([
-        //         'origin' => 'Event-' . $event->id,
-        //         'origin_id' => $event->id,
-        //         'description' => 'Address ' . $data['risques'],
-        //         'issued_date' => now(),
-        //         'pilot_id' => $this->assignResponsible($event->type, $cotation),
-        //         'deadline' => $actions[0]['deadline'] ?? now()->addDays(7),
-        //         'json_data' => json_encode(['event_id' => $event->id, 'progress' => 0]),
-        //         'due_date' => now()->addDays(7),
-        //         'progress_rate' => 0,
-        //         'efficiency' => 'N',
-        //         'comments' => 'Action generated from event editing',
-        //     ]);
-        // }
+
 
         // Notify users
         $notification = Notification::create([

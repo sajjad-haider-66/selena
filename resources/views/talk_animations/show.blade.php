@@ -35,7 +35,7 @@
                             @endforeach
                         </p>
                         <!-- Categories Section -->
-                        <tr>
+                        {{-- <tr>
                             <td colspan="4">
                                 <div class="checkbox-group">
                                     @php
@@ -55,7 +55,7 @@
                                     @endforeach
                                 </div>
                             </td>
-                        </tr>
+                        </tr> --}}
 
                         <!-- Title for Points -->
                         <tr>

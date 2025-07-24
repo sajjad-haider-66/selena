@@ -121,10 +121,10 @@
                                 </td>
                               
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <th>Signature</th>
                                 <td colspan="3"><input type="text" value="{{ $talk['signature'] ?? ''}}" name="signature"></td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <td colspan="4">
                                     <div class="checkbox-group">

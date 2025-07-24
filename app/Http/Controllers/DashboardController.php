@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Audit;
 use App\Models\Event;
+use App\Models\Action;
 use Illuminate\Http\Request;
 use App\Models\ReadinessForm;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
@@ -87,9 +88,20 @@ class DashboardController extends Controller
         }
 
         // Fetch Events Status (total counts for pending, completed, processing)
-        $pendingEvents = Event::where('status', 'pending')->count();
-        $completedEvents = Event::where('status', 'completed')->count();
-        $processingEvents = Event::where('status', 'processing')->count();
+        $pendingEvents = Action::where(function ($query) {
+            $query->whereNull('start_date')
+                ->whereNull('end_date');
+        })->count();
+
+        $completedEvents = Action::where(function ($query) {
+            $query->whereNotNull('start_date')
+                ->whereNotNull('end_date');
+        })->count();
+
+        $processingEvents = Action::where(function ($query) {
+            $query->whereNotNull('start_date')
+                ->whereNull('end_date');
+        })->count();
 
         // Widgets data
         $pendingActionsCount = $pendingEvents; // Total pending actions

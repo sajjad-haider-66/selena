@@ -53,9 +53,9 @@
             margin-bottom: 10px;
         }
 
-        /* .category-content.active {
-            display: block;
-        } */
+        .green-text { color: #28a745; }
+        .orange-text { color: #fd7e14; }
+        .red-text { color: #dc3545; }
     </style>
 
     <div class="py-12">
@@ -85,10 +85,11 @@
                                     <select name="type" class="form-control" required>
                                         <option value="">Sélectionner</option>
                                         <option value="Dangerous situation">Situation Dangereuse</option>
+                                        <option value="Incident">Incident</option>
                                         <option value="Near miss">Presque Accident</option>
                                         <option value="Work accident">Accident du Travail (AT)</option>
                                         <option value="Occupational illness">Maladie Professionnelle (MP)</option>
-                                        <option value="Incident">Incident</option>
+                                        <option value="Impact environnemental">Impact environnemental</option>
                                     </select>
                                 </div>
 
@@ -241,8 +242,7 @@
                             </div>
 
                             <!-- Formation sécurité / Habilitations -->
-                            <div class="category-title" onclick="toggleCategory('formation')">Formation sécurité /
-                                Habilitations</div>
+                            <div class="category-title" onclick="toggleCategory('formation')">"Formation sécurité / Habilitations / Autorisations</div>
                             <div id="formation" class="category-content">
                                 <div class="checkbox-group">
                                     <div class="checkbox-item"><input type="checkbox" name="analyse[formation][]"
@@ -265,8 +265,8 @@
                                 <div class="form-group">
                                     <label class="form-label">Fréquence d’exposition</label>
                                     <select name="frequence" class="form-control" required>
-                                        <option value="1">Faible (< 1 fois/an)</option>
-                                        <option value="2">Moyenne (< 1 fois/mois)</option>
+                                        <option value="1">Faible (= 1 fois/an)</option>
+                                        <option value="2">Moyenne (= 1 fois/mois)</option>
                                         <option value="3">Grande (> 1 fois/mois)</option>
                                         <option value="4">Grande (> 1 fois/semaine)</option>
                                     </select>
@@ -421,17 +421,21 @@
                 $('#riskValue').text(risk);
 
                 let message = '';
+                let colorClass = '';
                 if (risk <= 4) {
                     message = 'Action à entreprendre sous 1 semaine (Recueil des faits ci-dessus suffisant)';
                     updateAllDeadlines(7);
+                    colorClass = 'green-text';
                 } else if (risk <= 10) {
                     message = 'Action à entreprendre sous 48 h (Recueil des faits ci-dessus suffisant)';
                     updateAllDeadlines(2);
+                    colorClass = 'orange-text';
                 } else {
                     message = 'Action urgente à entreprendre immédiatement (Réalisation arbre des causes systématiquement)';
                     updateAllDeadlines(0);
+                    colorClass = 'red-text';
                 }
-                $('#riskMessage').html(`<strong>${message}</strong>`);
+                $('#riskMessage').html(`<strong class="${colorClass}">${message}</strong>`);
             }
 
             function updateDeadline(index) {
