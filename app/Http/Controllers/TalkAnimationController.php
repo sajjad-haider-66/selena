@@ -355,10 +355,15 @@ class TalkAnimationController extends Controller
         $talk = TalkAnimation::FindOrFail($id);
         $talk->delete();
           // Check if related action exists
-        $delAction = Action::where('origin_view_id', $id)->first();
-
-        if ($delAction) {
-            $delAction->delete();
+        $delAction = Action::where('origin_view_id', $id)
+            ->where('action_origin', 'talk_animation')
+            ->first();
+        try {
+            if ($delAction) {
+                $delAction->delete();
+            }
+        } catch (\Exception $e) {
+            dd('Delete failed:', $e->getMessage());
         }
         return $this->success('Talk Animation Delete Successfully', ['success' => true, 'data' => null]);
     }

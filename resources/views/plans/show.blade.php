@@ -14,7 +14,7 @@
                             <td><strong>N°</strong></td>
                             <td>{{ $plans->plan_number }}</td>
                             <td><strong>Date</strong></td>
-                            <td>{{ $plans->work_date }}</td>
+                            <td>{{ $plans->work_date != null ? $plans->work_date->format('Y-m-d') : 'No Date' }}</td>
                         </tr>
                     </table>
                     <h4>Nom de l'Entreprise</h4>
@@ -61,7 +61,7 @@
                             <td><strong>Emplacement prévu :</strong></td>
                             <td>{{ $plans->location }}</td>
                             <td><strong>Début d'intervention :</strong></td>
-                            <td>{{ $plans->start_time }}</td>
+                            <td>{{ $plans->start_time != null ? $plans->start_time->format('Y-m-d') : 'No Date' }}</td>
                         </tr>
                         <tr>
                             <td><strong>Description :</strong></td>
@@ -71,7 +71,7 @@
                             <td><strong>N° mode opératoire :</strong></td>
                             <td>{{ $plans->operative_mode_number }}</td>
                             <td><strong>Fin d'intervention prévue :</strong></td>
-                            <td>{{ $plans->end_time }}</td>
+                            <td>{{ $plans->end_time != null ? $plans->end_time->format('Y-m-d') : 'No Date' }}</td>
                         </tr>
                     </table>
                 </div>

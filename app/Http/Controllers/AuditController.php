@@ -245,7 +245,9 @@ class AuditController extends Controller
         $audit = Audit::FindOrFail($id);
         $audit->delete();
         // Check if related action exists
-        $delAction = Action::where('origin_view_id', $id)->first();
+        $delAction = Action::where('origin_view_id', $id)
+            ->where('action_origin', 'audit')
+            ->first();
 
         if ($delAction) {
             $delAction->delete();

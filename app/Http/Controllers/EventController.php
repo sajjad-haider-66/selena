@@ -268,7 +268,9 @@ class EventController extends Controller
         $event = Event::FindOrFail($id);
         $event->delete();
         // Check if related action exists
-        $delAction = Action::where('origin_view_id', $id)->first();
+        $delAction = Action::where('origin_view_id', $id)
+            ->where('action_origin', 'event')
+            ->first();
 
         if ($delAction) {
             $delAction->delete();
