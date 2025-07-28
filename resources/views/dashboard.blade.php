@@ -37,7 +37,6 @@
                                 <option selected>Timeframe</option>
                                 <option>Last 7 Days</option>
                                 <option>Last 30 Days</option>
-                                <option>Custom Range</option>
                             </select> </div>
                     </div> <!-- Dashboard Widgets -->
                     <div class="row g-4">
@@ -100,13 +99,18 @@
                         </div>
                         <!-- Upcoming Audits/Talks Chart -->
                         <div class="card bg-white dark:bg-gray-800 p-4">
-                            <h6 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-3">Upcoming Talks/Animation</h6>
-                            <canvas id="upcomingAuditsChart"></canvas>
+                            <h6 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-3">Talks Animation</h6>
+                            <canvas id="upcomingTalksChart"></canvas>
                         </div>
                         <!-- Events Status Chart -->
                         <div class="mt-6 card bg-white dark:bg-gray-800 p-4 circule-chart">
                             <h6 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-3">Events Status Overview</h6>
                             <canvas id="eventsStatusChart"></canvas>
+                        </div>
+                        <!-- audits Chart -->
+                        <div class="mt-6 card bg-white dark:bg-gray-800 p-4">
+                            <h6 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-3">Audits</h6>
+                            <canvas id="openAuditsChart"></canvas>
                         </div>
                     </div>
                     <!-- Events Status Chart -->
@@ -265,7 +269,8 @@
             createChart('pendingActionsChart', 'Pending Actions', @json($chartData['pending_actions']), 'rgba(59, 130, 246,');
             createChart('dailyReadinessChart', 'Daily Readiness (%)', @json($chartData['daily_readiness']), 'rgba(34, 197, 94,');
             createChart('openEventsChart', 'Open Events', @json($chartData['open_events']), 'rgba(234, 179, 8,');
-            createChart('upcomingAuditsChart', 'Upcoming Audits/Talks', @json($chartData['upcoming_audits']), 'rgba(239, 68, 68,');
+            createChart('openAuditsChart', 'Open Audits', @json($chartData['upcoming_audits']), 'rgba(235, 175, 8,');
+            createChart('upcomingTalksChart', 'Talks', @json($chartData['upcoming_talks']), 'rgba(239, 68, 68,');
     </script>
     
 </x-app-layout>

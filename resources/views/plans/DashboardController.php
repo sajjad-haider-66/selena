@@ -8,7 +8,6 @@ use App\Models\Event;
 use App\Models\Action;
 use Illuminate\Http\Request;
 use App\Models\ReadinessForm;
-use App\Models\TalkAnimation;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class DashboardController extends Controller
@@ -31,7 +30,6 @@ class DashboardController extends Controller
         $dailyReadiness = [];
         $openEvents = [];
         $upcomingAudits = [];
-        $upcomingTalks = [];
 
         // Get all dates in the range for consistent data points
         $dateRange = collect([]);
@@ -89,19 +87,6 @@ class DashboardController extends Controller
             $upcomingAudits[] = $upcomingAuditsData->get($date, 0);
         }
 
-
-        // Fetch Upcoming Audits/Talks (count of audits scheduled per day)
-        $upcomingTalksData = TalkAnimation::whereBetween('date', [$startDate, $endDate])
-            ->groupByRaw('DATE(date)')
-            ->selectRaw('DATE(date) as date, COUNT(*) as count')
-            ->get()
-            ->pluck('count', 'date');
-
-        // Fill the array with counts, defaulting to 0
-        foreach ($dateRange as $date) {
-            $upcomingTalks[] = $upcomingTalksData->get($date, 0);
-        }
-
         // Fetch Events Status (total counts for pending, completed, processing)
         $pendingEvents = Action::where(function ($query) {
             $query->whereNull('start_date')
@@ -122,7 +107,6 @@ class DashboardController extends Controller
         $pendingActionsCount = $pendingEvents; // Total pending actions
         $dailyReadinessCount = ReadinessForm::count(); // Total readiness forms
         $upcomingAuditsCount = Audit::whereBetween('date', [now(), now()->addDays(7)])->count();
-        $upcomingTalksCount = TalkAnimation::whereBetween('date', [now(), now()->addDays(7)])->count();
 
         // Chart data
         $chartData = [
@@ -130,7 +114,6 @@ class DashboardController extends Controller
             'daily_readiness' => $dailyReadiness,
             'open_events' => $openEvents,
             'upcoming_audits' => $upcomingAudits,
-            'upcoming_talks' => $upcomingTalks,
             'events_status' => [
                 'pending' => $pendingEvents,
                 'completed' => $completedEvents,
@@ -143,7 +126,6 @@ class DashboardController extends Controller
             'dailyReadinessCount',
             'pendingEvents',
             'upcomingAuditsCount',
-            'upcomingTalksCount',
             'chartData'
         ));
     }
