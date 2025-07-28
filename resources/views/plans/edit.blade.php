@@ -85,6 +85,7 @@
                             <td><input type="text" name="location" value="{{ old('location', $plan->location) }}"></td>
                             <td>Début d'intervention :</td>
                             <td><input type="date" name="start_time" value="{{ old('start_time', $plan->start_time ? $plan->start_time->format('Y-m-d') : '') }}"></td>
+                            <td><input type="date" name="start_time" value="{{ old('start_time', $plan->start_time ? $plan->start_time->format('Y-m-d') : '') }}"></td>
                         </tr>
                         <tr>
                             <td>Description :</td>
@@ -94,6 +95,10 @@
                             <td>N° mode opératoire :</td>
                             <td><input type="text" name="operative_mode_number" value="{{ old('operative_mode_number', $plan->operative_mode_number) }}"></td>
                             <td>Fin d'intervention prévue :</td>
+                            <td>
+                                <input type="date" name="end_time"
+                                    value="{{ old('end_time', $plan->end_time ? $plan->end_time->format('Y-m-d') : '') }}">
+                            </td>
                             <td>
                                 <input type="date" name="end_time"
                                     value="{{ old('end_time', $plan->end_time ? $plan->end_time->format('Y-m-d') : '') }}">
@@ -130,6 +135,7 @@
                                         <label><input type="checkbox" name="travail[]" value="Fouille / terrassement" {{ in_array('Fouille / terrassement', $travail) ? 'checked' : '' }}> Fouille / terrassement</label>
                                         <label><input type="checkbox" name="travail[]" value="Forage" {{ in_array('Forage', $travail) ? 'checked' : '' }}> Forage</label>
                                         <label><input type="checkbox" name="travail[]" value="Visites / audits / contrôles / études engineering" {{ in_array('Visites / audits / contrôles / études engineering', $travail) ? 'checked' : '' }}> Visites / audits / contrôles / études engineering</label>
+                                        <label><input type="checkbox" name="travail[]" value="Travaux d'entretien des abords de la station" {{ in_array('Travaux dentretien des abords de la station', $travail) ? 'checked' : '' }}> Travaux d'entretien</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux d'entretien des abords de la station" {{ in_array('Travaux dentretien des abords de la station', $travail) ? 'checked' : '' }}> Travaux d'entretien</label>
                                         <label><input type="checkbox" name="travail[]" value="Travaux de démolition" {{ in_array('Travaux de démolition', $travail) ? 'checked' : '' }}> Travaux de démolition</label>
                                         <label><input type="checkbox" name="travail[]" value="Intervention sur portique de lavage" {{ in_array('Intervention sur portique de lavage', $travail) ? 'checked' : '' }}> Intervention sur portique de lavage</label>
@@ -205,10 +211,13 @@
                                         <label><input type="checkbox" name="formations[]" value="- Mise à disposition casqueanti-bruit" {{ in_array('- Mise à disposition casqueanti-bruit', $formations) ? 'checked' : '' }}> - Mise à disposition casqueanti-bruit</label>
                                         <label><input type="checkbox" name="formations[]" value="- Aide à la manutention" {{ in_array('- Aide à la manutention', $formations) ? 'checked' : '' }}> - Aide à la manutention</label>
                                         {{-- <label><input type="checkbox" name="formations[]" value="Autres3" {{ in_array('Autres3', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other3" value="{{ old('training_certifications_other3', $training_certifications_other['Autres3']) }}"></label> --}}
+                                        {{-- <label><input type="checkbox" name="formations[]" value="Autres3" {{ in_array('Autres3', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other3" value="{{ old('training_certifications_other3', $training_certifications_other['Autres3']) }}"></label> --}}
                                         <label><input type="checkbox" name="formations[]" value="Permis spécifique :" {{ in_array('Permis spécifique :', $formations) ? 'checked' : '' }}> Permis spécifique :</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis de feu" {{ in_array('- Permis de feu', $formations) ? 'checked' : '' }}> - Permis de feu</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis delevage" {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis de levage</label>
+                                        <label><input type="checkbox" name="formations[]" value="- Permis delevage" {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis de levage</label>
                                         <label><input type="checkbox" name="formations[]" value="- Permis de fouille" {{ in_array('- Permis de fouille', $formations) ? 'checked' : '' }}> - Permis de fouille</label>
+                                        <label><input type="checkbox" name="formations[]" value="Permis de pénétrer" {{ in_array('Permis de pénétrer', $formations) ? 'checked' : '' }}>Permis de pénétrer</label>
                                         <label><input type="checkbox" name="formations[]" value="Permis de pénétrer" {{ in_array('Permis de pénétrer', $formations) ? 'checked' : '' }}>Permis de pénétrer</label>
                                         <label><input type="checkbox" name="formations[]" value="Autres4" {{ in_array('Autres4', $formations) ? 'checked' : '' }}> Autres <input type="text" name="training_certifications_other4" value="{{ old('training_certifications_other4', $training_certifications_other['Autres4']) }}"></label>
                                     </div>
@@ -219,8 +228,10 @@
                 </div>
 
                 <!-- VALIDATION  -->
+                <!-- VALIDATION  -->
                 <div class="card mb-4">
                     <div class="text-center card-header font-weight-bold">
+                        VALIDATION
                         VALIDATION
                     </div>
                     <div class="card-body">
@@ -257,7 +268,9 @@
                             </div>
 
                             <!-- Responsable de l'entreprise utilisatrice ou son représentant -->
+                            <!-- Responsable de l'entreprise utilisatrice ou son représentant -->
                             <div class="col-md-6">
+                                <h6>Responsable de l'entreprise utilisatrice ou son représentant</h6>
                                 <h6>Responsable de l'entreprise utilisatrice ou son représentant</h6>
                                 <div class="form-group">
                                     <label>Date :</label>
@@ -366,7 +379,107 @@
                                     <textarea class="form-control" rows="3" name="modifications_conditions">{{ $plan->modifications_conditions ?? '' }}</textarea>
                                 </div>
                             </div>
+                    <!-- Retour d’expérience -->
+                    <div class="card mb-4">
+                        <div class="text-center card-header font-weight-bold">
+                            Retour d’expérience de fin de chantier
+                        </div>
+                        <div class="card-body">
+                            <!-- Row 1 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Quelles sont les remontées d'information identifiées lors de notre chantier
+                                        ?</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="informations_identifiees">{{ $plan->informations_identifiees ?? '' }}</textarea>
+                                </div>
+                            </div>
 
+                            <!-- Row 2 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Ya t il eu des situations dangereuses, presque accidents et accidents
+                                        ?</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="situations_dangereuses">{{ $plan->situations_dangereuses ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Les résultats des mesurages liés à la santé des travailleurs (Fiche
+                                        d’exposition à jour, avis d’aptitude médicale en cours de validité)</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="resultats_sante">{{ $plan->resultats_sante ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 4 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>Quels sont les impacts sur l’environnement en cas de non respect du tri des
+                                        déchets ?</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="impacts_environnement">{{ $plan->impacts_environnement ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 5 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des sous-traitants ou du personnel d’appoint ?<br>
+                                        Merci de confirmer le respect des règles de sécurité, port des EPI, connaissance
+                                        politique SSE, de nos objectifs tels que le 0 AT, la 0 MP, le 0 Atteinte à l'environnement.
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="sous_traitants">{{ $plan->sous_traitants ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 6 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des constats suite à un audit SSE, une visite, un contrôle 
+                                        (de notre référent SSE, de l'auditeur MASE, du client, de la carsat, de l'inspecteur du travail)
+                                         ? Si oui, quel en a ete le résultat ?
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="audit_constats">{{ $plan->audit_constats ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 7 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des modifications des conditions opératoires ? Comment les avez-vous
+                                        gérées ?
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="modifications_conditions">{{ $plan->modifications_conditions ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Row 8 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des points positifs, les points à améliorer ? Merci de les indiquer.
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="points_ameliorer">{{ $plan->points_ameliorer ?? '' }}</textarea>
+                                </div>
                             <!-- Row 8 -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -379,6 +492,18 @@
                                 </div>
                             </div>
 
+                            <!-- Row 9 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Les analyses des risques ainsi que des modes opératoires ont-ils été efficaces
+                                        ?<br>
+                                        <small class="text-muted">(Merci d’expliquer en quelques mots comment ils ont été efficace)</small>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="analyses_risques">{{ $plan->analyses_risques ?? '' }}</textarea>
+                                </div>
                             <!-- Row 9 -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -404,6 +529,18 @@
                                 </div>
                                 <div class="col-md-6">
                                     <textarea class="form-control" rows="3" name="faits_marquants">{{ $plan->faits_marquants ?? '' }}</textarea>
+
+                            <!-- Row 10 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya t il eu des faits marquants ?<br>
+                                        <small class="text-muted">(merci de decrire en quelques mots les principaux faits,
+                                           marquants: visite positive du client, adaptation du mode operatoire suite à modificatio etc.)</small>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="faits_marquants">{{ $plan->faits_marquants ?? '' }}</textarea>
                                 </div>
                             </div>
 
@@ -414,7 +551,22 @@
                                         Ya til eu des écarts entre la préparation (travail prescrit) et la réalisation (travail réel)
                                         Quelle nalyse en fait vous? (merci de decrire l'impact potentiel sur la prestation)
                                     </label>
+                            </div>
+
+                            <!-- Row 11 -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label>
+                                        Ya til eu des écarts entre la préparation (travail prescrit) et la réalisation (travail réel)
+                                        Quelle nalyse en fait vous? (merci de decrire l'impact potentiel sur la prestation)
+                                    </label>
                                 </div>
+                                <div class="col-md-6">
+                                    <textarea class="form-control" rows="3" name="travail_prescrit">{{ $plan->travail_prescrit ?? '' }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                                 <div class="col-md-6">
                                     <textarea class="form-control" rows="3" name="travail_prescrit">{{ $plan->travail_prescrit ?? '' }}</textarea>
                                 </div>

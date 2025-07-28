@@ -32,6 +32,8 @@
                                 <tr>
                                     <th>Entreprise Extérieure</th>
                                     <th>Entreprise Utilisatrice</th>
+                                    <th>Entreprise Extérieure</th>
+                                    <th>Entreprise Utilisatrice</th>
                                     <th>Entreprise sous-traitante</th>
                                     <th>Nom de l'intervenant</th>
                                 </tr>
@@ -103,6 +105,7 @@
                                         <label><input type="checkbox" disabled {{ in_array('Fouille / terrassement', $travail) ? 'checked' : '' }}> Fouille / terrassement</label>
                                         <label><input type="checkbox" disabled {{ in_array('Forage', $travail) ? 'checked' : '' }}> Forage</label>
                                         <label><input type="checkbox" disabled {{ in_array('Visites / audits / contrôles / études engineering', $travail) ? 'checked' : '' }}> Visites / audits / contrôles / études engineering</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Travaux d\'entretien des abords de la station', $travail) ? 'checked' : '' }}> Travaux d'entretien</label>
                                         <label><input type="checkbox" disabled {{ in_array('Travaux d\'entretien des abords de la station', $travail) ? 'checked' : '' }}> Travaux d'entretien</label>
                                         <label><input type="checkbox" disabled {{ in_array('Travaux de démolition', $travail) ? 'checked' : '' }}> Travaux de démolition</label>
                                         <label><input type="checkbox" disabled {{ in_array('Intervention sur portique de lavage', $travail) ? 'checked' : '' }}> Intervention sur portique de lavage</label>
@@ -183,6 +186,7 @@
                                         <label><input type="checkbox" disabled {{ in_array('- Permis delevage', $formations) ? 'checked' : '' }}> - Permis de levage</label>
                                         <label><input type="checkbox" disabled {{ in_array('- Permis de fouille', $formations) ? 'checked' : '' }}> - Permis de fouille</label>
                                         <label><input type="checkbox" disabled {{ in_array('Permis de pénétrer', $formations) ? 'checked' : '' }}>Permis de pénétrer</label>
+                                        <label><input type="checkbox" disabled {{ in_array('Permis de pénétrer', $formations) ? 'checked' : '' }}>Permis de pénétrer</label>
                                         <label><input type="checkbox" disabled {{ in_array('Autres4', $formations) ? 'checked' : '' }}> Autres: {{ $training_certifications_other['Autres4'] ?? '' }}</label>
                                     </div>
                                 </td>
@@ -194,6 +198,7 @@
                 <!-- VALIDATION AVANT LES TRAVAUX -->
                 <div class="card mb-4">
                     <div class="text-center card-header font-weight-bold">
+                        VALIDATION
                         VALIDATION
                     </div>
                     <div class="card-body">
@@ -213,6 +218,7 @@
                             <!-- RESPONSABLE DE LA STATION OU SON REPRÉSENTANT -->
                             <div class="col-md-6">
                                 <h6>Responsable de l'entreprise utilisatrice ou son représentant</h6>
+                                <h6>Responsable de l'entreprise utilisatrice ou son représentant</h6>
                                 <p><strong>Date:</strong> {{ $plans->before_date ? $plans->before_date->format('d/m/Y') : '—' }}</p>
                                 <p><strong>Heure:</strong> {{ $plans->before_time ? $plans->before_time->format('H:i') : '—' }}</p>
                                 <p><strong>Nom:</strong> {{ $plans->before_responsible_name ?? '—' }}</p>
@@ -221,6 +227,9 @@
                     </div>
                 </div>
 
+                <div class="card mb-4 shadow-sm border-0">
+                    <div class="card-header text-black text-center font-weight-bold rounded-top">
+                        📝 Retour d’expérience de fin de chantier
                 <div class="card mb-4 shadow-sm border-0">
                     <div class="card-header text-black text-center font-weight-bold rounded-top">
                         📝 Retour d’expérience de fin de chantier
@@ -252,11 +261,41 @@
                                 <p class="mb-0 text-muted">
                                     {{ $plans->$key ?? '— Non renseigné —' }}
                                 </p>
+                    <div class="card-body bg-light">
+
+                        @php
+                            $fields = [
+                                'informations_identifiees' => "🔹 Quelles sont les remontées d'information identifiées lors de notre chantier ?",
+                                'situations_dangereuses' => "⚠️ Ya t il eu des situations dangereuses, presque accidents et accidents ?",
+                                'resultats_sante' => "🩺 Les résultats des mesurages liés à la santé des travailleurs",
+                                'impacts_environnement' => "🌱 Quels sont les impacts sur l’environnement en cas de non respect du tri des déchets ?",
+                                'sous_traitants' => "👷‍♂️ Ya t il eu des sous-traitants ou du personnel d’appoint ?",
+                                'audit_constats' => "🔍 Ya t il eu des constats suite à un audit SSE, visite ou contrôle ?",
+                                'modifications_conditions' => "⚙️ Ya t il eu des modifications des conditions opératoires ?",
+                                'points_ameliorer' => "📌 Points positifs / à améliorer",
+                                'analyses_risques' => "🛠️ Analyses des risques et modes opératoires efficaces ?",
+                                'faits_marquants' => "⭐ Ya t il eu des faits marquants ?
+                                        merci de decrire en quelques mots les principaux faits,
+                                           marquants: visite positive du client, adaptation du mode operatoire suite à modificatio etc.",
+                                'travail_prescrit' => "⭐ Ya til eu des écarts entre la préparation (travail prescrit) et la réalisation (travail réel)
+                                        Quelle nalyse en fait vous? (merci de decrire l'impact potentiel sur la prestation)",
+                            ];
+                        @endphp
+
+                        @foreach($fields as $key => $label)
+                            <div class="mb-3 p-3 bg-white rounded shadow-sm border-left border-primary">
+                                <h6 class="font-weight-bold text-primary mb-2">{{ $label }}</h6>
+                                <p class="mb-0 text-muted">
+                                    {{ $plans->$key ?? '— Non renseigné —' }}
+                                </p>
                             </div>
+                        @endforeach
+
                         @endforeach
 
                     </div>
                 </div>
+
 
 
                 <a href="{{ route('plan.index') }}" class="btn btn-primary">Back to List</a>

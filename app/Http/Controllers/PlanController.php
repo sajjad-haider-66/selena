@@ -164,7 +164,7 @@ class PlanController extends Controller
         
         // Map 'apres' fields
         $plan->new_authorization_date = $request->input('apres_nouvelle_autorisation');
-        $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : null;
+        $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : [];
         $plan->after_responsible_date = $request->input('apres_responsable_date');
         $plan->after_responsible_time = $request->input('apres_responsable_heure');
         $plan->after_responsible_name = $request->input('apres_responsable_nom');
