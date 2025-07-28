@@ -15,13 +15,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-
-         // Widgets ke data
-        // $pendingActions = Event::where('status', 'pending')->count();
-        // $dailyReadiness = 92; // Ya calculate karke percentage nikaal lo
-        // $openEvents = Event::where('status', 'open')->count();
-        // $upcomingAudits = Audit::whereBetween('date', [now(), now()->addDays(7)])->count();
-
         // Define the date range for the last 7 days
         $startDate = Carbon::today()->subDays(6)->startOfDay(); // 7 days ago
         $endDate = Carbon::today()->endOfDay(); // Today
@@ -166,4 +159,47 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function getChartData(Request $request)
+    {
+        $timeframe = $request->query('timeframe', '30'); // Default to 30 days
+        $days = $timeframe === '7' ? 7 : 30;
+
+        // Define date range
+        $startDate = Carbon::today()->subDays($days - 1)->startOfDay();
+        $endDate = Carbon::today()->endOfDay();
+
+        // Create date range array
+        $dateRange = [];
+        for ($i = 0; $i < $days; $i++) {
+            $dateRange[] = Carbon::today()->subDays($days - 1 - $i)->format('Y-m-d');
+        }
+
+        // Initialize arrays
+        $pendingActions = [];
+        $dailyReadiness = [];
+        $openEvents = [];
+        $upcomingAudits = [];
+
+        // Fetch Upcoming Audits/Talks
+        $upcomingAuditsData = Audit::whereBetween('date', [$startDate, $endDate])
+            ->groupByRaw('DATE(date)')
+            ->selectRaw('DATE(date) as date, COUNT(*) as count')
+            ->get()
+            ->pluck('count', 'date');
+
+        // Fill arrays with data (example, modify queries as needed)
+        foreach ($dateRange as $date) {
+            $upcomingAudits[] = $upcomingAuditsData->get($date, 0);
+            $pendingActions[] = 0; // Replace with actual query
+            $dailyReadiness[] = 0; // Replace with actual query
+            $openEvents[] = 0; // Replace with actual query
+        }
+
+        return response()->json([
+            'pending_actions' => $pendingActions,
+            'daily_readiness' => $dailyReadiness,
+            'open_events' => $openEvents,
+            'upcoming_audits' => $upcomingAudits,
+        ]);
+    }
 }

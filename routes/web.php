@@ -86,6 +86,7 @@ Route::get('/', function () {
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/updatechart', [DashboardController::class, 'getChartData']);
 Route::get('/dashboard/events-data', [DashboardController::class, 'getEventsData']);
 Route::get('/dashboard/audits-data', [DashboardController::class, 'getAuditsData']);
 Route::get('/dashboard/talks-data', [DashboardController::class, 'getTalksData']);

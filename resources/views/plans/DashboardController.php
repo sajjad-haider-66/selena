@@ -12,9 +12,13 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Project;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request, $timeframe = '7')
     {
-
+dd($timeframe);
+         // Get the timeframe from the request, default to 7 days
+        $timeframe = $request->query('timeframe', '7'); // Default to 7 days
+        $days = $timeframe === '30' ? 30 : 7;
+        dd($days);
          // Widgets ke data
         // $pendingActions = Event::where('status', 'pending')->count();
         // $dailyReadiness = 92; // Ya calculate karke percentage nikaal lo
