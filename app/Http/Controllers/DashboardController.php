@@ -174,32 +174,84 @@ class DashboardController extends Controller
             $dateRange[] = Carbon::today()->subDays($days - 1 - $i)->format('Y-m-d');
         }
 
-        // Initialize arrays
+        // Initialize arrays for chart data
         $pendingActions = [];
         $dailyReadiness = [];
         $openEvents = [];
         $upcomingAudits = [];
+        $upcomingTalks = [];
 
-        // Fetch Upcoming Audits/Talks
+   // Fetch Pending Actions (count of pending events per day)
+        $pendingActionsData = Event::where('status', 'pending')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->groupByRaw('DATE(created_at)')
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->get()
+            ->pluck('count', 'date');
+
+        // Fill the array with counts, defaulting to 0 for days with no data
+        foreach ($dateRange as $date) {
+            $pendingActions[] = $pendingActionsData->get($date, 0);
+        }
+
+        // Fetch Daily Readiness (average readiness score per day)
+       $dailyReadinessData = ReadinessForm::whereBetween('created_at', [$startDate, $endDate])
+        ->groupByRaw('DATE(created_at)')
+        ->selectRaw('DATE(created_at) as date, AVG(readiness_rate) as average')
+        ->get()
+        ->pluck('average', 'date');
+
+        // Fill the array, defaulting to 0 for days with no data
+        foreach ($dateRange as $date) {
+            $dailyReadiness[] = round($dailyReadinessData->get($date, 0), 2);
+        }
+
+        // Fetch Open Events (count of non-completed events per day)
+       $openEventsData = Event::whereIn('status', ['pending', 'processing'])
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->groupByRaw('DATE(created_at)')
+        ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+        ->get()
+        ->pluck('count', 'date');
+
+        // Fill the array with counts, defaulting to 0
+        foreach ($dateRange as $date) {
+            $openEvents[] = $openEventsData->get($date, 0);
+        }
+
+        // Fetch Upcoming Audits/Talks (count of audits scheduled per day)
         $upcomingAuditsData = Audit::whereBetween('date', [$startDate, $endDate])
             ->groupByRaw('DATE(date)')
             ->selectRaw('DATE(date) as date, COUNT(*) as count')
             ->get()
             ->pluck('count', 'date');
 
-        // Fill arrays with data (example, modify queries as needed)
+        // Fill the array with counts, defaulting to 0
         foreach ($dateRange as $date) {
             $upcomingAudits[] = $upcomingAuditsData->get($date, 0);
-            $pendingActions[] = 0; // Replace with actual query
-            $dailyReadiness[] = 0; // Replace with actual query
-            $openEvents[] = 0; // Replace with actual query
         }
 
+
+        // Fetch Upcoming Audits/Talks (count of audits scheduled per day)
+        $upcomingTalksData = TalkAnimation::whereBetween('date', [$startDate, $endDate])
+            ->groupByRaw('DATE(date)')
+            ->selectRaw('DATE(date) as date, COUNT(*) as count')
+            ->get()
+            ->pluck('count', 'date');
+
+        // Fill the array with counts, defaulting to 0
+        foreach ($dateRange as $date) {
+            $upcomingTalks[] = $upcomingTalksData->get($date, 0);
+        }
+
+
         return response()->json([
+
             'pending_actions' => $pendingActions,
             'daily_readiness' => $dailyReadiness,
             'open_events' => $openEvents,
             'upcoming_audits' => $upcomingAudits,
+            'upcoming_talks' => $upcomingTalks,
         ]);
     }
 }

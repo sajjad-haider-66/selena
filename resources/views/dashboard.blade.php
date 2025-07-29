@@ -37,7 +37,6 @@
                             <select class="form-select" id="timeframeFilter">
                                 <option value="7" selected>Last 7 Days</option>
                                 <option value="30">Last 30 Days</option>
-                                <option value="custom">Custom Range</option>
                             </select>
                         </div>
                     </div> <!-- Dashboard Widgets -->
@@ -199,46 +198,8 @@
                 }
             });
         }
-
-        // Function to update charts based on timeframe
-        function updateCharts() {
-            const timeframe = $('#timeframeFilter').val();
-            $.ajax({
-                url: "updatechart?timeframe=" + timeframe,
-                method: 'GET',
-                success: function(chartData) {
-                    // Destroy existing charts
-                    Object.values(Chart.instances).forEach(chart => chart.destroy());
-
-                    // Create new charts with updated data
-                    createChart('pendingActionsChart', 'Pending Actions', chartData.pending_actions, 'rgba(59, 130, 246,', timeframe);
-                    createChart('dailyReadinessChart', 'Daily Readiness (%)', chartData.daily_readiness, 'rgba(34, 197, 94,', timeframe);
-                    createChart('openEventsChart', 'Open Events', chartData.open_events, 'rgba(234, 179, 8,', timeframe);
-                    createChart('openAuditsChart', 'Open Audits',chartData.upcoming_audits, 'rgba(235, 175, 8,', timeframe);
-                    createChart('upcomingTalksChart', 'Talks', chartData.upcoming_talks, 'rgba(239, 68, 68,', timeframe);
-                },
-                error: function(error) {
-                    console.error('Error updating charts:', error);
-                }
-            });
-        }
-
-        // Create new charts with updated data
-        createChart('pendingActionsChart', 'Pending Actions', @json($chartData['pending_actions']), 'rgba(59, 130, 246,');
-        createChart('dailyReadinessChart', 'Daily Readiness (%)', @json($chartData['daily_readiness']), 'rgba(34, 197, 94,');
-        createChart('openEventsChart', 'Open Events', @json($chartData['open_events']), 'rgba(234, 179, 8,');
-        createChart('openAuditsChart', 'Open Audits',@json($chartData['upcoming_audits']), 'rgba(235, 175, 8,');
-        createChart('upcomingTalksChart', 'Talks', @json($chartData['upcoming_talks']), 'rgba(239, 68, 68,');
-
-        // jQuery document ready
-        $(document).ready(function() {
-            // Bind change event to timeframe filter
-            $('#timeframeFilter').on('change', updateCharts);
-            // Initial chart load
-            updateCharts();
-        });
-           $(document).ready(function() {
-            // Doughnut Chart for Events Status
+        // Doughnut Chart for Events Status
+        function createEventsStatusChart(){
             const $canvas = $('#eventsStatusChart');
             if ($canvas.length) {
                 const ctx = $canvas[0].getContext('2d');
@@ -288,7 +249,46 @@
                     }
                 });
             }
+        }
 
+        // Function to update charts based on timeframe
+        function updateCharts() {
+            const timeframe = $('#timeframeFilter').val();
+            $.ajax({
+                url: "updatechart?timeframe=" + timeframe,
+                method: 'GET',
+                success: function(chartData) {
+                    // Destroy existing charts
+                    Object.values(Chart.instances).forEach(chart => chart.destroy());
+                    createEventsStatusChart()
+                    // Create new charts with updated data
+                    createChart('pendingActionsChart', 'Pending Actions', chartData.pending_actions, 'rgba(59, 130, 246,', timeframe);
+                    createChart('dailyReadinessChart', 'Daily Readiness (%)', chartData.daily_readiness, 'rgba(34, 197, 94,', timeframe);
+                    createChart('openEventsChart', 'Open Events', chartData.open_events, 'rgba(234, 179, 8,', timeframe);
+                    createChart('openAuditsChart', 'Open Audits',chartData.upcoming_audits, 'rgba(235, 175, 8,', timeframe);
+                    createChart('upcomingTalksChart', 'Talks', chartData.upcoming_talks, 'rgba(239, 68, 68,', timeframe);
+                },
+                error: function(error) {
+                    console.error('Error updating charts:', error);
+                }
+            });
+        }
+
+        // Create new charts with updated data
+        createChart('pendingActionsChart', 'Pending Actions', @json($chartData['pending_actions']), 'rgba(59, 130, 246,');
+        createChart('dailyReadinessChart', 'Daily Readiness (%)', @json($chartData['daily_readiness']), 'rgba(34, 197, 94,');
+        createChart('openEventsChart', 'Open Events', @json($chartData['open_events']), 'rgba(234, 179, 8,');
+        createChart('openAuditsChart', 'Open Audits',@json($chartData['upcoming_audits']), 'rgba(235, 175, 8,');
+        createChart('upcomingTalksChart', 'Talks', @json($chartData['upcoming_talks']), 'rgba(239, 68, 68,');
+
+        // jQuery document ready
+        $(document).ready(function() {
+            // Bind change event to timeframe filter
+            $('#timeframeFilter').on('change', updateCharts);
+            // Initial chart load
+            updateCharts();
+        });
+        $(document).ready(function() {
             // Optional: Update chart based on filter change (e.g., Timeframe dropdown)
             $('.form-select').on('change', function() {
                 // Example AJAX call to fetch new data
