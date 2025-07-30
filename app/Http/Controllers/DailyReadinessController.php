@@ -65,7 +65,7 @@ class DailyReadinessController extends Controller
      */
     public function store(DailyReadinessStoreRequest $request)
     {
-        // dd($request->all());
+       
             // Calculate readiness rate
             $readinessRate = $this->calculateReadinessRate($request->checklist_data);
             $status = $readinessRate >= 75 ? 'Green' : 'Blocked';
@@ -159,20 +159,24 @@ class DailyReadinessController extends Controller
         return $this->success('Readiness Delete Successfully', ['success' => true, 'data' => null]);
     }
 
-    private function calculateReadinessRate($checklistData)
-    {
-        $totalScore = 0;
-        $count = 0;
-        foreach ($checklistData as $item) {
-            if ($item['answer'] === 'Yes') {
-                $totalScore += $item['score'] ?? 1;
+        private function calculateReadinessRate($checklistData)
+        {
+            $totalScore = 0;
+            $count = 0;
+
+            foreach ($checklistData as $item) {
+                if ($item['answer'] === 'Yes') {
+                    $totalScore += $item['score'] ?? 1;
+                    $count++;
+                } elseif ($item['answer'] === 'No') {
+                    $count++;
+                }
+                // N/A is ignored
             }
-            if ($item['answer']) {
-                $count++;
-            }
+
+            return $count ? ($totalScore / $count) * 100 : 0;
         }
-        return $count ? ($totalScore / $count) * 100 : 0;
-    }
+
 
     public function Notification()
     {

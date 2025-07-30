@@ -63,7 +63,7 @@
                             <div class="card text-white bg-warning h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Open Events</h6>
-                                    <h3>{{ $pendingEvents }}</h3>
+                                    <h3>{{ $upcomingEventsCount }}</h3>
                                     <p class="card-text">Active</p>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                             <div class="card text-white bg-danger h-100">
                                 <div class="card-body">
                                     <h6 class="card-title">Audits Completed</h6>
-                                    <h3>{{ $upcomingAuditsCount }}</h3>
+                                    <h3>{{ $completeAuditsCount }}</h3>
                                 </div>
                             </div>
                         </div>

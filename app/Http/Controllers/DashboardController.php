@@ -33,7 +33,7 @@ class DashboardController extends Controller
         }
 
         // Fetch Pending Actions (count of pending events per day)
-        $pendingActionsData = Event::where('status', 'pending')
+        $pendingActionsData = Action::where('status', 'pending')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupByRaw('DATE(created_at)')
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
@@ -112,10 +112,11 @@ class DashboardController extends Controller
         })->count();
 
         // Widgets data
-        $pendingActionsCount = $pendingEvents; // Total pending actions
+        $pendingActionsCount = Action::where('start_date', null)->where('end_date', null)->count(); // Total pending actions
         $dailyReadinessCount = ReadinessForm::count(); // Total readiness forms
-        $upcomingAuditsCount = Audit::whereBetween('date', [now(), now()->addDays(7)])->count();
+        $completeAuditsCount = Audit::whereDate('date', '<', today())->count();
         $upcomingTalksCount = TalkAnimation::whereBetween('date', [now(), now()->addDays(7)])->count();
+        $upcomingEventsCount = Event::whereBetween('date', [now(), now()->addDays(7)])->count();
 
         // Chart data
         $chartData = [
@@ -134,8 +135,8 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'pendingActionsCount',
             'dailyReadinessCount',
-            'pendingEvents',
-            'upcomingAuditsCount',
+            'upcomingEventsCount',
+            'completeAuditsCount',
             'upcomingTalksCount',
             'chartData'
         ));

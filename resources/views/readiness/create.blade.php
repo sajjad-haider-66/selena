@@ -231,34 +231,34 @@
         $(document).ready(function() {
             // Readiness Rate Calculation
             function calculateReadinessRate(category) {
-            let totalScore = 0;
-            let count = 0;
+                let totalScore = 0;
+                let count = 0;
 
-            $(`#checklist-${category} .checklist-input:checked`).each(function () {
-                const value = $(this).val();
+                $(`#checklist-${category} .checklist-input:checked`).each(function () {
+                    const value = $(this).val();
 
-                if (value === 'Yes') {
-                    const score = parseInt($(this).closest('.checklist-item').find('input[name$="[score]"]').val());
-                    totalScore += score;
-                    count++;
-                } else if (value === 'No') {
-                    // Count No but no score
-                    count++;
-                }
-                // N/A is ignored completely
-            });
+                    if (value === 'Yes') {
+                        const score = parseInt($(this).closest('.checklist-item').find('input[name$="[score]"]').val());
+                        totalScore += score;
+                        count++;
+                    } else if (value === 'No') {
+                        // Count No but no score
+                        count++;
+                    }
+                    // N/A is ignored completely
+                });
 
-            const rate = count ? (totalScore / count) * 100 : 0;
+                const rate = count ? (totalScore / count) * 100 : 0;
 
-            $(`#readiness-label-${category}`).text(`Readiness Rate: ${rate.toFixed(1)}%`);
-            $(`#readiness-progress-${category} .progress-bar`)
-                .css('width', `${rate}%`)
-                .text(`${rate.toFixed(1)}%`);
+                $(`#readiness-label-${category}`).text(`Readiness Rate: ${rate.toFixed(1)}%`);
+                $(`#readiness-progress-${category} .progress-bar`)
+                    .css('width', `${rate}%`)
+                    .text(`${rate.toFixed(1)}%`);
 
-            const progressParent = $(`#readiness-progress-${category}`);
-            progressParent.removeClass('alert-green alert-blocked');
-            progressParent.addClass(rate >= 75 ? 'alert-green' : 'alert-blocked');
-        }
+                const progressParent = $(`#readiness-progress-${category}`);
+                progressParent.removeClass('alert-green alert-blocked');
+                progressParent.addClass(rate >= 75 ? 'alert-green' : 'alert-blocked');
+            }
 
 
             // Bind readiness rate calculation to radio button changes

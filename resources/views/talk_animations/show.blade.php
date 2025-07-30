@@ -147,7 +147,7 @@
                                 </table>
                             </div>
                         </div>
-                        <p><strong>Status:</strong> {{ $talk->status }}</p>
+                        <p><strong>Status:</strong> {{ $talk->date < now()->toDateString() ? 'Closed' : 'Scheduled' }}</p>
                     </div>
 
                     {{-- Only show if today --}}
