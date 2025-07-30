@@ -193,15 +193,21 @@
                                 <th width="50%">Nom</th>
                                 <th width="50%">Prénom</th>
                             </tr>
-                            @foreach (json_decode($talk->participants, true) as $participant)
-                           <tbody id="participant-body">
-                             <tr>
-                                <td><input type="text" name="participant_name[]" value="{{ $participant['name'] }}"></td>
-                                <td><input type="text" name="participant_signature[]" value="{{ $participant['signature'] }}"></td>
-                            </tr>
-                          
-                           </tbody>
-                            @endforeach
+                            <tbody id="participant-body">
+                                @php
+                                    $participants = json_decode($talk->participants, true) ?? [];
+                                @endphp
+
+                                @forelse ($participants as $participant)
+                                    <tr class="participant-row">
+                                        <td><input type="text" name="participant_name[]" value="{{ $participant['name'] }}" class="form-control"></td>
+                                        <td><input type="text" name="participant_signature[]" value="{{ $participant['signature'] }}" class="form-control"></td>
+                                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Remove</button></td>
+                                    </tr>
+                                @empty
+                                    {{-- Optional: show one empty row or keep tbody empty --}}
+                                @endforelse
+                            </tbody>
                               <tr>
                                 <td colspan="3">
                                     <button type="button" id="add-participant" class="btn btn-outline-dark btn-sm">Add More</button>
