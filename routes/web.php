@@ -124,6 +124,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/talk/{id}/feedback', [TalkAnimationController::class, 'submitFeedback'])->name('talk_animation.feedback');
     Route::post('/talk/{id}/archive', [TalkAnimationController::class, 'archive'])->name('talk_animation.archive');
     Route::post('/index/{id}/action', [ActionController::class, 'indexStore'])->name('action.indexStore');
+    Route::post('/remove-image/{event_id}', [EventController::class, 'removeImage'])->name('event.removeImage');
+    Route::post('/remove-image-talk/{talk_id}', [TalkAnimationController::class, 'removeImage'])->name('talk.removeImage');
 });
 // KEY : MULTIPERMISSION ends
 

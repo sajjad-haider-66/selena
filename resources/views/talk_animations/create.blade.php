@@ -111,7 +111,7 @@
                             </tr>
                             <tr>
                                 <th>Thème :</th>
-                                <td><input type="text" name="theme" value="Les produits corrosifs" required></td>
+                                <td><input type="text" name="theme" placeholder="Les produits corrosifs" value="" required></td>
                                 <th>Animateur(s)</th>
                                 <td class="animatuer-section">
                                     <input class="form-control first-input" type="text" name="animateur[0]" required>

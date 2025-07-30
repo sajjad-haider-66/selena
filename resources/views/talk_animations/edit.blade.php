@@ -171,6 +171,7 @@
                                         <div colspan="4">
                                             <div class="mt-2" class="mb-2">
                                                 @if ($talk->path)
+                                                <i class="fa fa-trash-o click-remove" aria-hidden="true" style="color:red; cursor: pointer"> Remove Image</i>
                                                     <img src="{{ asset('storage/' . $talk->path) }}" alt="Uploaded Image"
                                                         width="200" height="150" class="rounded shadow">
                                                 @else
@@ -303,7 +304,32 @@
                 $(this).closest('.remove-animateur-input').remove();
             });
 
-                      // add participant
+            // Remove Image
+            $('body').on('click', '.click-remove', function (e) {
+                e.preventDefault();
+                if (confirm("Are you sure you want to remove this image?")) {
+                    $.ajax({
+                        url: "{{ route('talk.removeImage', $talk->id) }}",
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                location.reload();
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            toastr.error('An error occurred while removing the image.');
+                        }
+                    });
+                }
+            });
+
+            // add participant
             $('#add-participant').on('click', function () {
                 var newRow = `
                     <tr class="participant-row">
@@ -330,38 +356,38 @@
 
     submitButton.prop('disabled', true);
 
-    $.ajax({
-        url: '{{ route("talk_animation.update", ":id") }}'.replace(':id', id), // Dynamic route with ID
-        type: 'POST', // Use POST with _method=PUT for Laravel
-        data: formData,
-        contentType: false, // Required for file uploads
-        processData: false, // Required for file uploads
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
-        },
-        success: function (response) {
-            if (response.responseCode == 200) {
-                toastr.success('Talk event updated successfully.');
-                setTimeout(() => {
-                    window.location.href = '{{ route("talk_animation.index") }}';
-                }, 2000);
+        $.ajax({
+            url: '{{ route("talk_animation.update", ":id") }}'.replace(':id', id), // Dynamic route with ID
+            type: 'POST', // Use POST with _method=PUT for Laravel
+            data: formData,
+            contentType: false, // Required for file uploads
+            processData: false, // Required for file uploads
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
+            },
+            success: function (response) {
+                if (response.responseCode == 200) {
+                    toastr.success('Talk event updated successfully.');
+                    setTimeout(() => {
+                        window.location.href = '{{ route("talk_animation.index") }}';
+                    }, 2000);
+                }
+            },
+            error: function (xhr) {
+                submitButton.prop('disabled', false);
+                const errors = xhr.responseJSON?.errors || {};
+                let errorMessage = 'Please fix the following errors:<br>';
+                if (Object.keys(errors).length > 0) {
+                    $.each(errors, function (key, value) {
+                        errorMessage += `- ${value[0]}<br>`;
+                    });
+                } else {
+                    errorMessage = xhr.responseJSON?.message || 'An error occurred.';
+                }
+                toastr.error(errorMessage);
             }
-        },
-        error: function (xhr) {
-            submitButton.prop('disabled', false);
-            const errors = xhr.responseJSON?.errors || {};
-            let errorMessage = 'Please fix the following errors:<br>';
-            if (Object.keys(errors).length > 0) {
-                $.each(errors, function (key, value) {
-                    errorMessage += `- ${value[0]}<br>`;
-                });
-            } else {
-                errorMessage = xhr.responseJSON?.message || 'An error occurred.';
-            }
-            toastr.error(errorMessage);
-        }
+        });
     });
-});
         });
     </script>
 </x-app-layout>

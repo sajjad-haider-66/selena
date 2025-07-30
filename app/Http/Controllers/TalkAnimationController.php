@@ -8,6 +8,7 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Models\TalkAnimation;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\TalkAnimationUpdateRequest;
 
 class TalkAnimationController extends Controller
@@ -116,13 +117,13 @@ class TalkAnimationController extends Controller
                 'description' => $actions[0]['action'] ?? 'talk description',
                 'issued_date' => now(),
                 'emission' => now(),
-                'pilot_id' => $data['animateur'][0] ?? 'dummy' ?? auth()->user()->id,
+                'pilot_id' => $actions[0]['responsable'] ?? auth()->user()->id,
                 'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
                 'json_data' => json_encode(['talk_id' => $talk->id, 'progress' => 0]),
                 'progress_rate' => 0,
                 'efficiency' => 'N',
                 'type' => $actions[0]['type'] ?? now()->addDays(7),
-                'comments' => 'Action generated from event',
+                'comments' => $data['theme'] ?? 'Action generated from Talk Animation',
             ]);
         } 
 
@@ -366,5 +367,22 @@ class TalkAnimationController extends Controller
             dd('Delete failed:', $e->getMessage());
         }
         return $this->success('Talk Animation Delete Successfully', ['success' => true, 'data' => null]);
+    }
+
+    /**
+     * Remove image from talk.
+     */
+    public function removeImage(Request $request, $talkId)
+    {
+     
+        $talk = TalkAnimation::findOrFail($talkId);
+        if ($talk->path) {
+            // Delete the image file from storage
+            Storage::disk('public')->delete($talk->path);
+            // Set the path to null in the database
+            $talk->path = null;
+            $talk->save();
+            return response()->json(['success' => true, 'message' => 'Image removed successfully.']);
+        }
     }
 }

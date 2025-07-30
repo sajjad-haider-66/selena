@@ -58,18 +58,16 @@ class DashboardController extends Controller
         }
 
         // Fetch Open Events (count of non-completed events per day)
-       $openEventsData = Event::whereIn('status', ['pending', 'processing'])
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->groupByRaw('DATE(created_at)')
-        ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-        ->get()
-        ->pluck('count', 'date');
+       $openEventsData = Event::whereBetween('date', [$startDate, $endDate])
+            ->groupByRaw('DATE(date)')
+            ->selectRaw('DATE(date) as date, COUNT(*) as count')
+            ->get()
+            ->pluck('count', 'date');
 
         // Fill the array with counts, defaulting to 0
         foreach ($dateRange as $date) {
             $openEvents[] = $openEventsData->get($date, 0);
         }
-
         // Fetch Upcoming Audits/Talks (count of audits scheduled per day)
         $upcomingAuditsData = Audit::whereBetween('date', [$startDate, $endDate])
             ->groupByRaw('DATE(date)')
@@ -116,7 +114,7 @@ class DashboardController extends Controller
         $dailyReadinessCount = ReadinessForm::count(); // Total readiness forms
         $completeAuditsCount = Audit::whereDate('date', '<', today())->count();
         $upcomingTalksCount = TalkAnimation::whereBetween('date', [now(), now()->addDays(7)])->count();
-        $upcomingEventsCount = Event::whereBetween('date', [now(), now()->addDays(7)])->count();
+        $upcomingEventsCount = Event::whereDate('date', '<', today())->count();
 
         // Chart data
         $chartData = [
@@ -183,12 +181,13 @@ class DashboardController extends Controller
         $upcomingTalks = [];
 
    // Fetch Pending Actions (count of pending events per day)
-        $pendingActionsData = Event::where('status', 'pending')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupByRaw('DATE(created_at)')
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->get()
-            ->pluck('count', 'date');
+       $pendingActionsData = Action::whereNull('start_date')
+        ->whereNull('end_date')
+        ->whereBetween('created_at', [$startDate, $endDate])
+        ->groupByRaw('DATE(created_at)')
+        ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+        ->get()
+        ->pluck('count', 'date');
 
         // Fill the array with counts, defaulting to 0 for days with no data
         foreach ($dateRange as $date) {
@@ -207,13 +206,12 @@ class DashboardController extends Controller
             $dailyReadiness[] = round($dailyReadinessData->get($date, 0), 2);
         }
 
-        // Fetch Open Events (count of non-completed events per day)
-       $openEventsData = Event::whereIn('status', ['pending', 'processing'])
-        ->whereBetween('created_at', [$startDate, $endDate])
-        ->groupByRaw('DATE(created_at)')
-        ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-        ->get()
-        ->pluck('count', 'date');
+         // Fetch Open Events (count of non-completed events per day)
+       $openEventsData = Event::whereBetween('date', [$startDate, $endDate])
+            ->groupByRaw('DATE(date)')
+            ->selectRaw('DATE(date) as date, COUNT(*) as count')
+            ->get()
+            ->pluck('count', 'date');
 
         // Fill the array with counts, defaulting to 0
         foreach ($dateRange as $date) {

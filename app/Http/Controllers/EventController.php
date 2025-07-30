@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Action;
+use App\Traits\ApiResponse;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Notifications\EventReported;
-use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -125,12 +126,12 @@ class EventController extends Controller
             'issued_date' => now(),
             'emission' => now(),
             'type' => $actions[0]['type'] ?? 'Preventive',
-            'pilot_id' => $data['emetteur'] ?? $this->assignResponsible($event->type, $cotation),
+            'pilot_id' => $actions[0]['responsable'] ?? 'test',
             'due_date' => $actions[0]['delai'] ?? now()->addDays(7),
             'json_data' => json_encode(['event_id' => $event->id, 'progress' => 0]),
             'progress_rate' => 0,
             'efficiency' => 'N',
-            'comments' => 'Action generated from event',
+            'comments' => $data['type'] ?? 'Action generated from event',
         ]);
 
         // Notify Client or RQSE (basic structure)
@@ -276,5 +277,21 @@ class EventController extends Controller
             $delAction->delete();
         }
         return $this->success('Event Delete Successfully', ['success' => true, 'data' => null]);
+    }
+
+    /**
+     * Remove image from event.
+     */
+    public function removeImage(Request $request, $eventId)
+    {
+        $event = Event::findOrFail($eventId);
+        if ($event->path) {
+            // Delete the image file from storage
+            Storage::disk('public')->delete($event->path);
+            // Set the path to null in the database
+            $event->path = null;
+            $event->save();
+            return response()->json(['success' => true, 'message' => 'Image removed successfully.']);
+        }
     }
 }

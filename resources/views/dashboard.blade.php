@@ -46,7 +46,7 @@
                                 <div class="card-body">
                                     <h6 class="card-title">Pending Actions</h6>
                                     <h3>{{ $pendingActionsCount }}</h3>
-                                    <p class="card-text">Due this week</p>
+                                    {{-- <p class="card-text">Due this week</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -140,6 +140,7 @@
 
         // Chart configuration function
         function createChart(canvasId, label, data, color, timeframe) {
+            console.log('Creating chart for:', canvasId, 'with data:', data);
             const ctx = document.getElementById(canvasId).getContext('2d');
             const labels = timeframe === '7' 
                 ? Array.from({length: 7}, (_, i) => `Day ${i + 1}`)
@@ -275,11 +276,11 @@
         }
 
         // Create new charts with updated data
-        createChart('pendingActionsChart', 'Pending Actions', @json($chartData['pending_actions']), 'rgba(59, 130, 246,');
-        createChart('dailyReadinessChart', 'Daily Readiness (%)', @json($chartData['daily_readiness']), 'rgba(34, 197, 94,');
-        createChart('openEventsChart', 'Open Events', @json($chartData['open_events']), 'rgba(234, 179, 8,');
-        createChart('openAuditsChart', 'Open Audits',@json($chartData['upcoming_audits']), 'rgba(235, 175, 8,');
-        createChart('upcomingTalksChart', 'Talks', @json($chartData['upcoming_talks']), 'rgba(239, 68, 68,');
+        // createChart('pendingActionsChart', 'Pending Actions', @json($chartData['pending_actions']), 'rgba(59, 130, 246,');
+        // createChart('dailyReadinessChart', 'Daily Readiness (%)', @json($chartData['daily_readiness']), 'rgba(34, 197, 94,');
+        // createChart('openAuditsChart', 'Open Audits',@json($chartData['upcoming_audits']), 'rgba(235, 175, 8,');
+        // createChart('upcomingTalksChart', 'Talks', @json($chartData['upcoming_talks']), 'rgba(239, 68, 68,');
+        // createChart('openEventsChart', 'Open Events', @json($chartData['open_events']), 'rgba(234, 179, 8,');
 
         // jQuery document ready
         $(document).ready(function() {

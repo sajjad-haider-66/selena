@@ -134,6 +134,7 @@
                         
                         <div class="mb-2">
                             @if ($event->path)
+                            <i class="fa fa-trash-o click-remove" aria-hidden="true" style="color:red; cursor: pointer"> Remove Image</i>
                                 <img src="{{ asset('storage/' . $event->path) }}" alt="Uploaded Image"
                                     width="200" height="150" class="rounded shadow">
                             @else
@@ -322,16 +323,18 @@
                         <div class="form-group">
                             <div id="actions-container" class="table-responsive mb-3">
                                 <table class="action-table">
-                                    <tr>
-                                        <th colspan="7" class="blue-header">Action(s) à mettre en place</th>
-                                    </tr>
+                                    <thead class="table-secondary text-center">
                                         <tr>
-                                        <th width="35%">Action(s) à mettre en place</th>
-                                        <th width="20%">Responsable</th>
-                                        <th width="20%">Délai</th>
-                                        <th width="15%">Type d'Action</th>
-                                        <th width="5%">Remove</th>
-                                    </tr>
+                                            <th colspan="7" class="blue-header">Action(s) à mettre en place</th>
+                                        </tr>
+                                        <tr>
+                                            <th width="35%">Action(s) à mettre en place</th>
+                                            <th width="20%">Responsable</th>
+                                            <th width="20%">Délai</th>
+                                            <th width="15%">Type d'Action</th>
+                                            <th width="5%">Remove</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         @php
                                             $actions = json_decode($event->actions, true) ?? [];
@@ -355,6 +358,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <button type="button" id="add-action" class="btn btn-outline-dark mb-3">Add Action</button>
                         </div>
 
                        <div class="mt-6">
@@ -372,8 +376,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-         let actionCount = 0;
-
             // Toggle category visibility
             $('.category-title').click(function() {
                 $(this).next('.category-content').toggle();
@@ -385,6 +387,7 @@
             });
 
             // Add Action Dynamically
+            let actionCount = $('#actions-container .action-row').length;
             $('#add-action').on('click', function () {
                 actionCount++;
                 const newAction = `
@@ -403,6 +406,7 @@
                     </tr>
                 `;
                 $('#actions-container table tbody').append(newAction);
+
                 updateDeadline(actionCount);
             });
 
@@ -458,15 +462,15 @@
             }
 
             function updateAllDeadlines(days) {
-                    $('#actions-container table tbody tr').each(function(index) {
-                        const deadlineField = $(this).find('input[type="date"]');
-                        if (deadlineField.length > 0) {
-                            deadlineField.val(getDateAfterDays(days));
-                        } else {
-                            console.warn(`Row ${index} has no date field.`);
-                        }
-                    });
-                }
+                $('#actions-container table tbody tr').each(function(index) {
+                    const deadlineField = $(this).find('input[type="date"]');
+                    if (deadlineField.length > 0) {
+                        deadlineField.val(getDateAfterDays(days));
+                    } else {
+                        console.warn(`Row ${index} has no date field.`);
+                    }
+                });
+            }
 
 
             function getDateAfterDays(days) {
@@ -481,6 +485,30 @@
                 }
                 else {
                     $(".autre_input_show").slideUp("fast");
+                }
+            });
+
+            $('body').on('click', '.click-remove', function (e) {
+                e.preventDefault();
+                if (confirm("Are you sure you want to remove this image?")) {
+                    $.ajax({
+                        url: "{{ route('event.removeImage', $event->id) }}",
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                location.reload();
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            toastr.error('An error occurred while removing the image.');
+                        }
+                    });
                 }
             });
 
