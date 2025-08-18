@@ -23,11 +23,11 @@ class ActionController extends Controller
      */
     function __construct()
     {  //KEY : MULTIPERMISSION
-        $this->middleware('permission:action-list|action-create|action-edit|action-show|action-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:action-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:action-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:action-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:action-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des actions|Créer une action|Modifier une action|Voir une action|Supprimer une action', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer une action', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier une action', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer une action', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir une action', ['only' => ['show']]);
     }
 
     /**
@@ -78,7 +78,7 @@ class ActionController extends Controller
             'emission' => now(),
         ]);
 
-        return $this->success('Action Created Successfully', ['success' => true, 'data' => null]);
+        return $this->success('Action créée avec succès', ['success' => true, 'data' => null]);
     }
 
     private function getActionType($actionData)
@@ -161,7 +161,7 @@ class ActionController extends Controller
         $action->calculateProgressRate();
         
         // Return a success response
-        return $this->success('Action updated successfully', ['success' => true, 'data' => null]);
+        return $this->success('Action mise à jour avec succès', ['success' => true, 'data' => null]);
     }
 
 }

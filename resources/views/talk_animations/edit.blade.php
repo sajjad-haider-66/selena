@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit - Talk/Animation') }}
+            {{ __('Modifier la Causerie') }}
         </h2>
     </x-slot>
     <style>
@@ -88,7 +88,7 @@
                     @endif
                     
                      <div class="card-header text-black d-flex justify-content-between align-items-center">
-                        <h4>Talk Animation</h4>
+                        <h4>Informations Générales</h4>
                     </div>
                     <!-- The Form -->
                     <form id="talkForm" enctype="multipart/form-data" data-id="{{ $talk['id']}}">
@@ -112,12 +112,12 @@
                                             <input class="form-control" type="text" name="animateur[{{ $key }}]" value="{{ $animateur }}" required>
                                             @if($key > 0)
                                                 <div class="input-group-append">
-                                                    <button type="button" class="btn btn-danger remove-animateur">Remove</button>
+                                                    <button type="button" class="btn btn-danger remove-animateur">Supprimer</button>
                                                 </div>
                                             @endif
                                         </div>
                                     @endforeach
-                                    <button type="button" id="add-animateur" class="btn btn-outline-dark btn-sm mt-2">Add More</button>
+                                    <button type="button" id="add-animateur" class="btn btn-outline-dark btn-sm mt-2">Ajouter un animateur</button>
                                 </td>
                               
                             </tr>
@@ -167,7 +167,7 @@
                                     <div>
                                          <input type="file" name="corrosive_image" accept="image/*" class="form-control mb-2">
                                          <!-- Textarea for Description -->
-                                        <textarea name="commentaires" rows="3" class="form-control" placeholder="Enter image description...">{{ $talk->commentaires }}</textarea>
+                                        <textarea name="commentaires" rows="3" class="form-control" placeholder="Saisir la description de l'image...">{{ $talk->commentaires }}</textarea>
                                         <div colspan="4">
                                             <div class="mt-2" class="mb-2">
                                                 @if ($talk->path)
@@ -193,7 +193,7 @@
                                 <th width="50%">Nom</th>
                                 <th width="50%">Prénom</th>
                             </tr>
-                            <tbody id="participant-body">
+                             <tbody id="participant-body">
                                 @php
                                     $participants = json_decode($talk->participants, true) ?? [];
                                 @endphp
@@ -202,7 +202,7 @@
                                     <tr class="participant-row">
                                         <td><input type="text" name="participant_name[]" value="{{ $participant['name'] }}" class="form-control"></td>
                                         <td><input type="text" name="participant_signature[]" value="{{ $participant['signature'] }}" class="form-control"></td>
-                                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Remove</button></td>
+                                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Supprimer</button></td>
                                     </tr>
                                 @empty
                                     {{-- Optional: show one empty row or keep tbody empty --}}
@@ -210,7 +210,7 @@
                             </tbody>
                               <tr>
                                 <td colspan="3">
-                                    <button type="button" id="add-participant" class="btn btn-outline-dark btn-sm">Add More</button>
+                                    <button type="button" id="add-participant" class="btn btn-outline-dark btn-sm">Ajouter un participant</button>
                                 </td>
                             </tr>
                         </table>
@@ -225,7 +225,7 @@
                                 <th width="20%">Responsable</th>
                                 <th width="20%">Délai</th>
                                 <th width="15%">Type d'Action</th>
-                                <th width="5%">Remove</th>
+                                <th width="5%">Supprimer</th>
                             </tr>
                             @foreach (json_decode($talk->actions, true) as $index => $action)
                                 <tr class="action-row">
@@ -239,16 +239,16 @@
                                             <option value="Preventive" {{ $action['type'] == 'Preventive' ? 'selected' : '' }}>Préventive (P)</option>
                                         </select>
                                     </td>
-                                    <td><button type="button" class="btn btn-danger remove-action" {{ $index == 0 ? 'disabled' : '' }}>Remove</button></td>
+                                    <td><button type="button" class="btn btn-danger remove-action" {{ $index == 0 ? 'disabled' : '' }}>Supprimer</button></td>
                                 </tr>
                             @endforeach
                         </table>
-                        <button type="button" id="add-action" class="btn btn-outline-dark btn-sm mt-2">Add Action</button>
+                        <button type="button" id="add-action" class="btn btn-outline-dark btn-sm mt-2">Ajouter une action</button>
                         <div class="action-legend mt-2">I : Action Immédiate ; C : Action Corrective ; P : Action Préventive</div>
                         
                         <div class="mt-6">
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-800 transition ease-in-out duration-150" style="background-color: blue;">
-                                Update
+                                Mettre à jour
                             </button>
                         </div>
                     </form>
@@ -278,7 +278,7 @@
                                 <option value="Preventive">Préventive (P)</option>
                             </select>
                         </td>
-                        <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
+                        <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Supprimer</button></td>
                     </tr>
                 `;
                 $('#actions-table tbody').append(newAction);
@@ -298,7 +298,7 @@
                     <div class="input-group mt-2 remove-animateur-input">
                         <input type="text" name="animateur[${animCount}]" class="form-control" required>
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-danger  remove-animateur">Remove</button>
+                            <button type="button" class="btn btn-danger  remove-animateur">Supprimer</button>
                         </div>
                     </div>
                 `;
@@ -310,10 +310,10 @@
                 $(this).closest('.remove-animateur-input').remove();
             });
 
-            // Remove Image
+                    // Remove Image
             $('body').on('click', '.click-remove', function (e) {
                 e.preventDefault();
-                if (confirm("Are you sure you want to remove this image?")) {
+                if (confirm("Êtes-vous sûr de vouloir supprimer cette image?")) {
                     $.ajax({
                         url: "{{ route('talk.removeImage', $talk->id) }}",
                         type: 'POST',
@@ -329,7 +329,7 @@
                             }
                         },
                         error: function(xhr) {
-                            toastr.error('An error occurred while removing the image.');
+                            toastr.error('Une erreur s est produite lors de la suppression de l image.');
                         }
                     });
                 }
@@ -341,7 +341,7 @@
                     <tr class="participant-row">
                         <td><input type="text" name="participant_name[]" class="form-control"></td>
                         <td><input type="text" name="participant_signature[]" class="form-control"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Remove</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Supprimer</button></td>
                     </tr>`;
                 $('#participant-body').append(newRow);
             });
@@ -362,38 +362,38 @@
 
     submitButton.prop('disabled', true);
 
-        $.ajax({
-            url: '{{ route("talk_animation.update", ":id") }}'.replace(':id', id), // Dynamic route with ID
-            type: 'POST', // Use POST with _method=PUT for Laravel
-            data: formData,
-            contentType: false, // Required for file uploads
-            processData: false, // Required for file uploads
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
-            },
-            success: function (response) {
-                if (response.responseCode == 200) {
-                    toastr.success('Talk event updated successfully.');
-                    setTimeout(() => {
-                        window.location.href = '{{ route("talk_animation.index") }}';
-                    }, 2000);
-                }
-            },
-            error: function (xhr) {
-                submitButton.prop('disabled', false);
-                const errors = xhr.responseJSON?.errors || {};
-                let errorMessage = 'Please fix the following errors:<br>';
-                if (Object.keys(errors).length > 0) {
-                    $.each(errors, function (key, value) {
-                        errorMessage += `- ${value[0]}<br>`;
-                    });
-                } else {
-                    errorMessage = xhr.responseJSON?.message || 'An error occurred.';
-                }
-                toastr.error(errorMessage);
+    $.ajax({
+        url: '{{ route("talk_animation.update", ":id") }}'.replace(':id', id), // Dynamic route with ID
+        type: 'POST', // Use POST with _method=PUT for Laravel
+        data: formData,
+        contentType: false, // Required for file uploads
+        processData: false, // Required for file uploads
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // CSRF token
+        },
+        success: function (response) {
+            if (response.responseCode == 200) {
+                toastr.success('Événement de discussion mis à jour avec succès.');
+                setTimeout(() => {
+                    window.location.href = '{{ route("talk_animation.index") }}';
+                }, 2000);
             }
-        });
+        },
+        error: function (xhr) {
+            submitButton.prop('disabled', false);
+            const errors = xhr.responseJSON?.errors || {};
+            let errorMessage = 'Veuillez corriger les erreurs suivantes:<br>';
+            if (Object.keys(errors).length > 0) {
+                $.each(errors, function (key, value) {
+                    errorMessage += `- ${value[0]}<br>`;
+                });
+            } else {
+                errorMessage = xhr.responseJSON?.message || 'An error occurred.';
+            }
+            toastr.error(errorMessage);
+        }
     });
+});
         });
     </script>
 </x-app-layout>

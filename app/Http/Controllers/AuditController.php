@@ -24,11 +24,11 @@ class AuditController extends Controller
     function __construct()
     {
         //KEY : MULTIPERMISSION
-        $this->middleware('permission:audit-list|audit-create|audit-edit|audit-show|audit-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:audit-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:audit-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:audit-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:audit-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des audits|Créer un audit|Modifier un audit|Voir un audit|Supprimer un audit', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer un audit', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier un audit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer un audit', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir un audit', ['only' => ['show']]);
     }
 
     /**
@@ -107,13 +107,13 @@ class AuditController extends Controller
                 'progress_rate' => 0,
                 'efficiency' => 'N',
                 'type' => $actions[0]['type'] ?? now()->addDays(7),
-                'comments' => 'Action generated from audit',
+                'comments' => 'Action générée par l audit',
             ]);
         } 
 
         return response()->json([
             'success' => true,
-            'message' => 'Audit submitted successfully.',
+            'message' => 'Audit soumis avec succès.',
             'redirect' => route('audit.index'),
         ]);
     }
@@ -230,9 +230,40 @@ class AuditController extends Controller
             'actions' => $actions,        // Laravel will JSON encode due to $casts
         ]);
 
+        if ($actions) {
+            $action = Action::where('action_origin', 'audit')
+                ->where('origin_view_id', $audit->id)
+                ->first();
+
+            if ($action) {
+                $action->update([
+                    'origin'         => 'Audit',                      // same as create
+                    'origin_view_id' => $audit->id,                  // same as create
+                    'action_origin'  => 'audit',                     // missing key fixed
+                    'action_number'  => $action->action_number 
+                                    ?? $this->random_number(),    // keep existing number; no regen
+                    'description'    => $actions[0]['description'] 
+                                    ?? 'audit description',
+                    'issued_date'    => now(),
+                    'emission'       => now(),
+                    'pilot_id'       => $actions[0]['responsable'] 
+                                    ?? auth()->user()->id,
+                    'due_date'       => $actions[0]['delai'] 
+                                    ?? now()->addDays(7),
+                    'json_data'      => json_encode(['audit_id' => $audit->id, 'progress' => 0]),
+                    'progress_rate'  => 0,
+                    'efficiency'     => 'N',
+                    'type'           => $actions[0]['type'] 
+                                    ?? $action->type,             // date ki jagah existing type
+                    'comments'       => 'Action générée par l audit',
+                ]);
+            }
+        }
+
+
         return response()->json([
             'success' => true,
-            'message' => 'Audit updated successfully.',
+            'message' => 'Audit mis à jour avec succès.',
             'redirect' => route('audit.index'),
         ]);
     }
@@ -252,7 +283,7 @@ class AuditController extends Controller
         if ($delAction) {
             $delAction->delete();
         }
-        return $this->success('Audit Delete Successfully', ['success' => true, 'data' => null]);
+        return $this->success('Audit supprimé avec succès', ['success' => true, 'data' => null]);
     }
 
     /**
@@ -267,7 +298,7 @@ class AuditController extends Controller
         try {
             // check parameter empty Validation
             if (empty($request) || empty($htmlformfilename) || empty($uploadfiletopath)) {
-                throw new \Exception("Required Parameters are missing", 400);
+                throw new \Exception("Les paramètres obligatoires sont manquants", 400);
             }
             // check if folder exist at public directory if not exist then create folder 0777 permission
             if (!file_exists($uploadfiletopath)) {
@@ -281,7 +312,7 @@ class AuditController extends Controller
             // $request->file($htmlformfilename)->move(public_path($uploadfiletopath), $fileFullName);
             $resp['status'] = true;
             $resp['data'] = array('name' => $fileFullName, 'url' => url('storage/' . str_replace('public/', '', $uploadfiletopath) . '/' . $fileFullName), 'path' => \storage_path('app/' . $path), 'extenstion' => $request->file($htmlformfilename)->getClientOriginalExtension(), 'type' => $request->file($htmlformfilename)->getMimeType(), 'size' => $request->file($htmlformfilename)->getSize());
-            $resp['message'] = "File uploaded successfully..!";
+            $resp['message'] = "Fichier téléchargé avec succès.!";
         } catch (\Exception $ex) {
             $resp['status'] = false;
             $resp['data'] = ['name' => null];

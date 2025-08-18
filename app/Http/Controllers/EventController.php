@@ -23,11 +23,11 @@ class EventController extends Controller
     function __construct()
     {
         //KEY : MULTIPERMISSION
-        $this->middleware('permission:event-list|event-create|event-edit|event-show|event-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:event-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:event-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:event-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:event-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des événements|Créer un événement|Modifier un événement|Voir un événement|Supprimer un événement', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer un événement', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier un événement', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer un événement', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir un événement', ['only' => ['show']]);
     }
     /**
      * Display a listing of the resource.
@@ -66,7 +66,6 @@ class EventController extends Controller
             'propositions' => 'nullable|array',
             'mesures' => 'nullable|array',
             'actions' => 'nullable|array',
-            // 'attachments' => 'nullable|array',
         ]);
 
         // Calculate cotation
@@ -200,7 +199,7 @@ class EventController extends Controller
             'propositions' => 'nullable|array',
             'mesures' => 'nullable|array',
             'actions' => 'nullable|array',
-           
+            
             // 'attachments.*' => 'file|mimes:jpg,jpeg,png,mp4,mov|max:20480',
         ]);
 
@@ -245,18 +244,40 @@ class EventController extends Controller
         ]);
 
 
+        $action = Action::where('action_origin', 'event')
+            ->where('origin_view_id', $event->id)
+            ->first();
+
+        if ($action) {
+            $action->update([
+                'origin'         => 'Evenement',                             // same as create
+                'origin_view_id' => $event->id,                              // same as create
+                'action_origin'  => 'event',                                 // add missing key
+                'action_number'  => $action->action_number ?? $this->random_number(), 
+                'description'    => $actions[0]['description'] ?? ('Address ' . $data['risques']),
+                'issued_date'    => now(),
+                'emission'       => now(),
+                'type'           => $actions[0]['type'] ?? $action->type ?? 'Preventive',
+                'pilot_id'       => $actions[0]['responsable'] ?? $action->pilot_id ?? 'test',
+                'due_date'       => $actions[0]['delai'] ?? $action->due_date ?? now()->addDays(7),
+                'json_data'      => json_encode(['event_id' => $event->id, 'progress' => 0]),
+                'progress_rate'  => 0,
+                'efficiency'     => 'N',
+                'comments'       => $data['type'] ?? 'Action updated from event',
+            ]);
+        }
 
         // Notify users
         $notification = Notification::create([
             'to_user_id' => Auth::id(),
             'from_user_id' => Auth::id(),
             'action' => 'user_event_update_notify',
-            'message' => 'Event has been updated',
+            'message' => 'L événement a été mis à jour',
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Event updated successfully.',
+            'message' => 'Événement mis à jour avec succès.',
             'redirect' => route('event.index'),
         ]);
     }
@@ -276,10 +297,10 @@ class EventController extends Controller
         if ($delAction) {
             $delAction->delete();
         }
-        return $this->success('Event Delete Successfully', ['success' => true, 'data' => null]);
+        return $this->success('L événement a été supprimé avec succès', ['success' => true, 'data' => null]);
     }
 
-    /**
+        /**
      * Remove image from event.
      */
     public function removeImage(Request $request, $eventId)
@@ -291,7 +312,7 @@ class EventController extends Controller
             // Set the path to null in the database
             $event->path = null;
             $event->save();
-            return response()->json(['success' => true, 'message' => 'Image removed successfully.']);
+            return response()->json(['success' => true, 'message' => 'Image supprimée avec succès.']);
         }
     }
 }

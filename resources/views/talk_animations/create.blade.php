@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create - Talk/Animation') }}
+            {{ __('Créer une Causerie') }}
         </h2>
     </x-slot>
 
@@ -91,11 +91,11 @@
                     <!-- Permission based button -->
                     @can('category-create')
                     <a title="new" href="{{ route('talk_animation.create') }}" class="inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest text-black uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500 active:bg-green-700 focus:outline-none focus:border-green-700 focus:shadow-outline-gray disabled:opacity-25">
-                        Create New Talk/Animation
+                        CREER UNE CAUSERIE
                     </a>
                     @endcan
                      <div class="card-header text-black d-flex justify-content-between align-items-center">
-                        <h4>Talk Animation</h4>
+                        <h4>Causerie</h4>
                     </div>
                     <!-- The Form -->
                     <form id="talkForm" enctype="multipart/form-data" method="POST">
@@ -115,7 +115,7 @@
                                 <th>Animateur(s)</th>
                                 <td class="animatuer-section">
                                     <input class="form-control first-input" type="text" name="animateur[0]" required>
-                                    <button type="button" id="add-animateur" class="btn btn-outline-dark btn-sm mt-2">Add More</button>
+                                    <button type="button" id="add-animateur" class="btn btn-outline-dark btn-sm mt-2">Ajouter un animateur</button>
                                 </td>
                             </tr>
                             <tr>
@@ -162,7 +162,7 @@
                                         <input type="file" name="corrosive_image" accept="image/*" class="form-control mb-2">
 
                                         <!-- Textarea for Description -->
-                                        <textarea name="commentaires" rows="3" class="form-control" placeholder="Enter image description..."></textarea>
+                                        <textarea name="commentaires" rows="3" class="form-control" placeholder="Entrer une description de l'image..."></textarea>
                                     </div>
                                 </td>
                             </tr>
@@ -185,13 +185,13 @@
                                 <tr class="participant-row">
                                     <td><input type="text" name="participant_name[]" class="form-control"></td>
                                     <td><input type="text" name="participant_signature[]" class="form-control"></td>
-                                    <td><button type="button" class="btn btn-danger btn-sm remove-rows" disabled>Remove</button></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm remove-rows" disabled>Supprimer</button></td>
                                 </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="3">
-                                        <button type="button" id="add-participant" class="btn btn-outline-dark btn-sm">Add More</button>
+                                        <button type="button" id="add-participant" class="btn btn-outline-dark btn-sm">Ajouter un participant</button>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -225,7 +225,7 @@
                                 {{-- <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td> --}}
                             </tr>
                         </table>
-                        <button type="button" id="add-action" class="btn btn-outline-dark btn-sm mt-2">Add Action</button>
+                        <button type="button" id="add-action" class="btn btn-outline-dark btn-sm mt-2">Ajouter une action</button>
                         <div class="action-legend mt-2">I : Action Immédiate ; C : Action Corrective ; P : Action Préventive</div>
                         
                         <div class="mt-6">
@@ -252,7 +252,7 @@
                     <div class="input-group mt-2 remove-animateur-input">
                         <input type="text" name="animateur[${animCount}]" class="form-control" required>
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-danger  remove-animateur">Remove</button>
+                            <button type="button" class="btn btn-danger  remove-animateur">Supprimer</button>
                         </div>
                     </div>
                 `;
@@ -281,7 +281,7 @@
                                 <option value="Preventive">Préventive (P)</option>
                             </select>
                         </td>
-                        <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Remove</button></td>
+                        <td style="text-align:center;"><button type="button" class="btn btn-danger btn-sm remove-action" style="background-color: red;">Supprimer</button></td>
                     </tr>
                 `;
                 $('#actions-table tbody').append(newAction);
@@ -298,7 +298,7 @@
                     <tr class="participant-row">
                         <td><input type="text" name="participant_name[]" class="form-control"></td>
                         <td><input type="text" name="participant_signature[]" class="form-control"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Remove</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-row">Supprimer</button></td>
                     </tr>`;
                 $('#participant-body').append(newRow);
             });
@@ -331,7 +331,7 @@
                     },
                     error: function (xhr) {
                         const errors = xhr.responseJSON.errors;
-                        let errorMessage = 'Please fix the following errors:<br>';
+                        let errorMessage = 'Veuillez corriger les erreurs suivantes:<br>';
                         toastr.error(response.message);
                         $.each(errors, function (key, value) {
                             errorMessage += `- ${value[0]}<br>`;

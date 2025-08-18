@@ -23,11 +23,11 @@ class DailyReadinessController extends Controller
     function __construct()
     {
         //KEY : MULTIPERMISSION
-        $this->middleware('permission:daily_readiness-list|daily_readiness-create|daily_readiness-edit|daily_readiness-show|daily_readiness-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:daily_readiness-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:daily_readiness-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:daily_readiness-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:daily_readiness-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des validations journalières|Créer une validation journalière|Modifier une validation joumallière|Voir une validation journalière|Supprimer une validation journalière', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer une validation journalière', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier une validation joumallière', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer une validation journalière', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir une validation journalière', ['only' => ['show']]);
     }
 
     /**
@@ -65,7 +65,7 @@ class DailyReadinessController extends Controller
      */
     public function store(DailyReadinessStoreRequest $request)
     {
-       
+        // dd($request->all());
             // Calculate readiness rate
             $readinessRate = $this->calculateReadinessRate($request->checklist_data);
             $status = $readinessRate >= 75 ? 'Green' : 'Blocked';
@@ -103,13 +103,13 @@ class DailyReadinessController extends Controller
                     Notification::create([
                         'to_user_id' => $manager->id,
                         'action' => 'daily_work_readness',
-                        'message' => "Readiness form blocked for site Name {$form->site_name}. Rate: {$readinessRate}%",
+                        'message' => "Formulaire de préparation bloqué pour le site Nom {$form->site_name}. Rate: {$readinessRate}%",
                     ]);
                 }
             }
 
             // Return JSON response for AJAX
-          return $this->success('Readiness form submitted successfully.', ['success' => true, 'data' => null]);
+          return $this->success('Formulaire de préparation soumis avec succès.', ['success' => true, 'data' => null]);
 
     }
 
@@ -156,27 +156,26 @@ class DailyReadinessController extends Controller
     {
         $daily = ReadinessForm::FindOrFail($id);
         $daily->delete();
-        return $this->success('Readiness Delete Successfully', ['success' => true, 'data' => null]);
+        return $this->success('Préparation Supprimer avec succès', ['success' => true, 'data' => null]);
     }
 
-        private function calculateReadinessRate($checklistData)
-        {
-            $totalScore = 0;
-            $count = 0;
+    private function calculateReadinessRate($checklistData)
+    {
+        $totalScore = 0;
+        $count = 0;
 
-            foreach ($checklistData as $item) {
-                if ($item['answer'] === 'Yes') {
-                    $totalScore += $item['score'] ?? 1;
-                    $count++;
-                } elseif ($item['answer'] === 'No') {
-                    $count++;
-                }
-                // N/A is ignored
+        foreach ($checklistData as $item) {
+            if ($item['answer'] === 'Oui') {
+                $totalScore += $item['score'] ?? 1;
+                $count++;
+            } elseif ($item['answer'] === 'Non') {
+                $count++;
             }
-
-            return $count ? ($totalScore / $count) * 100 : 0;
+            // N/A is ignored
         }
 
+        return $count ? ($totalScore / $count) * 100 : 0;
+    }
 
     public function Notification()
     {

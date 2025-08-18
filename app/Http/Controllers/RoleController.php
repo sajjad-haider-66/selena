@@ -18,11 +18,11 @@ class RoleController extends Controller
     function __construct()
     {
         //KEY : MULTIPERMISSION
-        $this->middleware('permission:role-list|role-create|role-edit|role-show|role-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:role-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:role-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:role-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:role-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des roles|Créer un rôle|Modifier un rôle|Voir un rõle|Supprimer un rôle', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer un rôle', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier un rôle', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer un rôle', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir un rõle', ['only' => ['show']]);
     }
 
     /**
@@ -120,7 +120,7 @@ class RoleController extends Controller
             $role = $role->updateOrFail(['name' => $request->input('name')]);
             \Log::info(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Success updating data : " . json_encode([request()->all(), $role]));
             return redirect()->route('roles.index')
-                ->with('success', 'Role updated successfully');
+                ->with('success', 'Rôle mis à jour avec succès.');
         } catch (\Illuminate\Database\QueryException $e) { // Handle query exception
             \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error Query updating data : " . $e->getMessage());
             // You can also return a response to the user
@@ -146,7 +146,7 @@ class RoleController extends Controller
             $role->delete();
             \Log::info(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Success deleting data : " . json_encode([request()->all(), $role]));
             return redirect()->route('roles.index')
-                ->withSuccess('Deleted Successfully.');
+                ->withSuccess('Supprimé avec succès.');
         } catch (\Illuminate\Database\QueryException $e) { // Handle query exception
             \Log::error(" file '" . __CLASS__ . "' , function '" . __FUNCTION__ . "' , Message : Error Query deleting data : " . $e->getMessage() . '');
             // You can also return a response to the user

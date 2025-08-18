@@ -21,11 +21,11 @@ class UserController extends Controller
     function __construct()
     {
         //KEY : MULTIPERMISSION
-        $this->middleware('permission:user-list|user-create|user-edit|user-show|user-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:user-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des utilisateurs|Créer un utilisateur|Modifier un utilisateur|Voir un utilisateur|Supprimer un utilisateur', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer un utilisateur', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier un utilisateur', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer un utilisateur', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir un utilisateur', ['only' => ['show']]);
     }
     /**
      * Display a listing of the resource.

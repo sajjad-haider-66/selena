@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Talk Event: {{ $talk->theme }}
+            Détails de la Causerie
         </h2>
     </x-slot>
     @php
@@ -27,9 +27,9 @@
                     {{-- Event Info --}}
                     <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
                         <p><strong>Date:</strong> {{ $talk->date }}</p>
-                        <p><strong>Location:</strong> {{ $talk->lieu }}</p>
-                        <p><strong>Theme:</strong> {{ $talk->theme }}</p>
-                        <p><strong>Animator:</strong>
+                        <p><strong>Lieu:</strong> {{ $talk->lieu }}</p>
+                        <p><strong>Thème:</strong> {{ $talk->theme }}</p>
+                        <p><strong>Animateur:</strong>
                             @foreach ($talk->animateur as $item)
                                 {{ $item }},
                             @endforeach
@@ -147,25 +147,25 @@
                                 </table>
                             </div>
                         </div>
-                        <p><strong>Status:</strong> {{ $talk->date < now()->toDateString() ? 'Closed' : 'Scheduled' }}</p>
+                        <p><strong>Status:</strong> {{ $talk->date < now()->toDateString() ? 'Clôturé' : 'Planifié' }}</p>
                     </div>
 
                     {{-- Only show if today --}}
                     @if ($talk->date == now()->toDateString())
                         {{-- Attendance --}}
                         <div class="border-t pt-4">
-                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">📝 Mark Attendance</h3>
+                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">📝 Valider la Participation</h3>
                             <form id="attendanceForm" method="POST">
                                 @csrf
                                 <button type="button" id="markAttendance"
                                     class="px-4 py-2 mb-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                    style="background-color: rgb(27, 218, 106)">Mark Attendance</button>
+                                    style="background-color: rgb(27, 218, 106)">Valider la Participation</button>
                             </form>
                         </div>
 
                         {{-- Upload Materials --}}
                         <div class="border-t pt-4">
-                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">📁 Upload Materials</h3>
+                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">📁 Télécharger des Documents</h3>
                             <form action="{{ route('talk_animation.materials', $talk->id) }}" method="POST"
                                 enctype="multipart/form-data" class="space-y-3">
                                 @csrf
@@ -173,26 +173,22 @@
                                     class="block w-full text-sm text-gray-600">
                                 <button type="submit"
                                     class="px-4 py-2 mt-2 mb-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                                    style="background-color: rgb(13, 159, 196)">Upload</button>
+                                    style="background-color: rgb(13, 159, 196)">Télécharger</button>
                             </form>
                         </div>
 
                         {{-- Submit Feedback --}}
                         <div class="border-t pt-4">
-                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">🗣️ Submit Feedback</h3>
+                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">🗣️ Envoyer un Commentaire</h3>
                             <form id="feedbackForm" method="POST" class="space-y-4">
                                 @csrf
                                 <div>
                                     <label for="feedback" class="block font-medium">Feedback</label>
                                     <textarea name="feedback" id="feedback" rows="3" class="w-full border rounded px-3 py-2" required></textarea>
                                 </div>
-                                <div>
-                                    <label for="concerns" class="block font-medium">Concerns (Optional)</label>
-                                    <textarea name="concerns" id="concerns" rows="3" class="w-full border rounded px-3 py-2"></textarea>
-                                </div>
                                 <button type="button" id="submitFeedback"
                                     class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mb-2"
-                                    style="background-color: rgb(15, 12, 231)">Submit Feedback</button>
+                                    style="background-color: rgb(15, 12, 231)">Envoyer le Commentaire</button>
                             </form>
                         </div>
                     @endif
@@ -218,11 +214,11 @@
                     {{-- Display Materials --}}
                     @if ($talk->materials)
                         <div class="border-t pt-4">
-                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">📚 Materials</h3>
+                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">📚 Documents Partagés</h3>
                             <ul class="list-disc list-inside text-blue-600">
                                 @foreach ($talk->materials as $material)
                                     <li><a href="{{ asset('storage/' . $material) }}" target="_blank"
-                                            class="underline">View Material</a></li>
+                                            class="underline">Voir le document</a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -231,7 +227,7 @@
                     {{-- Display Feedback --}}
                     @if ($talk->feedback)
                         <div class="border-t pt-4">
-                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">📋 Feedback</h3>
+                            <h3 class="text-lg font-semibold mb-2 text-indigo-700">📋 Retours des Participants</h3>
                             <ul class="space-y-2">
                                 @foreach ($talk->feedback as $fb)
                                     <li class="bg-gray-100 p-2 rounded">"{{ $fb['feedback'] }}" <span

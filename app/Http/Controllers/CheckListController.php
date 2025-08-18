@@ -16,11 +16,11 @@ class CheckListController extends Controller
     function __construct()
     {
         //KEY : MULTIPERMISSION
-        $this->middleware('permission:checklist-list|checklist-create|checklist-edit|checklist-show|checklist-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:checklist-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:checklist-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:checklist-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:checklist-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des formulaires de vérification|Créer un formulaire de vérification|Modifier un formulaire de vérification|Voir un formulaire de vérification|Supprimer un formulaire de vérification', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer un formulaire de vérification', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier un formulaire de vérification', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer un formulaire de vérification', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir un formulaire de vérification', ['only' => ['show']]);
     }
 
     public function index()
@@ -54,7 +54,7 @@ class CheckListController extends Controller
             ]);
         }
 
-        return $this->success($saveChecklist, 'Checklist created successfully', 200);
+        return $this->success($saveChecklist, 'Liste de contrôle créée avec succès', 200);
     }
 
     /**
@@ -96,7 +96,7 @@ class CheckListController extends Controller
             ]);
         }
 
-         return redirect()->route('checklist.index')->with('success', 'Checklist updated successfully');
+         return redirect()->route('checklist.index')->with('success', 'Liste de contrôle mise à jour avec succès');
     }
 
     /**
@@ -108,6 +108,6 @@ class CheckListController extends Controller
             return $this->error('Checklist not found', 404);
         }
         $checklist = Checklist::where('category', $name)->delete();
-        return $this->success(null, 'Checklist deleted successfully', 200);
+        return $this->success(null, 'Liste de contrôle supprimée avec succès', 200);
     }
 }

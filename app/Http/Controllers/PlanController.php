@@ -18,11 +18,11 @@ class PlanController extends Controller
     function __construct()
     {
         //KEY : MULTIPERMISSION
-        $this->middleware('permission:plan-list|plan-create|plan-edit|plan-show|plan-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:plan-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:plan-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:plan-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:plan-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des plans|Créer un plan|Modifier un plan|Voir un plan|Supprimer un plan', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer un plan', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier un plan', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer un plan', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir un plan', ['only' => ['show']]);
     }
     /**
      * Display a listing of the resource.
@@ -66,8 +66,14 @@ class PlanController extends Controller
             'avant_entreprise' => 'nullable|array',
         ];
 
+        $messages = [
+            'plan_number.required' => 'Le numéro du plan est requis.',
+            'plan_number.string'   => 'Le numéro du plan doit être une chaîne de caractères.',
+            'plan_number.unique'   => 'Le numéro du plan existe déjà.',
+        ];
+
         // Validate the request
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -164,7 +170,7 @@ class PlanController extends Controller
         
         // Map 'apres' fields
         $plan->new_authorization_date = $request->input('apres_nouvelle_autorisation');
-        $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : [];
+        $plan->company_nom_date = $companyNomDate ? json_encode($companyNomDate) : null;
         $plan->after_responsible_date = $request->input('apres_responsable_date');
         $plan->after_responsible_time = $request->input('apres_responsable_heure');
         $plan->after_responsible_name = $request->input('apres_responsable_nom');
@@ -198,7 +204,7 @@ class PlanController extends Controller
         $plan->save();
 
         // Redirect or return response
-        return redirect()->route('plan.index')->with('success', 'Plan created successfully.');
+        return redirect()->route('plan.index')->with('success', 'Plan créé avec succès.');
     }
     /**
      * Display the specified resource.
@@ -375,7 +381,7 @@ class PlanController extends Controller
         $plan->save();
 
         // Redirect to index with success message
-        return redirect()->route('plan.index')->with('success', 'Plan updated successfully.');
+        return redirect()->route('plan.index')->with('success', 'Plan mis à jour avec succès.');
     }
 
     /**
@@ -385,6 +391,6 @@ class PlanController extends Controller
     {
         $Plan = Plan::FindOrFail($id);
         $Plan->delete();
-        return $this->success('Plan Delete Successfully', ['success' => true, 'data' => null]);
+        return $this->success('Plan supprimé avec succès', ['success' => true, 'data' => null]);
     }
 }

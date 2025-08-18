@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create - Talk/Animation
+            Causeries
         </h2>
     </x-slot>
     <div class="py-12">
@@ -9,7 +9,7 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
                 <a title="back" href="{{ route('talk_animation.create') }}"
                     class="bt btn-primary inline-flex items-center px-4 py-2 mb-4 text-xs font-semibold tracking-widest uppercase transition duration-150 ease-in-out bg-green-600 border border-transparent rounded-md hover:bg-green-500 active:bg-green-700 focus:outline-none focus:border-green-700 focus:shadow-outline-gray disabled:opacity-25" style="float: right">
-                    Create Talk
+                    CREER UNE CAUSERIE
                 </a>
                 <div class="card-body">
                     <table id="talk_table" class="table table-bordered table-striped">
@@ -19,7 +19,7 @@
                                 <th>Date</th>
                                 <th>Lieu</th>
                                 <th>Theme</th>
-                                <th>Status</th>
+                                <th>Statut</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -32,7 +32,7 @@
                                     <td>{{ $talk->theme }}</td>
                                     <td>
                                         <span class="badge {{ $talk->date < now()->toDateString() ? 'bg-danger' : 'bg-success' }}">
-                                            {{ $talk->date < now()->toDateString() ? 'Closed' : 'Scheduled' }}
+                                            {{ $talk->date < now()->toDateString() ? 'Clôturé' : 'Planifié' }}
                                         </span>
                                     </td>
                                     <td>
@@ -62,6 +62,19 @@
             "info": true,
             "autoWidth": false,
             "responsive": true,
+            language: {
+                "search": "Rechercher :",
+                "lengthMenu": "Afficher _MENU_ entrées",
+                "info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                "infoEmpty": "Aucune donnée disponible",
+                "zeroRecords": "Aucun enregistrement correspondant trouvé",
+                "paginate": {
+                    "first": "Premier",
+                    "last": "Dernier",
+                    "next": "Suivant",
+                    "previous": "Précédent"
+                }
+            }
         });
 
         $('body').on('click', '.delete-talks', function () {

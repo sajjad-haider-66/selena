@@ -22,11 +22,11 @@ class TalkAnimationController extends Controller
     function __construct()
     {
         //KEY : MULTIPERMISSION
-        $this->middleware('permission:talk_animation-list|talk_animation-create|talk_animation-edit|talk_animation-show|talk_animation-delete', ['only' => ['index', 'store']]);
-        $this->middleware('permission:talk_animation-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:talk_animation-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:talk_animation-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:talk_animation-show', ['only' => ['show']]);
+        $this->middleware('permission:Liste des causeries|Créer une causerie|Modifier une causerie|Voir une causerie|Supprimer une causerie', ['only' => ['index', 'store']]);
+        $this->middleware('permission:Créer une causerie', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Modifier une causerie', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Supprimer une causerie', ['only' => ['destroy']]);
+        $this->middleware('permission:Voir une causerie', ['only' => ['show']]);
     }
 
     /**
@@ -51,7 +51,7 @@ class TalkAnimationController extends Controller
      */
     public function store(Request $request)
     {
-       
+
         $data = $request->validate([
             'date' => 'required|date',
             'lieu' => 'required|string',
@@ -81,7 +81,7 @@ class TalkAnimationController extends Controller
 
         // Process actions array
         $actions = $data['actions'] ?? [];
-        
+
 
         // Handle attachments (assuming file upload via AJAX)
         if ($request->hasFile('corrosive_image')) {
@@ -95,11 +95,11 @@ class TalkAnimationController extends Controller
             'lieu' => $data['lieu'],
             'theme' => $data['theme'],
             'animateur' => $data['animateur'] ?? '',
-            'signature' => $data['signature']?? '',
-            'security' => $request->has('security')?? '',
-            'health' => $request->has('health')?? '',
-            'environment' => $request->has('environment')?? '',
-            'rse' => $request->has('rse')?? '',
+            'signature' => $data['signature'] ?? '',
+            'security' => $request->has('security') ?? '',
+            'health' => $request->has('health') ?? '',
+            'environment' => $request->has('environment') ?? '',
+            'rse' => $request->has('rse') ?? '',
             'points' => $data['points'],
             'participants' => json_encode($participants),
             'actions' => json_encode($actions),
@@ -110,7 +110,7 @@ class TalkAnimationController extends Controller
 
         if ($actions) {
             Action::create([
-                'origin' => 'TalkAnimation',
+                'origin' => 'Causerie',
                 'origin_view_id' => $talk->id,
                 'action_origin' => 'talk_animation',
                 'action_number' => $this->random_number(),
@@ -123,9 +123,9 @@ class TalkAnimationController extends Controller
                 'progress_rate' => 0,
                 'efficiency' => 'N',
                 'type' => $actions[0]['type'] ?? now()->addDays(7),
-                'comments' => $data['theme'] ?? 'Action generated from Talk Animation',
+                'comments' => $data['theme'] ?? 'Action générée à partir de Talk Animation',
             ]);
-        } 
+        }
 
         // Notify and Invite Users
         // $users = User::where('role', '!=', 'RQSE Manager')->get();
@@ -133,7 +133,7 @@ class TalkAnimationController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Talk event created successfully.',
+            'message' => 'L événement de discussion a été créé avec succès.',
             'redirect' => route('talk_animation.index'),
         ]);
     }
@@ -168,7 +168,7 @@ class TalkAnimationController extends Controller
 
         $talk->update(['materials' => $materials]);
 
-        return redirect()->back()->with('success', 'Materials uploaded successfully.');
+        return redirect()->back()->with('success', 'Les documents ont été téléchargés avec succès..');
     }
 
 
@@ -176,7 +176,7 @@ class TalkAnimationController extends Controller
     {
         $talk = TalkAnimation::findOrFail($id);
         if ($talk->date != now()->toDateString()) {
-            return response()->json(['error' => 'Attendance can only be marked on the event day.'], 400);
+            return response()->json(['error' => 'La présence ne peut être constatée que le jour de l événement.'], 400);
         }
 
         $userId = Auth::id();
@@ -194,7 +194,7 @@ class TalkAnimationController extends Controller
             // $talk->increment('participants_count');
         }
 
-        return response()->json(['success' => true, 'message' => 'Attendance marked successfully.']);
+        return response()->json(['success' => true, 'message' => 'Présence marquée avec succès.']);
     }
 
     public function markAttendanceQR(Request $request, $id)
@@ -219,7 +219,7 @@ class TalkAnimationController extends Controller
             $talk->increment('participants_count');
         }
 
-        return response()->json(['success' => true, 'message' => 'Attendance marked via QR code.']);
+        return response()->json(['success' => true, 'message' => 'Présence marquée via un code QR.']);
     }
 
     public function submitFeedback(Request $request, $id)
@@ -251,7 +251,7 @@ class TalkAnimationController extends Controller
             'concerns' => $concerns,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Feedback submitted successfully.']);
+        return response()->json(['success' => true, 'message' => 'Commentaires soumis avec succès.']);
     }
 
     public function archive(Request $request, $id)
@@ -259,10 +259,10 @@ class TalkAnimationController extends Controller
         $talk = TalkAnimation::findOrFail($id);
         $talk->update([
             'status' => 'archived',
-            'notes' => $request->input('notes', 'Talk completed and archived.'),
+            'notes' => $request->input('notes', 'Conférence terminée et archivée.'),
         ]);
 
-        return redirect()->back()->with('success', 'Talk archived successfully.');
+        return redirect()->back()->with('success', 'Discussion archivée avec succès.');
     }
 
     /**
@@ -344,7 +344,34 @@ class TalkAnimationController extends Controller
             'status' => 'scheduled',
         ]);
 
-        return $this->success('Talk event updated successfully.', ['success' => true, 'data' => null]);
+        // Update or create actions
+        if ($actions) {
+            $action = Action::where('action_origin', 'talk_animation')
+                ->where('origin_view_id', $talkAnimation->id)
+                ->first();
+
+            if ($action) {
+                $action->update([
+                    'origin'         => 'Causerie',                              // same as create
+                    'origin_view_id' => $talkAnimation->id,                               // same as create
+                    'action_origin'  => 'talk_animation',                        // keep same
+                    'action_number'  => $action->action_number ?? $this->random_number(),
+                    'description'    => $actions[0]['action'] ?? $action->description ?? 'talk description',
+                    'issued_date'    => now(),
+                    'emission'       => now(),
+                    'pilot_id'       => $actions[0]['responsable'] ?? $action->pilot_id ?? auth()->user()->id,
+                    'due_date'       => $actions[0]['delai'] ?? $action->due_date ?? now()->addDays(7),
+                    'json_data'      => json_encode(['talk_id' => $talkAnimation->id, 'progress' => 0]),
+                    'progress_rate'  => 0,
+                    'efficiency'     => 'N',
+                    'type'           => $actions[0]['type'] ?? $action->type ?? 'Preventive',
+                    'comments'       => $data['theme'] ?? 'Action mise à jour à partir de Talk Animation',
+                ]);
+            }
+        }
+
+
+        return $this->success('Événement de discussion mis à jour avec succès.', ['success' => true, 'data' => null]);
     }
 
 
@@ -355,10 +382,11 @@ class TalkAnimationController extends Controller
     {
         $talk = TalkAnimation::FindOrFail($id);
         $talk->delete();
-          // Check if related action exists
+         // Check if related action exists
         $delAction = Action::where('origin_view_id', $id)
             ->where('action_origin', 'talk_animation')
             ->first();
+
         try {
             if ($delAction) {
                 $delAction->delete();
@@ -366,10 +394,10 @@ class TalkAnimationController extends Controller
         } catch (\Exception $e) {
             dd('Delete failed:', $e->getMessage());
         }
-        return $this->success('Talk Animation Delete Successfully', ['success' => true, 'data' => null]);
+        return $this->success('Supprimer l animation de discussion avec succès', ['success' => true, 'data' => null]);
     }
 
-    /**
+        /**
      * Remove image from talk.
      */
     public function removeImage(Request $request, $talkId)
@@ -382,7 +410,7 @@ class TalkAnimationController extends Controller
             // Set the path to null in the database
             $talk->path = null;
             $talk->save();
-            return response()->json(['success' => true, 'message' => 'Image removed successfully.']);
+            return response()->json(['success' => true, 'message' => 'Image supprimée avec succès.']);
         }
     }
 }

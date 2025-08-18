@@ -114,7 +114,7 @@ class DashboardController extends Controller
         $dailyReadinessCount = ReadinessForm::count(); // Total readiness forms
         $completeAuditsCount = Audit::whereDate('date', '<', today())->count();
         $upcomingTalksCount = TalkAnimation::whereBetween('date', [now(), now()->addDays(7)])->count();
-        $upcomingEventsCount = Event::whereDate('date', '<', today())->count();
+        $upcomingEventsCount = Event::count();
 
         // Chart data
         $chartData = [

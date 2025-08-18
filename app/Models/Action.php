@@ -79,10 +79,10 @@ class Action extends Model
 
             // Special cases
             if ($checkedDate) {
-                if ($completionDate->lte($deadlineEnd)) {
+                if ($completionDate > $deadlineEnd) {
                     $progress = 100; // 100% if completed on time and verified
                 } else {
-                    $progress = 25 + 25 + 20; // 70% if completed late and verified
+                    $progress = 70; // 70% if completed late and verified
                 }
             } else {
                 if ($completionDate->lte($deadlineEnd)) {
