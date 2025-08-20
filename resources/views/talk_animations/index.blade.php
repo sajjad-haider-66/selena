@@ -55,13 +55,13 @@
 <script>
     $(document).ready(function() {
         $('#talk_table').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+            responsive: true,   // ✅ ab mobile par columns fold ho jayeinge
+            paging: true,
+            lengthChange: false,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
             language: {
                 "search": "Rechercher :",
                 "lengthMenu": "Afficher _MENU_ entrées",

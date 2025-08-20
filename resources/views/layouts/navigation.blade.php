@@ -4,139 +4,77 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-               <div class="shrink-0 flex items-center">
+                <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="block h-9 w-auto">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-            
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('talk_animation.index')" :active="request()->routeIs('talk_animation.index') || request()->routeIs('talk_animation.create') || request()->routeIs('talk_animation.edit') || request()->routeIs('talk_animation.show')">
-                        Talk/Animation
-                    </x-nav-link>
-                </div>
-                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('plan.index')" :active="request()->routeIs('plan.index') || request()->routeIs('plan.create') || request()->routeIs('plan.edit') || request()->routeIs('plan.show')">
-                        Plan
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('audit.index')" :active="request()->routeIs('audit.index') || request()->routeIs('audit.create') || request()->routeIs('audit.edit') || request()->routeIs('audit.show')">
-                        Audit 
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('event.index')" :active="request()->routeIs('event.index') || request()->routeIs('event.create') || request()->routeIs('event.edit') || request()->routeIs('event.show')">
-                        Event
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('action.index')" :active="request()->routeIs('action.index') || request()->routeIs('action.create') || request()->routeIs('action.edit') || request()->routeIs('action.show')">
-                        Actions
-                    </x-nav-link>
-                </div>
-                <div x-data="{ open: false }" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <!-- Dropdown Button -->
-                    <x-nav-link @click="open = !open" class="focus:outline-none" style="cursor: pointer">
-                        Daily Work Readiness
-                          <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                    </x-nav-link>
+                <div class="hidden sm:flex sm:space-x-8 sm:ml-10  space-x-8">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Tableau de bord</x-nav-link>
+                    <x-nav-link :href="route('talk_animation.index')" :active="request()->routeIs('talk_animation.*')">Causerie</x-nav-link>
+                    <x-nav-link :href="route('plan.index')" :active="request()->routeIs('plan.*')">Plan</x-nav-link>
+                    <x-nav-link :href="route('audit.index')" :active="request()->routeIs('audit.*')">Audit</x-nav-link>
+                    <x-nav-link :href="route('event.index')" :active="request()->routeIs('event.*')">Evénement</x-nav-link>
+                    <x-nav-link :href="route('action.index')" :active="request()->routeIs('action.*')">Actions</x-nav-link>
 
-                    <!-- Dropdown Menu -->
-                    <div x-show="open" @click.outside="open = false" class="absolute mt-5 w-48 bg-white rounded-md shadow-lg z-10">
-                        <x-nav-link 
-                            :href="route('daily_readiness.index')" 
-                            :active="request()->routeIs('daily_readiness.*')"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                            Daily Readiness
-                        </x-nav-link>
-                        <x-nav-link 
-                            :href="route('checklist.index')" 
-                            :active="request()->routeIs('checklist.*')"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                            Checklist
-                        </x-nav-link>
-                    </div>
-                </div>
-                  <div x-data="{ open: false }" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <!-- Dropdown Button -->
-                    <x-nav-link @click="open = !open" class="focus:outline-none" style="cursor: pointer">
-                        Settings
-                          <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                    </x-nav-link>
-
-                    <!-- Dropdown Menu -->
-                    <div x-show="open" @click.outside="open = false" class="absolute mt-5 w-48 bg-white rounded-md shadow-lg z-10">
-                        @if(auth()->user()->can('user-list'))
-                            <!-- KEY : MULTIPERMISSION starts -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index') || request()->routeIs('users.create') || request()->routeIs('users.edit') || request()->routeIs('users.show')">
-                                    Users
-                                </x-nav-link>
-                            </div>
-                        @endif
-                        @if(auth()->user()->can('role-list'))
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index') || request()->routeIs('roles.create') || request()->routeIs('roles.edit') || request()->routeIs('roles.show')">
-                                    Roles
-                                </x-nav-link>
-                            </div>
-                        @endif
-                            </div>
-                            </div>
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <x-nav-link :href="route('fetch.notification')" style="margin-left: -25px;">
-                                <i class="fa fa-bell" style="font-size:18px"></i>
-                                </x-nav-link>
-                            </div>
-                            <!-- KEY : MULTIPERMISSION ends -->
+                    <!-- Dropdown 1 -->
+                    <div x-data="{ open: false }" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <a href="#" @click.prevent="open = !open" class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:border-gray-300">
+                            Mise au Travail Journalière
+                            <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        <div x-show="open" @click.outside="open = false" class="absolute mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                            <x-nav-link :href="route('daily_readiness.index')" :active="request()->routeIs('daily_readiness.*')" class="block px-4 py-2">Mise au Travail Journalière</x-nav-link>
+                            <x-nav-link :href="route('checklist.index')" :active="request()->routeIs('checklist.*')" class="block px-4 py-2">Formulaire de Vérification</x-nav-link>
                         </div>
-  
+                    </div>
+
+                    <!-- Dropdown 2 -->
+                    <div x-data="{ open: false }" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <a href="#" @click.prevent="open = !open" class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 hover:border-gray-300">
+                            Paramètres
+                            <svg class="ml-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                        <div x-show="open" @click.outside="open = false" class="absolute mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                            @can('Liste des utilisateurs')
+                                <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" class="block px-4 py-2">Utilisateurs</x-nav-link>
+                            @endcan
+                            @can('Liste des roles')
+                                <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')" class="block px-4 py-2">Rôles</x-nav-link>
+                            @endcan
+                        </div>
+                    </div>
+
+                    <!-- Notification -->
+                    <x-nav-link :href="route('fetch.notification')">
+                        <i class="fa fa-bell text-lg"></i>
+                    </x-nav-link>
+                </div>
+            </div>
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300">
                             <div>{{ Auth::user()->name }}</div>
-
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
+                            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path fill="currentColor" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                            </svg>
                         </button>
                     </x-slot>
-
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
+                        <x-dropdown-link :href="route('profile.edit')">{{ __('Profil') }}</x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();this.closest('form').submit();">
+                                {{ __('Se déconnecter') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -145,45 +83,57 @@
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="p-2 rounded-md text-gray-600 dark:text-gray-400 focus:outline-none">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <path :class="{'hidden': open, 'inline-flex': ! open}" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{'hidden': ! open, 'inline-flex': open}" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
         </div>
     </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+ <!-- Mobile Menu -->
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white dark:bg-gray-800">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Dashboard</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('talk_animation.index')" :active="request()->routeIs('talk_animation.*')">Causerie</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('plan.index')" :active="request()->routeIs('plan.*')">Plan</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('audit.index')" :active="request()->routeIs('audit.*')">Audit</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('event.index')" :active="request()->routeIs('event.*')">Evénement</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('action.index')" :active="request()->routeIs('action.*')">Actions</x-responsive-nav-link>
+
+            <!-- Mobile Dropdowns -->
+            <details class="px-4 py-2">
+                <summary class="cursor-pointer">Daily Work Readiness</summary>
+                <div class="pl-4">
+                    <x-responsive-nav-link :href="route('daily_readiness.index')" :active="request()->routeIs('daily_readiness.*')">Daily Readiness</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('checklist.index')" :active="request()->routeIs('checklist.*')">Checklist</x-responsive-nav-link>
+                </div>
+            </details>
+            <details class="px-4 py-2">
+                <summary class="cursor-pointer">Settings</summary>
+                <div class="pl-4">
+                    @can('user-list')
+                        <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">Users</x-responsive-nav-link>
+                    @endcan
+                    @can('role-list')
+                        <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">Roles</x-responsive-nav-link>
+                    @endcan
+                </div>
+            </details>
         </div>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+        <!-- Mobile User Menu -->
+        <div class="border-t border-gray-200 dark:border-gray-600 pt-4 pb-1">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+                <div class="text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
-
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
+                <x-responsive-nav-link :href="route('profile.edit')">Profile</x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Log Out</x-responsive-nav-link>
                 </form>
             </div>
         </div>
