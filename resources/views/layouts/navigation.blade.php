@@ -104,20 +104,20 @@
 
             <!-- Mobile Dropdowns -->
             <details class="px-4 py-2">
-                <summary class="cursor-pointer">Daily Work Readiness</summary>
+                <summary class="cursor-pointer">Mise au Travail Journalière</summary>
                 <div class="pl-4">
-                    <x-responsive-nav-link :href="route('daily_readiness.index')" :active="request()->routeIs('daily_readiness.*')">Daily Readiness</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('checklist.index')" :active="request()->routeIs('checklist.*')">Checklist</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('daily_readiness.index')" :active="request()->routeIs('daily_readiness.*')">Mise au Travail Journalière</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('checklist.index')" :active="request()->routeIs('checklist.*')">Formulaire de Vérification</x-responsive-nav-link>
                 </div>
             </details>
             <details class="px-4 py-2">
-                <summary class="cursor-pointer">Settings</summary>
+                <summary class="cursor-pointer">Paramètres</summary>
                 <div class="pl-4">
-                    @can('user-list')
-                        <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">Users</x-responsive-nav-link>
+                    @can('Liste des utilisateurs')
+                        <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">Utilisateurs</x-responsive-nav-link>
                     @endcan
-                    @can('role-list')
-                        <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">Roles</x-responsive-nav-link>
+                    @can('Liste des roles')
+                        <x-responsive-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.*')">Rôles</x-responsive-nav-link>
                     @endcan
                 </div>
             </details>
